@@ -10,3 +10,22 @@ While contributions will be invited at some point in the future, currently this 
 
 For more information on the DarkGlass game engine, and the game development project it will support, see: http://chapmanworld.com/darkglass/
 
+<strong> Supported Targets </strong>
+
+DarkGlass aims to support at least those targets supported by Delphi.
+
+<ul>
+  <li> Linux (Ubuntu/RHEL). </li>
+  <li> Mac OSX </li>
+  <li> Windows </li>
+  <li> Android 5+ </li>
+  <li> iOS </li>
+</ul>
+
+These targets vary in capabilities and as such, DarkGlass engine features will vary among the targets accordingly.
+Development will focus primarily on Desktop targets initially.
+Additional targets may also be possible in the future depending upon research to be done.
+
+<strong> Graphics API </strong>
+
+DarkGlass will be designed to support interchangable graphics API's for rendering, with initial development targeting OpenGL and OpenGL-ES. With option to pivot to Vulkan early in development, and DirectX support being considered experimental in the initial phase.
