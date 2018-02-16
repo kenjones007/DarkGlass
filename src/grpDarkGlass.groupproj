@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{8084854E-5FED-4EAA-AC3D-647F5C1F58A4}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="darkGlassCore\pkgDarkGlassCore.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="darkGlassCore\DarkGlassCore.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="darkGlass\pkgDarkGlass.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Tests\DarknessDebug\DarknessDebug.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="pkgDarkGlassCore">
+        <MSBuild Projects="darkGlassCore\pkgDarkGlassCore.dproj"/>
+    </Target>
+    <Target Name="pkgDarkGlassCore:Clean">
+        <MSBuild Projects="darkGlassCore\pkgDarkGlassCore.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkgDarkGlassCore:Make">
+        <MSBuild Projects="darkGlassCore\pkgDarkGlassCore.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DarkGlassCore">
+        <MSBuild Projects="darkGlassCore\DarkGlassCore.dproj"/>
+    </Target>
+    <Target Name="DarkGlassCore:Clean">
+        <MSBuild Projects="darkGlassCore\DarkGlassCore.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DarkGlassCore:Make">
+        <MSBuild Projects="darkGlassCore\DarkGlassCore.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkgDarkGlass">
+        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj"/>
+    </Target>
+    <Target Name="pkgDarkGlass:Clean">
+        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkgDarkGlass:Make">
+        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DarknessDebug">
+        <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj"/>
+    </Target>
+    <Target Name="DarknessDebug:Clean">
+        <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DarknessDebug:Make">
+        <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="pkgDarkGlassCore;DarkGlassCore;pkgDarkGlass;DarknessDebug"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="pkgDarkGlassCore:Clean;DarkGlassCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="pkgDarkGlassCore:Make;DarkGlassCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
