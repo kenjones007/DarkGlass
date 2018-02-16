@@ -30,4 +30,9 @@ package pkgDarkGlass;
 requires
   rtl;
 
+contains
+  darkglass.static in 'api\darkglass.static.pas',
+  darkglass.common in 'api\darkglass.common.pas',
+  darkglass.dynamic in 'api\darkglass.dynamic.pas';
+
 end.

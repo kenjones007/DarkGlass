@@ -1,7 +1,8 @@
 library DarkGlassCore;
 uses
   System.SysUtils,
-  System.Classes;
+  System.Classes,
+  dg.messaging.api in 'api\dg.messaging.api.pas';
 
 {$R *.res}
 

@@ -30,4 +30,8 @@ package pkgDarkGlassCore;
 requires
   rtl;
 
+contains
+  dg.messaging.api in 'api\dg.messaging.api.pas',
+  dg.messaging.api.types in 'api\dg.messaging.api.types.pas';
+
 end.

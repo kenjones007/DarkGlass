@@ -150,6 +150,9 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
+        <DCCReference Include="api\darkglass.static.pas"/>
+        <DCCReference Include="api\darkglass.common.pas"/>
+        <DCCReference Include="api\darkglass.dynamic.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -198,7 +201,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\pkgDarkGlass.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\out\lib\bpl\pkgDarkGlass.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>pkgDarkGlass.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
