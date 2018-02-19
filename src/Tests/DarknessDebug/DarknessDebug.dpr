@@ -1,17 +1,21 @@
 program DarknessDebug;
 uses
+  darkglass,
 //  darkglass.static,
   darkglass.dynamic,
   sysutils,
   System.StartUpCopy;
 
 var
-  Engine: TDarkglassEngine;
   aMessage: TMessage;
 
 begin
-  Engine := getDarkGlass;
-  if not Engine.SendMessage(aMessage) then begin
-    Sleep(1);
+  if not dgInitialize() then begin
+    halt(1);
+  end;
+  try
+    dgRun();
+  finally
+    dgFinalize();
   end;
 end.

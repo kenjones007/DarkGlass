@@ -1,23 +1,59 @@
 unit darkglass.dynamic;
 
 interface
-uses
-  darkglass.common,
-  dg.messaging.api.types;
-
-type
-  TMessage = dg.messaging.api.types.TMessage;
-  TDarkglassEngine =  darkglass.common.TDarkglassEngine;
-
-function getDarkGlass: TDarkGlassEngine;
 
 implementation
+uses
+  sysutils,
+  darkglass.dynlib,
+  darkglass.dynlib.standard,
+  darkglass;
 
-function InternalSendMessage( aMessage: TMessage ): boolean; stdcall; external 'DarkGlassCore.dll' name 'SendMessage';
+const
+{$ifdef MSWINDOWS}
+  cLibName = 'DarkGlassCore.dll';
+{$endif}
+{$ifdef MACOS}
+  {$ifdef IOS}
+  cLibName = 'libDarkglass.dynlib';
+  {$else}
+  cLibName = 'libDarkglass.dynlib';
+  {$endif}
+{$endif}
+{$ifdef ANDROID}
+  cLibName = 'libDarkglass.so';
+{$endif}
+{$ifdef LINUX}
+  cLibName = 'libDarkglass.so';
+{$endif}
 
-function getDarkGlass: TDarkGlassEngine;
+
+var
+  libDarkGlass: IDynLib = nil;
+
+function LoadProcAddress( funcname: string ): pointer;
 begin
-  Result.SendMessage := @InternalSendMessage;
+  Result := libDarkGlass.GetProcAddress(funcname);
+  if not assigned(Result) then begin
+    raise
+      Exception.Create('Could not bind to function: '+funcname+' in libDakglass');
+  end;
 end;
+
+initialization
+  libDarkGlass := TDynLib.Create;
+  if not libDarkGlass.LoadLibrary(cLibName) then begin
+    raise
+      Exception.Create('Cannot find librarby '''+cLibName+'''.');
+  end;
+  dgVersionMajor := LoadProcAddress('dgVersionMajor');
+  dgVersionMinor := LoadProcAddress('dgVersionMinor');
+    dgInitialize := LoadProcAddress('dgInitialize');
+           dgRun := LoadProcAddress('dgRun');
+      dgFinalize := LoadProcAddress('dgFinalize');
+
+finalization
+  libDarkGlass := nil;
+
 
 end.

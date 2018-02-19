@@ -32,7 +32,11 @@ requires
 
 contains
   darkglass.static in 'api\darkglass.static.pas',
-  darkglass.common in 'api\darkglass.common.pas',
-  darkglass.dynamic in 'api\darkglass.dynamic.pas';
+  darkglass in 'api\darkglass.pas',
+  darkglass.dynamic in 'api\darkglass.dynamic.pas',
+  darkglass.dynlib in 'interfaces\darkglass.dynlib.pas',
+  darkglass.dynlib.windows in 'implementation\darkglass.dynlib.windows.pas',
+  darkglass.dynlib.posix in 'implementation\darkglass.dynlib.posix.pas',
+  darkglass.dynlib.standard in 'implementation\darkglass.dynlib.standard.pas';
 
 end.
