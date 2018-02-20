@@ -5,8 +5,8 @@ interface
 implementation
 uses
   sysutils,
-  darkglass.dynlib,
-  darkglass.dynlib.standard,
+  dg.dynlib.dynlib,
+  dg.dynlib.dynlib.standard,
   darkglass;
 
 const
@@ -15,16 +15,16 @@ const
 {$endif}
 {$ifdef MACOS}
   {$ifdef IOS}
-  cLibName = 'libDarkglass.dynlib';
+  cLibName = 'libDarkGlassCore.dynlib';
   {$else}
-  cLibName = 'libDarkglass.dynlib';
+  cLibName = 'libDarkGlassCore.dynlib';
   {$endif}
 {$endif}
 {$ifdef ANDROID}
-  cLibName = 'libDarkglass.so';
+  cLibName = 'libDarkGlassCore.so';
 {$endif}
 {$ifdef LINUX}
-  cLibName = 'libDarkglass.so';
+  cLibName = 'libDarkGlassCore.so';
 {$endif}
 
 

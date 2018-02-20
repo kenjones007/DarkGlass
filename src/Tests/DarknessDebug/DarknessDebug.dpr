@@ -3,8 +3,7 @@ uses
   darkglass,
 //  darkglass.static,
   darkglass.dynamic,
-  sysutils,
-  System.StartUpCopy;
+  sysutils;
 
 var
   aMessage: TMessage;

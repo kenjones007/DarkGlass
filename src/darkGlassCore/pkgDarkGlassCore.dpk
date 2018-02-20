@@ -33,6 +33,10 @@ requires
 contains
   dg.messaging.api in 'api\dg.messaging.api.pas',
   dg.messaging.api.types in 'api\dg.messaging.api.types.pas',
-  dg.engine.api in 'api\dg.engine.api.pas';
+  dg.engine.api in 'api\dg.engine.api.pas',
+  dg.dynlib.dynlib in 'interfaces\dg.dynlib.dynlib.pas',
+  dg.dynlib.dynlib.posix in 'implementation\dg.dynlib.dynlib.posix.pas',
+  dg.dynlib.dynlib.standard in 'implementation\dg.dynlib.dynlib.standard.pas',
+  dg.dynlib.dynlib.windows in 'implementation\dg.dynlib.dynlib.windows.pas';
 
 end.

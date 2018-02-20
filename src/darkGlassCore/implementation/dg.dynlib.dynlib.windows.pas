@@ -1,9 +1,10 @@
-unit darkglass.dynlib.windows;
+unit dg.dynlib.dynlib.windows;
 
 interface
+{$ifdef MSWINDOWS}
 uses
   Windows,
-  darkglass.dynlib;
+  dg.dynlib.dynlib;
 
 type
   TDynLib = class( TInterfacedObject, IDynLib )
@@ -18,7 +19,9 @@ type
     destructor Destroy; override;
   end;
 
+{$endif}
 implementation
+{$ifdef MSWINDOWS}
 
 const
   null = 0;
@@ -54,4 +57,5 @@ begin
   Result := not (fHandle=null);
 end;
 
+{$endif}
 end.

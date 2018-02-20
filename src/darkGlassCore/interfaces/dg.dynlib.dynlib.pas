@@ -1,4 +1,4 @@
-unit darkglass.dynlib;
+unit dg.dynlib.dynlib;
 
 interface
 
