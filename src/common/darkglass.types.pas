@@ -24,24 +24,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-program DarknessDebug;
-uses
-  darkglass,
-  darkglass.types,
-  darkglass.static,
-//  darkglass.dynamic,
-  sysutils;
+unit darkglass.types;
 
-var
-  aMessage: TMessage;
+interface
 
-begin
-  if not dgInitialize() then begin
-    halt(1);
+type
+  TMessage = record
+
   end;
-  try
-    dgRun();
-  finally
-    dgFinalize();
-  end;
+
+implementation
+
 end.

@@ -6,7 +6,7 @@
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Linux64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1247</TargetedPlatforms>
         <AppType>Package</AppType>
     </PropertyGroup>
@@ -151,12 +151,17 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="api\dg.messaging.api.pas"/>
-        <DCCReference Include="api\dg.messaging.api.types.pas"/>
         <DCCReference Include="api\dg.engine.api.pas"/>
         <DCCReference Include="interfaces\dg.dynlib.dynlib.pas"/>
         <DCCReference Include="implementation\dg.dynlib.dynlib.posix.pas"/>
         <DCCReference Include="implementation\dg.dynlib.dynlib.standard.pas"/>
         <DCCReference Include="implementation\dg.dynlib.dynlib.windows.pas"/>
+        <DCCReference Include="..\common\darkglass.types.pas"/>
+        <DCCReference Include="interfaces\dg.platform.platform.pas"/>
+        <DCCReference Include="implementation\dg.platform.platform.windows.pas"/>
+        <DCCReference Include="implementation\dg.platform.platform.standard.pas"/>
+        <DCCReference Include="interfaces\dg.platform.window.pas"/>
+        <DCCReference Include="implementation\dg.platform.window.windows.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

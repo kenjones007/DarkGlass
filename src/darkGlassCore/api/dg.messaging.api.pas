@@ -28,7 +28,7 @@ unit dg.messaging.api;
 
 interface
 uses
-  dg.messaging.api.types;
+  darkglass.types;
 
 function SendMessage( aMessage: TMessage ): boolean; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 

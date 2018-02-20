@@ -24,24 +24,45 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-program DarknessDebug;
+unit dg.platform.platform.standard;
+
+interface
 uses
-  darkglass,
-  darkglass.types,
-  darkglass.static,
-//  darkglass.dynamic,
-  sysutils;
+  {$ifdef MSWINDOWS}
+  dg.platform.platform.windows;
+  {$endif}
+  {$ifdef LINUX}
+  dg.platform.platform.linux;
+  {$endif}
+  {$ifdef OSX}
+    {$ifdef IOS}
+    dg.platform.platform.ios;
+    {$else}
+    dg.platform.platform.osx;
+    {$endif}
+  {$endif}
+  {$ifdef ANDROID}
+  dg.platform.platform.android;
+  {$endif}
 
-var
-  aMessage: TMessage;
+type
+  {$ifdef MSWINDOWS}
+  TPlatform = dg.platform.platform.windows.TPlatform;
+  {$endif}
+  {$ifdef LINUX}
+  TPlatform = dg.platform.platform.linux.TPlatform;
+  {$endif}
+  {$ifdef OSX}
+    {$ifdef IOS}
+    TPlatform = dg.platform.platform.ios.TPlatform;
+    {$else}
+    TPlatform = dg.platform.platform.osx.TPlatform;
+    {$endif}
+  {$endif}
+  {$ifdef ANDROID}
+  TPlatform = dg.platform.platform.android.TPlatform;
+  {$endif}
 
-begin
-  if not dgInitialize() then begin
-    halt(1);
-  end;
-  try
-    dgRun();
-  finally
-    dgFinalize();
-  end;
+implementation
+
 end.

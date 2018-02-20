@@ -24,12 +24,17 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.messaging.api.types;
+unit dg.platform.platform;
 
 interface
 
 type
-  TMessage = record
+  IPlatform = interface
+    ['{96483AB0-2942-4D7B-9E9D-1473CA32D6CB}']
+
+    function Initialize: boolean;
+    procedure Run;
+    function Finalize: boolean;
 
   end;
 

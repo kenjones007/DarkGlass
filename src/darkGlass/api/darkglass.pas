@@ -28,11 +28,7 @@ unit darkglass;
 
 interface
 uses
-  dg.messaging.api,
-  dg.messaging.api.types;
-
-type
-  TMessage = dg.messaging.api.types.TMessage;
+  dg.messaging.api;
 
 var
   dgVersionMajor: function: uint32;

@@ -36,11 +36,15 @@ function dgFinalize: boolean;     {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$e
 
 implementation
 uses
-  sysutils;
+  dg.platform.platform,
+  dg.platform.platform.standard;
 
 const
   cVersionMajor = 1;
   cVersionMinor = 0;
+
+var
+  Platform: IPlatform = nil;
 
 function dgVersionMajor: uint32;
 begin
@@ -54,19 +58,35 @@ end;
 
 function dgInitialize: boolean;
 begin
-  Result := True;
+  Result := False;
+  if assigned(Platform) then begin
+    exit;
+  end;
+  Platform := TPlatform.Create;
+  Result := Platform.Initialize;
+  if not Result then begin
+    Platform := nil;
+  end;
 end;
 
 procedure dgRun;
 begin
-  while (True) do begin
-    Sleep(1);
+  if not assigned(Platform) then begin
+    exit;
   end;
+  Platform.Run;
 end;
 
 function dgFinalize: boolean;
 begin
-  Result := True;
+  Result := False;
+  if not assigned(Platform) then begin
+    exit;
+  end;
+  Result := Platform.Finalize;
+  if Result then begin
+    Platform := nil;
+  end;
 end;
 
 exports

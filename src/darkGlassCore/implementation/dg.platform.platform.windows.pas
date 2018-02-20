@@ -24,24 +24,57 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-program DarknessDebug;
+unit dg.platform.platform.windows;
+
+interface
 uses
-  darkglass,
-  darkglass.types,
-  darkglass.static,
-//  darkglass.dynamic,
+  dg.platform.window,
+  dg.platform.platform;
+
+type
+  TPlatform = class( TInterfacedObject, IPlatform )
+  private
+    fMainWindow: IWindow;
+  private
+    function Initialize: boolean;
+    procedure Run;
+    function Finalize: boolean;
+  end;
+
+implementation
+uses
+  dg.platform.window.windows,
+  Windows,
+  Messages,
   sysutils;
 
-var
-  aMessage: TMessage;
+{ TPlatform }
 
+function TPlatform.Finalize: boolean;
 begin
-  if not dgInitialize() then begin
-    halt(1);
+  fMainWindow := nil;
+  Result := True;
+end;
+
+function TPlatform.Initialize: boolean;
+begin
+  Result := True;
+  fMainWindow := TWindow.Create;
+end;
+
+procedure TPlatform.Run;
+var
+  aMessage: tagMsg;
+begin
+  while (True) do begin
+    if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
+       TranslateMessage(aMessage);
+       DispatchMessage(aMessage);
+       if aMessage.message=WM_QUIT then begin
+         exit;
+       end;
+    end;
   end;
-  try
-    dgRun();
-  finally
-    dgFinalize();
-  end;
+end;
+
 end.

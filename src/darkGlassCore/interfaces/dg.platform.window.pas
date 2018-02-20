@@ -24,24 +24,22 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-program DarknessDebug;
-uses
-  darkglass,
-  darkglass.types,
-  darkglass.static,
-//  darkglass.dynamic,
-  sysutils;
+unit dg.platform.window;
 
-var
-  aMessage: TMessage;
+interface
 
-begin
-  if not dgInitialize() then begin
-    halt(1);
+type
+  IWindow = interface
+    ['{87174835-FEAA-4ED1-8E5B-94F3D7C3654E}']
+
+    ///  <summary>
+    ///    Returns a pointer to the window handle.
+    ///    Except on target platforms where a window handle is a pointer type.
+    ///  </summary>
+    function getHandle: pointer;
+
   end;
-  try
-    dgRun();
-  finally
-    dgFinalize();
-  end;
+
+implementation
+
 end.

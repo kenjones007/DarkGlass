@@ -32,11 +32,16 @@ requires
 
 contains
   dg.messaging.api in 'api\dg.messaging.api.pas',
-  dg.messaging.api.types in 'api\dg.messaging.api.types.pas',
   dg.engine.api in 'api\dg.engine.api.pas',
   dg.dynlib.dynlib in 'interfaces\dg.dynlib.dynlib.pas',
   dg.dynlib.dynlib.posix in 'implementation\dg.dynlib.dynlib.posix.pas',
   dg.dynlib.dynlib.standard in 'implementation\dg.dynlib.dynlib.standard.pas',
-  dg.dynlib.dynlib.windows in 'implementation\dg.dynlib.dynlib.windows.pas';
+  dg.dynlib.dynlib.windows in 'implementation\dg.dynlib.dynlib.windows.pas',
+  darkglass.types in '..\common\darkglass.types.pas',
+  dg.platform.platform in 'interfaces\dg.platform.platform.pas',
+  dg.platform.platform.windows in 'implementation\dg.platform.platform.windows.pas',
+  dg.platform.platform.standard in 'implementation\dg.platform.platform.standard.pas',
+  dg.platform.window in 'interfaces\dg.platform.window.pas',
+  dg.platform.window.windows in 'implementation\dg.platform.window.windows.pas';
 
 end.
