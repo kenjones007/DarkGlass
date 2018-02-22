@@ -24,15 +24,25 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.threading.threadengine;
 
 interface
+uses
+  dg.threading.enginethread;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  IThreadEngine = interface
+    ['{30780107-FED7-4A3B-BF80-742FDE3A8620}']
+
+    function getThreadCount: uint32;
+    function getThread( idx: uint32 ): IEngineThread;
+
+    procedure Run;
+
+    //- Pascal Only, Properties -//
+    property Count: uint32 read getThreadCount;
+    property Threads[ idx: uint32 ]: IEngineThread read getThread;
+
   end;
 
 implementation

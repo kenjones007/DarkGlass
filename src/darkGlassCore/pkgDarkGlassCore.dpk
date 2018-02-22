@@ -42,6 +42,22 @@ contains
   dg.platform.platform.windows in 'implementation\dg.platform.platform.windows.pas',
   dg.platform.platform.standard in 'implementation\dg.platform.platform.standard.pas',
   dg.platform.window in 'interfaces\dg.platform.window.pas',
-  dg.platform.window.windows in 'implementation\dg.platform.window.windows.pas';
+  dg.platform.window.windows in 'implementation\dg.platform.window.windows.pas',
+  dg.messaging.messagebus in 'interfaces\dg.messaging.messagebus.pas',
+  dg.messaging.messagechannel in 'interfaces\dg.messaging.messagechannel.pas',
+  dg.messaging.messagepipe in 'interfaces\dg.messaging.messagepipe.pas',
+  dg.threading.enginethread in 'interfaces\dg.threading.enginethread.pas',
+  dg.threading.subsystem in 'interfaces\dg.threading.subsystem.pas',
+  dg.threading.threadengine in 'interfaces\dg.threading.threadengine.pas',
+  dg.messaging.messagebus.standard in 'implementation\dg.messaging.messagebus.standard.pas',
+  dg.messaging.messagechannel.standard in 'implementation\dg.messaging.messagechannel.standard.pas',
+  dg.messaging.messagepipe.standard in 'implementation\dg.messaging.messagepipe.standard.pas',
+  dg.threading.enginethread.rtl in 'implementation\dg.threading.enginethread.rtl.pas',
+  dg.threading.enginethread.ui.rtl in 'implementation\dg.threading.enginethread.ui.rtl.pas',
+  dg.threading.threadengine.rtl in 'implementation\dg.threading.threadengine.rtl.pas',
+  dg.threading.threadengine.standard in 'implementation\dg.threading.threadengine.standard.pas',
+  dg.threading.threadmethod.rtl in 'implementation\dg.threading.threadmethod.rtl.pas',
+  dg.platform.platform.custom in 'implementation\dg.platform.platform.custom.pas',
+  dg.mainloop.windows in 'implementation\dg.mainloop.windows.pas';
 
 end.

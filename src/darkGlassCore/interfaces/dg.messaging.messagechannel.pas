@@ -24,15 +24,36 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.messaging.messagechannel;
 
 interface
+uses
+  darkglass.types,
+  dg.messaging.messagepipe;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  IMessageChannel = interface
+    ['{E72DE502-E6B9-49B9-829C-964587A555D4}']
+
+    ///  <summary>
+    ///    Returns the name of this message channel.
+    ///  </summary>
+    function getName: string;
+
+    ///  <summary>
+    ///    Pulls a message from the pipes of the message channel.
+    ///    Returns true if a message is returned, else returns false.
+    ///  </summary>
+    function Pull( var aMessage: TMessage ): boolean;
+
+    ///  <summary>
+    ///    Returns an implementation of IMessagePipe, which may be used
+    ///    to inject messages into this channel.
+    ///  </summary>
+    function getPipe: IMessagePipe;
+
+    // - Pascal Only, Property -//
+    property Name: string read getName;
   end;
 
 implementation

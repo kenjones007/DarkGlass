@@ -24,16 +24,22 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.threading.subsystem;
 
 interface
+uses
+  dg.messaging.messagebus;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  ISubSystem = interface
+  ['{37CF5CD7-EB5E-4FD5-A46B-A123EFC71870}']
+
+    procedure Install( MessageBus: IMessageBus );
+    function Initialize( MessageBus: IMessageBus ): boolean;
+    function Execute: boolean;
+    procedure Finalize;
   end;
+
 
 implementation
 

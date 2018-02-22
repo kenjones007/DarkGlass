@@ -24,15 +24,30 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.messaging.messagebus;
 
 interface
+uses
+  dg.messaging.messagepipe,
+  dg.messaging.messagechannel;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  IMessageBus = interface
+    ['{CAB3C192-2164-4BDB-BAD9-4F087C1BB7A4}']
+
+    ///  <summary>
+    ///    Called by a subsystem during initialization, to add it's message
+    ///    channel to the bus.
+    ///  </summary>
+    function CreateMessageChannel( name: string ): IMessageChannel;
+
+
+    ///  <summary>
+    ///    Called by a subsystem during initialization, to create a message
+    ///    pipe on another subsystem, for injecting messages to that target.
+    ///  </summary>
+    function GetMessagePipe( ChannelName: string ): IMessagePipe;
+
   end;
 
 implementation

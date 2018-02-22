@@ -24,17 +24,81 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.messaging.messagechannel.standard;
 
 interface
+uses
+  system.generics.collections,
+  darkglass.types,
+  dg.messaging.messagepipe,
+  dg.messaging.messagechannel;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  TMessageChannel = class( TInterfacedObject, IMessageChannel )
+  private
+    fName: string;
+    fPipes: TList<IMessagePipe>;
+    fPipeIndex: uint32;
+  private //- IMessageChannel -//
+    function getName: string;
+    function Pull( var aMessage: TMessage ): boolean;
+    function getPipe: IMessagePipe;
+  public
+    constructor Create( aName: string ); reintroduce;
+    destructor Destroy; override;
   end;
 
 implementation
+uses
+  dg.messaging.messagepipe.standard;
+
+{ TMessageChannel }
+
+constructor TMessageChannel.Create( aName: string );
+begin
+  inherited Create;
+  fName := aName;
+  fPipes := TList<IMessagePipe>.Create;
+  fPipeIndex := 0;
+end;
+
+destructor TMessageChannel.Destroy;
+begin
+  fPipes.DisposeOf;
+  inherited Destroy;
+end;
+
+function TMessageChannel.getName: string;
+begin
+  Result := fName;
+end;
+
+function TMessageChannel.getPipe: IMessagePipe;
+var
+  NewPipe: IMessagePipe;
+begin
+  NewPipe := TMessagePipe.Create;
+  fPipes.Add(NewPipe);
+  Result := NewPipe;
+end;
+
+function TMessageChannel.Pull(var aMessage: TMessage): boolean;
+var
+  idx: uint32;
+begin
+  Result := False;
+  if fPipes.Count=0 then begin
+    exit;
+  end;
+  idx := fPipeIndex;
+  repeat
+    Result := fPipes[idx].Pull(aMessage);
+    inc(idx);
+    if idx>=pred(fPipes.Count) then begin
+      idx := 0;
+    end;
+  until (idx=fPipeIndex) or (Result=True);
+  fPipeIndex := idx;
+end;
 
 end.

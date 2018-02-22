@@ -29,21 +29,23 @@ unit dg.platform.platform.windows;
 interface
 uses
   dg.platform.window,
-  dg.platform.platform;
+  dg.platform.platform,
+  dg.platform.platform.custom;
 
 type
-  TPlatform = class( TInterfacedObject, IPlatform )
+  TPlatform = class( TCustomPlatform, IPlatform )
   private
     fMainWindow: IWindow;
   private
-    function Initialize: boolean;
-    procedure Run;
-    function Finalize: boolean;
+    function Initialize: boolean; override;
+    procedure Run;  override;
+    function Finalize: boolean;  override;
   end;
 
 implementation
 uses
   dg.platform.window.windows,
+  dg.mainloop.windows,
   Windows,
   Messages,
   sysutils;
@@ -60,21 +62,12 @@ function TPlatform.Initialize: boolean;
 begin
   Result := True;
   fMainWindow := TWindow.Create;
+  fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
 end;
 
 procedure TPlatform.Run;
-var
-  aMessage: tagMsg;
 begin
-  while (True) do begin
-    if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-       TranslateMessage(aMessage);
-       DispatchMessage(aMessage);
-       if aMessage.message=WM_QUIT then begin
-         exit;
-       end;
-    end;
-  end;
+  inherited Run;
 end;
 
 end.

@@ -24,17 +24,54 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.mainloop.windows;
 
 interface
+uses
+  dg.messaging.messagebus,
+  dg.threading.subsystem;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  TMainLoop = class( TInterfacedObject, ISubSystem )
+  private //- ISubSystem
+    procedure Install( MessageBus: IMessageBus );
+    function Initialize( MessageBus: IMessageBus ): boolean;
+    function Execute: boolean;
+    procedure Finalize;
   end;
 
 implementation
+uses
+  Windows,
+  Messages;
+
+function TMainLoop.Execute: boolean;
+var
+  aMessage: tagMsg;
+begin
+  Result := True;
+  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
+     TranslateMessage(aMessage);
+     DispatchMessage(aMessage);
+     if aMessage.message=WM_QUIT then begin
+       Result := False;
+     end;
+  end;
+end;
+
+procedure TMainLoop.Finalize;
+begin
+  //- Do nothing
+end;
+
+function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
+begin
+  Result := True;
+end;
+
+procedure TMainLoop.Install(MessageBus: IMessageBus);
+begin
+ //- Do nothing
+end;
 
 end.

@@ -24,15 +24,22 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.threading.enginethread;
 
 interface
+uses
+  dg.threading.subsystem;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  IEngineThread = interface
+  ['{13CE71F7-C2AD-4B7B-AEC1-2A89FC2310A8}']
+
+    ///  <summary>
+    ///    Adds a subsystem to the thread.
+    ///    This method will only function before the thread is started.
+    ///  </summary>
+    procedure InstallSubsystem( aSubSystem: ISubSystem );
+    procedure Start;
   end;
 
 implementation

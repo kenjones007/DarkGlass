@@ -24,17 +24,47 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.platform.platform.custom;
 
 interface
+uses
+  dg.threading.threadengine,
+  dg.platform.platform;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  TCustomPlatform = class( TInterfacedObject, IPlatform )
+  protected
+    fThreadEngine: IThreadEngine;
+  protected //- IPlatform -//
+    function Initialize: boolean; virtual; abstract;
+    function Finalize: boolean; virtual;  abstract;
+    procedure Run;  virtual;
+  public
+    constructor Create; reintroduce; virtual;
+    destructor Destroy; override;
   end;
 
 implementation
+uses
+  dg.threading.threadengine.standard;
+
+{ TCustomPlatform }
+
+constructor TCustomPlatform.Create;
+begin
+  inherited Create;
+  fThreadEngine := TThreadEngine.Create;
+end;
+
+destructor TCustomPlatform.Destroy;
+begin
+  fThreadEngine := nil;
+  inherited;
+end;
+
+procedure TCustomPlatform.Run;
+begin
+  fThreadEngine.Run;
+end;
 
 end.

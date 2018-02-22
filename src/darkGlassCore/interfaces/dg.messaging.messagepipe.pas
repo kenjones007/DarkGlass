@@ -24,15 +24,18 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.messaging.messagepipe;
 
 interface
+uses
+  darkglass.types;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  IMessagePipe = interface
+    ['{B8FE0D89-B21F-4352-B7FE-F96A335F6EBE}']
+
+    function Push( aMessage: TMessage ): boolean;
+    function Pull( var aMessage: TMessage ): boolean;
   end;
 
 implementation

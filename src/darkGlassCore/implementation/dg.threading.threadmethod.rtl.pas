@@ -24,17 +24,56 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.threading.threadmethod.rtl;
 
 interface
+uses
+  classes;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  TThreadExecuteEvent = function() :boolean of object;
+
+  TThreadMethod = class( TThread )
+  private
+    fOnThreadExecuteEvent: TThreadExecuteEvent;
+  protected
+    procedure Execute; override;
+  public
+    constructor Create( ThreadedMethod: TThreadExecuteEvent ); reintroduce;
+    destructor Destroy; override;
   end;
 
 implementation
+
+{ TThreadMethod }
+
+constructor TThreadMethod.Create( ThreadedMethod: TThreadExecuteEvent );
+begin
+  inherited Create( True );
+  FreeOnTerminate := False;
+  fOnThreadExecuteEvent := ThreadedMethod;
+end;
+
+destructor TThreadMethod.Destroy;
+begin
+  if not Terminated then begin
+    Terminate;
+    WaitFor;
+  end;
+  inherited Destroy;
+end;
+
+procedure TThreadMethod.Execute;
+begin
+  while not terminated do begin
+    if assigned(fOnThreadExecuteEvent) then begin
+      if not fOnThreadExecuteEvent then begin
+        Terminate;
+      end;
+    end else begin
+      Sleep(0);
+    end;
+  end;
+end;
 
 end.

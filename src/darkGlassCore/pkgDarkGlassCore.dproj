@@ -162,6 +162,22 @@
         <DCCReference Include="implementation\dg.platform.platform.standard.pas"/>
         <DCCReference Include="interfaces\dg.platform.window.pas"/>
         <DCCReference Include="implementation\dg.platform.window.windows.pas"/>
+        <DCCReference Include="interfaces\dg.messaging.messagebus.pas"/>
+        <DCCReference Include="interfaces\dg.messaging.messagechannel.pas"/>
+        <DCCReference Include="interfaces\dg.messaging.messagepipe.pas"/>
+        <DCCReference Include="interfaces\dg.threading.enginethread.pas"/>
+        <DCCReference Include="interfaces\dg.threading.subsystem.pas"/>
+        <DCCReference Include="interfaces\dg.threading.threadengine.pas"/>
+        <DCCReference Include="implementation\dg.messaging.messagebus.standard.pas"/>
+        <DCCReference Include="implementation\dg.messaging.messagechannel.standard.pas"/>
+        <DCCReference Include="implementation\dg.messaging.messagepipe.standard.pas"/>
+        <DCCReference Include="implementation\dg.threading.enginethread.rtl.pas"/>
+        <DCCReference Include="implementation\dg.threading.enginethread.ui.rtl.pas"/>
+        <DCCReference Include="implementation\dg.threading.threadengine.rtl.pas"/>
+        <DCCReference Include="implementation\dg.threading.threadengine.standard.pas"/>
+        <DCCReference Include="implementation\dg.threading.threadmethod.rtl.pas"/>
+        <DCCReference Include="implementation\dg.platform.platform.custom.pas"/>
+        <DCCReference Include="implementation\dg.mainloop.windows.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

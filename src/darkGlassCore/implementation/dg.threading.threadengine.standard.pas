@@ -24,16 +24,14 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.types;
+unit dg.threading.threadengine.standard;
 
 interface
+uses
+  dg.threading.threadengine.rtl;
 
 type
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
-  end;
+  TThreadEngine = dg.threading.threadengine.rtl.TThreadEngine;
 
 implementation
 
