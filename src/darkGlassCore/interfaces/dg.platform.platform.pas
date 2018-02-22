@@ -27,10 +27,15 @@
 unit dg.platform.platform;
 
 interface
+uses
+  darkglass.types;
 
 type
   IPlatform = interface
     ['{96483AB0-2942-4D7B-9E9D-1473CA32D6CB}']
+
+    function GetMessageChannel( ChannelName: string ): THMessageChannel;
+    function SendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
 
     function Initialize: boolean;
     procedure Run;

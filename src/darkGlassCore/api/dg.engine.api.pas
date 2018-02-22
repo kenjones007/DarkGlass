@@ -27,15 +27,18 @@
 unit dg.engine.api;
 
 interface
+uses
+  darkglass.types;
 
-function dgVersionMajor: uint32;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
-function dgVersionMinor: uint32;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
-function dgInitialize: boolean;   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
-procedure dgRun;                  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
-function dgFinalize: boolean;     {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgVersionMajor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgVersionMinor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+procedure dgRun;                                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgGetMessageChannel( ChannelName: string ): THMessageChannel;             {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 implementation
 uses
+  sysutils,
   dg.platform.platform,
   dg.platform.platform.standard;
 
@@ -56,19 +59,6 @@ begin
   Result := cVersionMinor;
 end;
 
-function dgInitialize: boolean;
-begin
-  Result := False;
-  if assigned(Platform) then begin
-    exit;
-  end;
-  Platform := TPlatform.Create;
-  Result := Platform.Initialize;
-  if not Result then begin
-    Platform := nil;
-  end;
-end;
-
 procedure dgRun;
 begin
   if not assigned(Platform) then begin
@@ -77,23 +67,43 @@ begin
   Platform.Run;
 end;
 
-function dgFinalize: boolean;
+function dgGetMessageChannel( ChannelName: string ): THMessageChannel;
 begin
-  Result := False;
-  if not assigned(Platform) then begin
-    exit;
+  Result := Platform.getMessageChannel( ChannelName );
+end;
+
+function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
+begin
+  Result := Platform.SendMessage( Channel, aMessage );
+end;
+
+procedure dgInitialize;
+begin
+  Platform := TPlatform.Create;
+  if not Platform.Initialize then begin
+    raise
+      Exception.Create('DarkGlass engine failed to initialize.');
   end;
-  Result := Platform.Finalize;
-  if Result then begin
-    Platform := nil;
+end;
+
+procedure dgFinalize;
+begin
+  if not Platform.Finalize then begin
+    raise
+      Exception.Create('DarkGlass engine failed to finalize.');
   end;
 end;
 
 exports
   dgVersionMajor,
   dgVersionMinor,
-  dgInitialize,
-  dgRun,
+  dgRun;
+
+initialization
+  dgInitialize;
+
+finalization
   dgFinalize;
+  Platform := nil;
 
 end.

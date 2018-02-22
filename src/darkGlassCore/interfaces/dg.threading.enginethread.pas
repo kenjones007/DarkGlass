@@ -28,6 +28,7 @@ unit dg.threading.enginethread;
 
 interface
 uses
+  dg.messaging.messagebus,
   dg.threading.subsystem;
 
 type
@@ -39,6 +40,9 @@ type
     ///    This method will only function before the thread is started.
     ///  </summary>
     procedure InstallSubsystem( aSubSystem: ISubSystem );
+
+    ///  <summary>
+    ///  </summary>
     procedure Start;
   end;
 

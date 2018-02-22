@@ -39,6 +39,7 @@ type
     fMessageBus: IMessageBus;
     fThreads: TList<IEngineThread>;
   private //- IThreadEngine -//
+    function getMessageBus: IMessageBus;
     function getThreadCount: uint32;
     function getThread( idx: uint32 ): IEngineThread;
     procedure Run;
@@ -90,6 +91,11 @@ begin
   fThreads.DisposeOf;
   fMessageBus := nil;
   inherited Destroy;
+end;
+
+function TThreadEngine.getMessageBus: IMessageBus;
+begin
+  Result := fMessageBus;
 end;
 
 function TThreadEngine.getThread(idx: uint32): IEngineThread;

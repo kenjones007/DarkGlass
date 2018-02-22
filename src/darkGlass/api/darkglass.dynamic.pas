@@ -72,14 +72,13 @@ initialization
     raise
       Exception.Create('Cannot find librarby '''+cLibName+'''.');
   end;
-  dgVersionMajor := LoadProcAddress('dgVersionMajor');
-  dgVersionMinor := LoadProcAddress('dgVersionMinor');
-    dgInitialize := LoadProcAddress('dgInitialize');
-           dgRun := LoadProcAddress('dgRun');
-      dgFinalize := LoadProcAddress('dgFinalize');
+       dgVersionMajor := LoadProcAddress('dgVersionMajor');
+       dgVersionMinor := LoadProcAddress('dgVersionMinor');
+                dgRun := LoadProcAddress('dgRun');
+  dgGetMessageChannel := LoadProcAddress('dgGetMessageChannel');
+        dgSendMessage := LoadProcAddress('dgSendMessage');
 
 finalization
   libDarkGlass := nil;
-
 
 end.

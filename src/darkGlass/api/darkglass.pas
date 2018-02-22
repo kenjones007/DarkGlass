@@ -28,14 +28,16 @@ unit darkglass;
 
 interface
 uses
+  darkglass.types,
   dg.messaging.api;
 
 var
-  dgVersionMajor: function: uint32;
-  dgVersionMinor: function: uint32;
-  dgInitialize: function : boolean;
-  dgRun: procedure();
-  dgFinalize: function: boolean;
+       dgVersionMajor: function: uint32;                                                    {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+       dgVersionMinor: function: uint32;                                                    {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+                dgRun: procedure();                                                         {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  //-
+  dgGetMessageChannel: function( ChannelName: string ): THMessageChannel;                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+        dgSendMessage: function( Channel: THMessageChannel; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
 implementation
 

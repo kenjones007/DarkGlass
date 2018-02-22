@@ -28,6 +28,9 @@ unit dg.platform.platform.custom;
 
 interface
 uses
+  system.generics.collections,
+  darkglass.types,
+  dg.messaging.messagepipe,
   dg.threading.threadengine,
   dg.platform.platform;
 
@@ -35,7 +38,10 @@ type
   TCustomPlatform = class( TInterfacedObject, IPlatform )
   protected
     fThreadEngine: IThreadEngine;
+    fMessagePipes: TList<IMessagePipe>;
   protected //- IPlatform -//
+    function GetMessageChannel( ChannelName: string ): THMessageChannel;
+    function SendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
     function Initialize: boolean; virtual; abstract;
     function Finalize: boolean; virtual;  abstract;
     procedure Run;  virtual;
@@ -54,17 +60,41 @@ constructor TCustomPlatform.Create;
 begin
   inherited Create;
   fThreadEngine := TThreadEngine.Create;
+  fMessagePipes := TList<IMessagePipe>.Create;
 end;
 
 destructor TCustomPlatform.Destroy;
 begin
   fThreadEngine := nil;
-  inherited;
+  fMessagePipes.DisposeOf;
+  inherited Destroy;
+end;
+
+function TCustomPlatform.GetMessageChannel(ChannelName: string): THMessageChannel;
+var
+  Pipe: IMessagePipe;
+begin
+  Pipe := fThreadEngine.getMessageBus.GetMessagePipe(ChannelName);
+  if not assigned(Pipe) then begin
+    Result := 0;
+  end;
+  fMessagePipes.Add(Pipe);
+  Result := fMessagePipes.Count;
 end;
 
 procedure TCustomPlatform.Run;
 begin
   fThreadEngine.Run;
+end;
+
+
+function TCustomPlatform.SendMessage(Channel: THMessageChannel; aMessage: TMessage): boolean;
+begin
+  Result := False;
+  if (Channel=0) or (Channel>fMessagePipes.Count) then begin
+    exit;
+  end;
+  Result := fMessagePipes.Items[pred(Channel)].Push(aMessage);
 end;
 
 end.

@@ -177,7 +177,7 @@
         <DCCReference Include="implementation\dg.threading.threadengine.standard.pas"/>
         <DCCReference Include="implementation\dg.threading.threadmethod.rtl.pas"/>
         <DCCReference Include="implementation\dg.platform.platform.custom.pas"/>
-        <DCCReference Include="implementation\dg.mainloop.windows.pas"/>
+        <DCCReference Include="implementation\dg.platform.mainloop.windows.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

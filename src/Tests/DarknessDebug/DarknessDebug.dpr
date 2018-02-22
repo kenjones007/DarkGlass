@@ -34,14 +34,11 @@ uses
 
 var
   aMessage: TMessage;
+  PlatformChannel: THMessageChannel;
 
 begin
-  if not dgInitialize() then begin
-    halt(1);
-  end;
-  try
-    dgRun();
-  finally
-    dgFinalize();
-  end;
+  PlatformChannel := dgGetMessageChannel('platform');
+  aMessage.MessageValue := 0;
+  dgSendMessage(PlatformChannel,aMessage);
+  dgRun();
 end.

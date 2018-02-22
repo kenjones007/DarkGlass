@@ -24,44 +24,74 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.platform.windows;
+unit dg.platform.mainloop.windows;
 
 interface
 uses
-  dg.platform.platform,
-  dg.platform.platform.custom;
+  system.generics.collections,
+  dg.messaging.messagechannel,
+  dg.messaging.messagebus,
+  dg.platform.window,
+  dg.threading.subsystem;
 
 type
-  TPlatform = class( TCustomPlatform, IPlatform )
+  TMainLoop = class( TInterfacedObject, ISubSystem )
   private
-    function Initialize: boolean; override;
-    procedure Run;  override;
-    function Finalize: boolean;  override;
+    fMessageChannel: IMessageChannel;
+    fMainWindow: IWindow;
+//    fWindows: TList<IWindow>;
+  private //- ISubSystem
+    procedure Install( MessageBus: IMessageBus );
+    function Initialize( MessageBus: IMessageBus ): boolean;
+    function Execute: boolean;
+    procedure Finalize;
   end;
 
 implementation
 uses
-  dg.platform.mainloop.windows,
+  darkglass.types,
+  dg.platform.window.windows,
   Windows,
-  Messages,
-  sysutils;
+  Messages;
 
-{ TPlatform }
+function TMainLoop.Execute: boolean;
+var
+  aMessage: tagMsg;
+  anotherMessage: darkglass.types.TMessage;
+begin
+  Result := True;
+  //- Check for OS messages
+  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
+     TranslateMessage(aMessage);
+     DispatchMessage(aMessage);
+     if aMessage.message=WM_QUIT then begin
+       Result := False;
+     end;
+  end;
+  //- Check for engine messages
+  if not fMessageChannel.Pull(anotherMessage) then begin
+    exit;
+  end;
+  case anotherMessage.MessageValue of
+    0: begin
+      fMainWindow := TWindow.Create;
+    end;
+  end;
+end;
 
-function TPlatform.Finalize: boolean;
+procedure TMainLoop.Finalize;
+begin
+  //- Do nothing
+end;
+
+function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
 begin
   Result := True;
 end;
 
-function TPlatform.Initialize: boolean;
+procedure TMainLoop.Install(MessageBus: IMessageBus);
 begin
-  Result := True;
-  fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
-end;
-
-procedure TPlatform.Run;
-begin
-  inherited Run;
+  fMessageChannel := MessageBus.CreateMessageChannel('platform');
 end;
 
 end.

@@ -28,11 +28,17 @@ unit dg.threading.threadengine;
 
 interface
 uses
+  dg.messaging.messagebus,
   dg.threading.enginethread;
 
 type
   IThreadEngine = interface
     ['{30780107-FED7-4A3B-BF80-742FDE3A8620}']
+
+    ///  <summary>
+    ///    Returns the message bus, used to communicate between subsystems.
+    ///  </summary>
+    function getMessageBus: IMessageBus;
 
     function getThreadCount: uint32;
     function getThread( idx: uint32 ): IEngineThread;
