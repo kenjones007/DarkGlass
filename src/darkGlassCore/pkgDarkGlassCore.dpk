@@ -31,7 +31,6 @@ requires
   rtl;
 
 contains
-  dg.messaging.api in 'api\dg.messaging.api.pas',
   dg.engine.api in 'api\dg.engine.api.pas',
   dg.dynlib.dynlib in 'interfaces\dg.dynlib.dynlib.pas',
   dg.dynlib.dynlib.posix in 'implementation\dg.dynlib.dynlib.posix.pas',

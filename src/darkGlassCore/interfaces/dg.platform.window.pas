@@ -29,15 +29,25 @@ unit dg.platform.window;
 interface
 
 type
+
+  /// <summary>
+  ///   Represents a window within the target platforms UI system. This may be
+  ///   a visible window on a desktop, or an abstract window concept such as a
+  ///   rendering surface on mobile targets.
+  /// </summary>
   IWindow = interface
     ['{87174835-FEAA-4ED1-8E5B-94F3D7C3654E}']
 
-    ///  <summary>
-    ///    Returns a pointer to the window handle.
-    ///    Except on target platforms where a window handle is a pointer type.
-    ///  </summary>
+    /// <summary>
+    ///   Returns a pointer to the OS-level window handle. <br />Except on
+    ///   target platforms where a window handle is a pointer type, in which
+    ///   case this method returns that pointer.
+    /// </summary>
+    /// <returns>
+    ///   The OS-Level window handle, or a pointer to it. (Platform specific
+    ///   behavior).
+    /// </returns>
     function getHandle: pointer;
-
   end;
 
 implementation

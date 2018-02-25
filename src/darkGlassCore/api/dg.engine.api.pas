@@ -30,10 +30,80 @@ interface
 uses
   darkglass.types;
 
+
+/// <summary>
+///   Returns the major part of the library version number. For example, if the
+///   version number is 2.5 this function returns 2.
+/// </summary>
+/// <returns>
+///   See description.
+/// </returns>
+/// <remarks>
+///   This function is exposed as an exported symbol from the library.
+/// </remarks>
 function dgVersionMajor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+/// <summary>
+///   Returns the minor part of the library version number. For example, if the
+///   version number is 2.5 this function returns 5.
+/// </summary>
+/// <returns>
+///   See description.
+/// </returns>
+/// <remarks>
+///   This function is exposed as an exported symbol from the library.
+/// </remarks>
 function dgVersionMinor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+
+/// <summary>
+///   This procedure passes execution to the run method of the global IPlatform
+///   instance, which subsequently passes execution to the application main
+///   loop. This procedure will therefore not return until execution of the
+///   application has ended.
+/// </summary>
+/// <remarks>
+///   This function is exposed as an exported symbol from the library.
+/// </remarks>
 procedure dgRun;                                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+
+/// <summary>
+///   This function locates a message channel by name and returns a handle to
+///   it. <br />Message channels are used to communicate between the
+///   sub-systems of the application during execution.
+/// </summary>
+/// <param name="ChannelName">
+///   The case-insensitive name of the message channel to be located.
+/// </param>
+/// <returns>
+///   If this method is unsuccessful a value of zero is returned, otherwise a
+///   handle to the message channel is returned.
+/// </returns>
+/// <remarks>
+///   This function is exposed as an exported symbol from the library.
+/// </remarks>
 function dgGetMessageChannel( ChannelName: string ): THMessageChannel;             {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+
+/// <summary>
+///   This procedure sends a message into a message channel as specified by
+///   it's handle (optained using the dggetMessageChannal() function.
+/// </summary>
+/// <param name="Channel">
+///   The handle of a message channel to send a message to.
+/// </param>
+/// <param name="aMessage">
+///   The message to send into the message channel.
+/// </param>
+/// <returns>
+///   Returns true if the message was sent to the channel, else returns false. <br />
+///   Possible causes of failure include the message channel being full, or an
+///   invalid message channel handle being specified.
+/// </returns>
+/// <remarks>
+///   This function is exposed as an exported symbol from the library.
+/// </remarks>
 function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 implementation
@@ -97,7 +167,9 @@ end;
 exports
   dgVersionMajor,
   dgVersionMinor,
-  dgRun;
+  dgRun,
+  dgGetMessageChannel,
+  dgSendMessage;
 
 initialization
   dgInitialize;

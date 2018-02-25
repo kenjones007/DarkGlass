@@ -31,7 +31,6 @@ interface
 implementation
 uses
   dg.engine.api,
-  dg.messaging.api,
   darkglass;
 
 initialization

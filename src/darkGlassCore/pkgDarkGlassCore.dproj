@@ -150,7 +150,6 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
-        <DCCReference Include="api\dg.messaging.api.pas"/>
         <DCCReference Include="api\dg.engine.api.pas"/>
         <DCCReference Include="interfaces\dg.dynlib.dynlib.pas"/>
         <DCCReference Include="implementation\dg.dynlib.dynlib.posix.pas"/>

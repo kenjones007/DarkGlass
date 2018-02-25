@@ -32,6 +32,11 @@ uses
   dg.messaging.messagechannel;
 
 type
+
+  /// <summary>
+  ///   An implementation of IMessageBus represents a collection of named
+  ///   communications channels across one or more sub-systems.
+  /// </summary>
   IMessageBus = interface
     ['{CAB3C192-2164-4BDB-BAD9-4F087C1BB7A4}']
 

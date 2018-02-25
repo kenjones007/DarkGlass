@@ -112,7 +112,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="api\dg.messaging.api.pas"/>
         <DCCReference Include="api\dg.engine.api.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

@@ -32,6 +32,21 @@ uses
   dg.messaging.messagepipe;
 
 type
+
+  /// <summary>
+  ///   An implementation of IMessageChannel provides a named mechanism for
+  ///   delivering messages to a sub-system. A message channel is a collection
+  ///   of message pipes, where each message pipe facilitates communication
+  ///   between one originator sub-system, and the target subsystem which owns
+  ///   the channel.
+  /// </summary>
+  /// <remarks>
+  ///   As an abstract example, there may be a sub-system responsible for
+  ///   playing audio files, which owns a message channel named 'audio'. Every
+  ///   sub-system which wishes to send messages to the audio sub-system, must
+  ///   acquire a pipe from the 'audio' channel, and may then send messages
+  ///   into that pipe, for the audio sub-system to receive.
+  /// </remarks>
   IMessageChannel = interface
     ['{E72DE502-E6B9-49B9-829C-964587A555D4}']
 
@@ -40,19 +55,42 @@ type
     ///  </summary>
     function getName: string;
 
-    ///  <summary>
-    ///    Pulls a message from the pipes of the message channel.
-    ///    Returns true if a message is returned, else returns false.
-    ///  </summary>
+    /// <summary>
+    ///   Pulls a message from the pipes of the message channel. Returns true
+    ///   if a message is returned, else returns false. This method is called
+    ///   by the target sub-system, which owns the message channel.
+    /// </summary>
+    /// <param name="aMessage">
+    ///   A TMessage structure which will be populated with the message which
+    ///   is retrieved from the channel.
+    /// </param>
+    /// <returns>
+    ///   If a message is waiting to be received, this method will populate its
+    ///   aMessage parameter and return true. If there are no messages waiting
+    ///   to be retrieved, this method will simply return false.
+    /// </returns>
     function Pull( var aMessage: TMessage ): boolean;
 
-    ///  <summary>
-    ///    Returns an implementation of IMessagePipe, which may be used
-    ///    to inject messages into this channel.
-    ///  </summary>
+    /// <summary>
+    ///   Returns an implementation of IMessagePipe, which may be used to
+    ///   inject messages into this channel.
+    /// </summary>
+    /// <returns>
+    ///   Returns an instance of IMessagePipe.
+    /// </returns>
+    /// <remarks>
+    ///   Each originating sub-system must call this method to obtain it's own
+    ///   dedicated message pipe into this channel. Pipes are only thread-safe
+    ///   between two threads, the originator and the target, they may not be
+    ///   shared between multiple originators.
+    /// </remarks>
     function getPipe: IMessagePipe;
 
     // - Pascal Only, Property -//
+
+    ///  <summary>
+    ///    Returns the name of this message channel.
+    ///  </summary>
     property Name: string read getName;
   end;
 

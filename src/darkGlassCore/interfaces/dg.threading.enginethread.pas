@@ -32,17 +32,28 @@ uses
   dg.threading.subsystem;
 
 type
+
+  /// <summary>
+  ///   Represents an executing thread to be installed into the thread engine
+  ///   (IThreadEngine).
+  /// </summary>
   IEngineThread = interface
   ['{13CE71F7-C2AD-4B7B-AEC1-2A89FC2310A8}']
 
-    ///  <summary>
-    ///    Adds a subsystem to the thread.
-    ///    This method will only function before the thread is started.
-    ///  </summary>
+    /// <summary>
+    ///   Adds a subsystem to the thread. This method will only function before
+    ///   the thread is started.
+    /// </summary>
+    /// <param name="aSubSystem">
+    ///   Pass a reference to the sub-system to be installed into the thread.
+    ///   The sub-system will share execution time with other installed
+    ///   sub-systems.
+    /// </param>
     procedure InstallSubsystem( aSubSystem: ISubSystem );
 
-    ///  <summary>
-    ///  </summary>
+    /// <summary>
+    ///   Starts the thread running.
+    /// </summary>
     procedure Start;
   end;
 

@@ -79,6 +79,7 @@
         <SanitizedProjectName>pkgDarkGlass</SanitizedProjectName>
         <DCC_BplOutput>..\..\out\lib\bpl</DCC_BplOutput>
         <DCC_UnitSearchPath>..\..\out\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_IMPLICIT_IMPORT>false</DCC_IMPLICIT_IMPORT>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_CBuilderOutput>None</DCC_CBuilderOutput>
