@@ -166,7 +166,7 @@ end;
 
 function AlwaysTrue: boolean;
 begin
-  Result := True;
+  Result := False;
 end;
 
 exports
