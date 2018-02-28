@@ -164,6 +164,11 @@ begin
   end;
 end;
 
+function AlwaysTrue: boolean;
+begin
+  Result := True;
+end;
+
 exports
   dgVersionMajor,
   dgVersionMinor,
@@ -172,6 +177,7 @@ exports
   dgSendMessage;
 
 initialization
+  while AlwaysTrue do sleep(1);
   dgInitialize;
 
 finalization

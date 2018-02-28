@@ -27,6 +27,7 @@
 unit dg.platform.platform.windows;
 
 interface
+{$ifdef MSWINDOWS}
 uses
   dg.platform.platform,
   dg.platform.platform.custom;
@@ -39,7 +40,9 @@ type
     function Finalize: boolean;  override;
   end;
 
+{$endif}
 implementation
+{$ifdef MSWINDOWS}
 uses
   dg.platform.mainloop.windows,
   Windows,
@@ -64,4 +67,5 @@ begin
   inherited Run;
 end;
 
+{$endif}
 end.

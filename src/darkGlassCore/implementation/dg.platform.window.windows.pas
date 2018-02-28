@@ -27,6 +27,7 @@
 unit dg.platform.window.windows;
 
 interface
+{$ifdef MSWINDOWS}
 uses
   Windows,
   dg.platform.window;
@@ -45,8 +46,9 @@ type
     destructor Destroy; override;
   end;
 
-
+{$endif}
 implementation
+{$ifdef MSWINDOWS}
 uses
   Classes,
   Messages,
@@ -161,4 +163,5 @@ finalization
   WindowList.DisposeOf;
   DestroyWindowClass;
 
+{$endif}
 end.

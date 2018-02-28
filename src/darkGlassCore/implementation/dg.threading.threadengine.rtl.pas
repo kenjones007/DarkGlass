@@ -53,7 +53,11 @@ type
 implementation
 uses
   dg.threading.enginethread.rtl,
+  {$ifdef ANDROID}
+  dg.threading.enginethread.ui.android,
+  {$else}
   dg.threading.enginethread.ui.rtl,
+  {$endif}
   dg.messaging.messagebus.standard;
 
 { TThreadEngine }
@@ -68,7 +72,12 @@ begin
   fThreads := TList<IEngineThread>.Create;
   fMessageBus := TMessageBus.Create;
   //- Create and add the UI thread.
+  {$ifdef ANDROID}
+  aThread := dg.threading.enginethread.ui.android.TEngineThread.Create( fMessageBus );
+  {$else}
   aThread := dg.threading.enginethread.ui.rtl.TEngineThread.Create( fMessageBus );
+  {$endif}
+
   fThreads.Add(AThread);
   //- Create ancillary threads
   if ThreadCount=0 then begin

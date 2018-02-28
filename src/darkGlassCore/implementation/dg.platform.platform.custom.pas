@@ -65,7 +65,7 @@ end;
 
 destructor TCustomPlatform.Destroy;
 begin
-  fThreadEngine := nil;
+   fThreadEngine := nil;
   fMessagePipes.DisposeOf;
   inherited Destroy;
 end;
@@ -86,7 +86,6 @@ procedure TCustomPlatform.Run;
 begin
   fThreadEngine.Run;
 end;
-
 
 function TCustomPlatform.SendMessage(Channel: THMessageChannel; aMessage: TMessage): boolean;
 begin

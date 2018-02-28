@@ -24,77 +24,78 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.platform.android;
 
 interface
-{$ifdef MSWINDOWS}
+{$ifdef ANDROID}
 uses
-  system.generics.collections,
-  dg.messaging.messagechannel,
-  dg.messaging.messagebus,
-  dg.platform.window,
-  dg.threading.subsystem;
+  Androidapi.Input,
+  Androidapi.NativeActivity,
+  Androidapi.JNIBridge,
+  Androidapi.JNI.Os,
+  Androidapi.Looper,
+  Androidapi.AppGlue,
+  dg.platform.platform,
+  dg.platform.platform.custom;
 
 type
-  TMainLoop = class( TInterfacedObject, ISubSystem )
+  TPlatform = class( TCustomPlatform, IPlatform )
   private
-    fMessageChannel: IMessageChannel;
-    fMainWindow: IWindow;
-//    fWindows: TList<IWindow>;
-  private //- ISubSystem
-    procedure Install( MessageBus: IMessageBus );
-    function Initialize( MessageBus: IMessageBus ): boolean;
-    function Execute: boolean;
-    procedure Finalize;
+    procedure HandleApplicationCommand(const App: TAndroidApplicationGlue; const ACommand: TAndroidApplicationCommand);
+    function HandleInputEvent(const App: TAndroidApplicationGlue; const AEvent: PAInputEvent): Int32;
+  protected //- IPlatform -//
+    function Initialize: boolean; override;
+    function Finalize: boolean; override;
+    procedure Run; override;
+  public
+    constructor Create; reintroduce;
+    destructor Destroy; override;
   end;
 
 {$endif}
 implementation
-{$ifdef MSWINDOWS}
+{$ifdef ANDROID}
 uses
-  darkglass.types,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
+ sysutils;
 
-function TMainLoop.Execute: boolean;
-var
-  aMessage: tagMsg;
-  anotherMessage: darkglass.types.TMessage;
+{ TPlatform }
+
+procedure TPlatform.HandleApplicationCommand(const App: TAndroidApplicationGlue; const ACommand: TAndroidApplicationCommand);
 begin
-  Result := True;
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-     TranslateMessage(aMessage);
-     DispatchMessage(aMessage);
-     if aMessage.message=WM_QUIT then begin
-       Result := False;
-     end;
-  end;
-  //- Check for engine messages
-  if not fMessageChannel.Pull(anotherMessage) then begin
-    exit;
-  end;
-  case anotherMessage.MessageValue of
-    0: begin
-      fMainWindow := TWindow.Create;
-    end;
-  end;
+  sleep(1);
 end;
 
-procedure TMainLoop.Finalize;
+function TPlatform.HandleInputEvent(const App: TAndroidApplicationGlue; const AEvent: PAInputEvent): Int32;
 begin
-  //- Do nothing
+  Sleep(1);
 end;
 
-function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
+constructor TPlatform.Create;
 begin
-  Result := True;
+  inherited Create;
+  app_dummy;
+  TAndroidApplicationGlue(PANativeActivity(System.DelphiActivity)^.instance).OnApplicationCommandEvent := HandleApplicationCommand;
+  TAndroidApplicationGlue(PANativeActivity(System.DelphiActivity)^.instance).OnInputEvent := HandleInputEvent;
 end;
 
-procedure TMainLoop.Install(MessageBus: IMessageBus);
+destructor TPlatform.Destroy;
 begin
-  fMessageChannel := MessageBus.CreateMessageChannel('platform');
+  inherited Destroy;
+end;
+
+function TPlatform.Finalize: boolean;
+begin
+//-
+end;
+
+function TPlatform.Initialize: boolean;
+begin
+//-
+end;
+
+procedure TPlatform.Run;
+begin
+  inherited;
 end;
 
 {$endif}

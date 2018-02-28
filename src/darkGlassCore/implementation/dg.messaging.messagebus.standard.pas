@@ -105,7 +105,7 @@ begin
   Result := nil;
   aChannel := FindChannelByName(ChannelName);
   if not assigned(aChannel) then begin
-    exit;
+    aChannel := CreateMessageChannel(ChannelName);
   end;
   Result := aChannel.getPipe;
 end;
