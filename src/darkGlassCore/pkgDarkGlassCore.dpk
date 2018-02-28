@@ -59,6 +59,7 @@ contains
   dg.platform.platform.custom in 'implementation\dg.platform.platform.custom.pas',
   dg.platform.mainloop.windows in 'implementation\dg.platform.mainloop.windows.pas',
   dg.threading.enginethread.ui.android in 'implementation\dg.threading.enginethread.ui.android.pas',
-  dg.platform.platform.android in 'implementation\dg.platform.platform.android.pas';
+  dg.platform.platform.android in 'implementation\dg.platform.platform.android.pas',
+  dg.platform.mainloop.android in 'implementation\dg.platform.mainloop.android.pas';
 
 end.

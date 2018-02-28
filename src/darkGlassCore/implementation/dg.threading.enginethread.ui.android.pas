@@ -42,7 +42,7 @@ type
 
   TMainLoopHandler = class(TJavaLocal, JMessageQueue_IdleHandler)
   private
-    fEngineThread: TEngineThread;
+    [weak] fEngineThread: TEngineThread;
   public
     function queueIdle: Boolean; cdecl;
   public

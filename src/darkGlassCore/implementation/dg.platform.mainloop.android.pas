@@ -24,80 +24,65 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.platform.android;
+unit dg.platform.mainloop.android;
 
 interface
 {$ifdef ANDROID}
 uses
-  Androidapi.Input,
-  Androidapi.NativeActivity,
-  Androidapi.JNIBridge,
-  Androidapi.JNI.Os,
-  Androidapi.Looper,
-  Androidapi.AppGlue,
-  dg.platform.platform,
-  dg.platform.platform.custom;
+  system.generics.collections,
+  dg.messaging.messagechannel,
+  dg.messaging.messagebus,
+  dg.platform.window,
+  dg.threading.subsystem;
 
 type
-  TPlatform = class( TCustomPlatform, IPlatform )
+  TMainLoop = class( TInterfacedObject, ISubSystem )
   private
-    procedure HandleApplicationCommand(const App: TAndroidApplicationGlue; const ACommand: TAndroidApplicationCommand);
-    function HandleInputEvent(const App: TAndroidApplicationGlue; const AEvent: PAInputEvent): Int32;
-  protected //- IPlatform -//
-    function Initialize: boolean; override;
-    function Finalize: boolean; override;
-    procedure Run; override;
-  public
-    constructor Create; reintroduce;
-    destructor Destroy; override;
+    fMessageChannel: IMessageChannel;
+    fMainWindow: IWindow;
+  private //- ISubSystem
+    procedure Install( MessageBus: IMessageBus );
+    function Initialize( MessageBus: IMessageBus ): boolean;
+    function Execute: boolean;
+    procedure Finalize;
   end;
 
 {$endif}
 implementation
 {$ifdef ANDROID}
 uses
- dg.platform.mainloop.android,
- sysutils;
+  darkglass.types,
+  dg.platform.window.windows;
 
-{ TPlatform }
-
-procedure TPlatform.HandleApplicationCommand(const App: TAndroidApplicationGlue; const ACommand: TAndroidApplicationCommand);
-begin
-  sleep(1);
-end;
-
-function TPlatform.HandleInputEvent(const App: TAndroidApplicationGlue; const AEvent: PAInputEvent): Int32;
-begin
-  Sleep(1);
-end;
-
-constructor TPlatform.Create;
-begin
-  inherited Create;
-  app_dummy;
-  TAndroidApplicationGlue(PANativeActivity(System.DelphiActivity)^.instance).OnApplicationCommandEvent := HandleApplicationCommand;
-  TAndroidApplicationGlue(PANativeActivity(System.DelphiActivity)^.instance).OnInputEvent := HandleInputEvent;
-end;
-
-destructor TPlatform.Destroy;
-begin
-  inherited Destroy;
-end;
-
-function TPlatform.Finalize: boolean;
-begin
-//-
-end;
-
-function TPlatform.Initialize: boolean;
+function TMainLoop.Execute: boolean;
+var
+  aMessage: darkglass.types.TMessage;
 begin
   Result := True;
-  fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
+  //- Check for engine messages
+  if not fMessageChannel.Pull(aMessage) then begin
+    exit;
+  end;
+//  case aMessage.MessageValue of
+//    0: begin
+//      fMainWindow := TWindow.Create;
+//    end;
+//  end;
 end;
 
-procedure TPlatform.Run;
+procedure TMainLoop.Finalize;
 begin
-  inherited;
+  //- Do nothing
+end;
+
+function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
+begin
+  Result := True;
+end;
+
+procedure TMainLoop.Install(MessageBus: IMessageBus);
+begin
+  fMessageChannel := MessageBus.CreateMessageChannel('platform');
 end;
 
 {$endif}
