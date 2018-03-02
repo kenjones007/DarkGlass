@@ -24,62 +24,37 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.dynamic;
+unit dg.threading.messagebus;
 
 interface
+uses
+  dg.threading.messagepipe,
+  dg.threading.messagechannel;
+
+type
+
+  /// <summary>
+  ///   An implementation of IMessageBus represents a collection of named
+  ///   communications channels across one or more sub-systems.
+  /// </summary>
+  IMessageBus = interface
+    ['{CAB3C192-2164-4BDB-BAD9-4F087C1BB7A4}']
+
+    ///  <summary>
+    ///    Called by a subsystem during initialization, to add it's message
+    ///    channel to the bus.
+    ///  </summary>
+    function CreateMessageChannel( name: string ): IMessageChannel;
+
+
+    ///  <summary>
+    ///    Called by a subsystem during initialization, to create a message
+    ///    pipe on another subsystem, for injecting messages to that target.
+    ///  </summary>
+    function GetMessagePipe( ChannelName: string ): IMessagePipe;
+
+  end;
 
 implementation
-uses
-  sysutils,
-  dg.dynlib.dynlib,
-  dg.dynlib.dynlib.standard,
-  darkglass;
-
-const
-{$ifdef MSWINDOWS}
-  cLibName = 'darkglass.core.dll';
-{$endif}
-{$ifdef MACOS}
-  {$ifdef IOS}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$else}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$endif}
-{$endif}
-{$ifdef ANDROID}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
-{$ifdef LINUX}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
-
-
-var
-  libDarkGlass: IDynLib = nil;
-
-function LoadProcAddress( funcname: string ): pointer;
-begin
-  Result := libDarkGlass.GetProcAddress(funcname);
-  if not assigned(Result) then begin
-    raise
-      Exception.Create('Could not bind to function: '+funcname+' in libDakglass');
-  end;
-end;
-
-initialization
-  libDarkGlass := TDynLib.Create;
-  if not libDarkGlass.LoadLibrary(cLibName) then begin
-    raise
-      Exception.Create('Cannot find librarby '''+cLibName+'''.');
-  end;
-       dgVersionMajor := LoadProcAddress('dgVersionMajor');
-       dgVersionMinor := LoadProcAddress('dgVersionMinor');
-                dgRun := LoadProcAddress('dgRun');
-  dgGetMessageChannel := LoadProcAddress('dgGetMessageChannel');
-        dgSendMessage := LoadProcAddress('dgSendMessage');
-         dgInitialize := LoadProcAddress('dgInitialize');
-
-finalization
-  libDarkGlass := nil;
 
 end.

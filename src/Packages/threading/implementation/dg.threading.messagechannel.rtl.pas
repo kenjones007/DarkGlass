@@ -24,62 +24,81 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.dynamic;
+unit dg.threading.messagechannel.rtl;
 
 interface
+uses
+  system.generics.collections,
+  dg.threading.types,
+  dg.threading.messagepipe,
+  dg.threading.messagechannel;
+
+type
+  TMessageChannel = class( TInterfacedObject, IMessageChannel )
+  private
+    fName: string;
+    fPipes: TList<IMessagePipe>;
+    fPipeIndex: uint32;
+  private //- IMessageChannel -//
+    function getName: string;
+    function Pull( var aMessage: TMessage ): boolean;
+    function getPipe: IMessagePipe;
+  public
+    constructor Create( aName: string ); reintroduce;
+    destructor Destroy; override;
+  end;
 
 implementation
 uses
-  sysutils,
-  dg.dynlib.dynlib,
-  dg.dynlib.dynlib.standard,
-  darkglass;
+  dg.threading.messagepipe.rtl;
 
-const
-{$ifdef MSWINDOWS}
-  cLibName = 'darkglass.core.dll';
-{$endif}
-{$ifdef MACOS}
-  {$ifdef IOS}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$else}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$endif}
-{$endif}
-{$ifdef ANDROID}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
-{$ifdef LINUX}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
+{ TMessageChannel }
 
-
-var
-  libDarkGlass: IDynLib = nil;
-
-function LoadProcAddress( funcname: string ): pointer;
+constructor TMessageChannel.Create( aName: string );
 begin
-  Result := libDarkGlass.GetProcAddress(funcname);
-  if not assigned(Result) then begin
-    raise
-      Exception.Create('Could not bind to function: '+funcname+' in libDakglass');
-  end;
+  inherited Create;
+  fName := aName;
+  fPipes := TList<IMessagePipe>.Create;
+  fPipeIndex := 0;
 end;
 
-initialization
-  libDarkGlass := TDynLib.Create;
-  if not libDarkGlass.LoadLibrary(cLibName) then begin
-    raise
-      Exception.Create('Cannot find librarby '''+cLibName+'''.');
-  end;
-       dgVersionMajor := LoadProcAddress('dgVersionMajor');
-       dgVersionMinor := LoadProcAddress('dgVersionMinor');
-                dgRun := LoadProcAddress('dgRun');
-  dgGetMessageChannel := LoadProcAddress('dgGetMessageChannel');
-        dgSendMessage := LoadProcAddress('dgSendMessage');
-         dgInitialize := LoadProcAddress('dgInitialize');
+destructor TMessageChannel.Destroy;
+begin
+  fPipes.DisposeOf;
+  inherited Destroy;
+end;
 
-finalization
-  libDarkGlass := nil;
+function TMessageChannel.getName: string;
+begin
+  Result := fName;
+end;
+
+function TMessageChannel.getPipe: IMessagePipe;
+var
+  NewPipe: IMessagePipe;
+begin
+  NewPipe := TMessagePipe.Create;
+  fPipes.Add(NewPipe);
+  Result := NewPipe;
+end;
+
+function TMessageChannel.Pull(var aMessage: TMessage): boolean;
+var
+  idx: uint32;
+begin
+  Result := False;
+  if fPipes.Count=0 then begin
+    exit;
+  end;
+  idx := fPipeIndex;
+  repeat
+    Result := fPipes[idx].Pull(aMessage);
+    inc(idx);
+    if idx>=pred(fPipes.Count) then begin
+      idx := 0;
+    end;
+  until (idx=fPipeIndex) or (Result=True);
+  fPipeIndex := idx;
+end;
 
 end.

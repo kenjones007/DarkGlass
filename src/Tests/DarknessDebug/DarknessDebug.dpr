@@ -27,7 +27,6 @@
 program DarknessDebug;
 uses
   darkglass,
-  darkglass.types,
   darkglass.static,
 //  darkglass.dynamic,
   sysutils;

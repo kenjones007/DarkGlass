@@ -37,20 +37,20 @@ uses
 
 const
 {$ifdef MSWINDOWS}
-  cLibName = 'darkglass.core.dll';
+  cLibName = 'DarkGlassCore.dll';
 {$endif}
 {$ifdef MACOS}
   {$ifdef IOS}
-  cLibName = 'libdarkglass.core.dynlib';
+  cLibName = 'libDarkGlassCore.dynlib';
   {$else}
-  cLibName = 'libdarkglass.core.dynlib';
+  cLibName = 'libDarkGlassCore.dynlib';
   {$endif}
 {$endif}
 {$ifdef ANDROID}
-  cLibName = 'libdarkglass.core.so';
+  cLibName = 'libDarkGlassCore.so';
 {$endif}
 {$ifdef LINUX}
-  cLibName = 'libdarkglass.core.so';
+  cLibName = 'libDarkGlassCore.so';
 {$endif}
 
 

@@ -1,0 +1,42 @@
+package pkg.threading.rtl;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl;
+
+contains
+  dg.threading.enginethread.ui.rtl in 'implementation\dg.threading.enginethread.ui.rtl.pas',
+  dg.threading.threadengine.rtl in 'implementation\dg.threading.threadengine.rtl.pas',
+  dg.threading.threadmethod.rtl in 'implementation\dg.threading.threadmethod.rtl.pas',
+  dg.threading.enginethread.rtl in 'implementation\dg.threading.enginethread.rtl.pas',
+  dg.threading.messagebus.rtl in 'implementation\dg.threading.messagebus.rtl.pas',
+  dg.threading.messagechannel.rtl in 'implementation\dg.threading.messagechannel.rtl.pas',
+  dg.threading.messagepipe.rtl in 'implementation\dg.threading.messagepipe.rtl.pas';
+
+end.

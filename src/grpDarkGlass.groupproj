@@ -3,13 +3,46 @@
         <ProjectGuid>{8084854E-5FED-4EAA-AC3D-647F5C1F58A4}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="darkGlassCore\pkgDarkGlassCore.dproj">
+        <Projects Include="Packages\dynlib\pkg.dynlib.common.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="darkGlassCore\DarkGlassCore.dproj">
+        <Projects Include="Packages\dynlib\pkg.dynlib.windows.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="darkGlass\pkgDarkGlass.dproj">
+        <Projects Include="Packages\dynlib\pkg.dynlib.posix.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\dynlib\pkg.dynlib.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\threading\pkg.threading.common.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\threading\pkg.threading.rtl.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\threading\pkg.threading.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\platform\pkg.platform.common.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\platform\pkg.platform.android.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\platform\pkg.platform.windows.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\platform\pkg.platform.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\darkglass.core\pkg.darkglass.core.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\darkglass.core\darkglass.core.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\darkglass\pkgDarkGlass.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Tests\DarknessDebug\DarknessDebug.dproj">
@@ -23,32 +56,131 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="pkgDarkGlassCore">
-        <MSBuild Projects="darkGlassCore\pkgDarkGlassCore.dproj"/>
+    <Target Name="pkg_dynlib_common">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.common.dproj"/>
     </Target>
-    <Target Name="pkgDarkGlassCore:Clean">
-        <MSBuild Projects="darkGlassCore\pkgDarkGlassCore.dproj" Targets="Clean"/>
+    <Target Name="pkg_dynlib_common:Clean">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.common.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="pkgDarkGlassCore:Make">
-        <MSBuild Projects="darkGlassCore\pkgDarkGlassCore.dproj" Targets="Make"/>
+    <Target Name="pkg_dynlib_common:Make">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.common.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DarkGlassCore">
-        <MSBuild Projects="darkGlassCore\DarkGlassCore.dproj"/>
+    <Target Name="pkg_dynlib_windows">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.windows.dproj"/>
     </Target>
-    <Target Name="DarkGlassCore:Clean">
-        <MSBuild Projects="darkGlassCore\DarkGlassCore.dproj" Targets="Clean"/>
+    <Target Name="pkg_dynlib_windows:Clean">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.windows.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DarkGlassCore:Make">
-        <MSBuild Projects="darkGlassCore\DarkGlassCore.dproj" Targets="Make"/>
+    <Target Name="pkg_dynlib_windows:Make">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.windows.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_dynlib_posix">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.posix.dproj"/>
+    </Target>
+    <Target Name="pkg_dynlib_posix:Clean">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.posix.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_dynlib_posix:Make">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.posix.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_dynlib">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.dproj"/>
+    </Target>
+    <Target Name="pkg_dynlib:Clean">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_dynlib:Make">
+        <MSBuild Projects="Packages\dynlib\pkg.dynlib.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_threading_common">
+        <MSBuild Projects="Packages\threading\pkg.threading.common.dproj"/>
+    </Target>
+    <Target Name="pkg_threading_common:Clean">
+        <MSBuild Projects="Packages\threading\pkg.threading.common.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_threading_common:Make">
+        <MSBuild Projects="Packages\threading\pkg.threading.common.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_threading_rtl">
+        <MSBuild Projects="Packages\threading\pkg.threading.rtl.dproj"/>
+    </Target>
+    <Target Name="pkg_threading_rtl:Clean">
+        <MSBuild Projects="Packages\threading\pkg.threading.rtl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_threading_rtl:Make">
+        <MSBuild Projects="Packages\threading\pkg.threading.rtl.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_threading">
+        <MSBuild Projects="Packages\threading\pkg.threading.dproj"/>
+    </Target>
+    <Target Name="pkg_threading:Clean">
+        <MSBuild Projects="Packages\threading\pkg.threading.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_threading:Make">
+        <MSBuild Projects="Packages\threading\pkg.threading.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_platform_common">
+        <MSBuild Projects="Packages\platform\pkg.platform.common.dproj"/>
+    </Target>
+    <Target Name="pkg_platform_common:Clean">
+        <MSBuild Projects="Packages\platform\pkg.platform.common.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_platform_common:Make">
+        <MSBuild Projects="Packages\platform\pkg.platform.common.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_platform_android">
+        <MSBuild Projects="Packages\platform\pkg.platform.android.dproj"/>
+    </Target>
+    <Target Name="pkg_platform_android:Clean">
+        <MSBuild Projects="Packages\platform\pkg.platform.android.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_platform_android:Make">
+        <MSBuild Projects="Packages\platform\pkg.platform.android.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_platform_windows">
+        <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj"/>
+    </Target>
+    <Target Name="pkg_platform_windows:Clean">
+        <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_platform_windows:Make">
+        <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_platform">
+        <MSBuild Projects="Packages\platform\pkg.platform.dproj"/>
+    </Target>
+    <Target Name="pkg_platform:Clean">
+        <MSBuild Projects="Packages\platform\pkg.platform.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_platform:Make">
+        <MSBuild Projects="Packages\platform\pkg.platform.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_darkglass_core">
+        <MSBuild Projects="Packages\darkglass.core\pkg.darkglass.core.dproj"/>
+    </Target>
+    <Target Name="pkg_darkglass_core:Clean">
+        <MSBuild Projects="Packages\darkglass.core\pkg.darkglass.core.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_darkglass_core:Make">
+        <MSBuild Projects="Packages\darkglass.core\pkg.darkglass.core.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="darkglass_core">
+        <MSBuild Projects="Packages\darkglass.core\darkglass.core.dproj"/>
+    </Target>
+    <Target Name="darkglass_core:Clean">
+        <MSBuild Projects="Packages\darkglass.core\darkglass.core.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="darkglass_core:Make">
+        <MSBuild Projects="Packages\darkglass.core\darkglass.core.dproj" Targets="Make"/>
     </Target>
     <Target Name="pkgDarkGlass">
-        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj"/>
+        <MSBuild Projects="Packages\darkglass\pkgDarkGlass.dproj"/>
     </Target>
     <Target Name="pkgDarkGlass:Clean">
-        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj" Targets="Clean"/>
+        <MSBuild Projects="Packages\darkglass\pkgDarkGlass.dproj" Targets="Clean"/>
     </Target>
     <Target Name="pkgDarkGlass:Make">
-        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj" Targets="Make"/>
+        <MSBuild Projects="Packages\darkglass\pkgDarkGlass.dproj" Targets="Make"/>
     </Target>
     <Target Name="DarknessDebug">
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj"/>
@@ -60,13 +192,13 @@
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkgDarkGlassCore;DarkGlassCore;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkg_dynlib_common;pkg_dynlib_windows;pkg_dynlib_posix;pkg_dynlib;pkg_threading_common;pkg_threading_rtl;pkg_threading;pkg_platform_common;pkg_platform_android;pkg_platform_windows;pkg_platform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkgDarkGlassCore:Clean;DarkGlassCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkg_dynlib_common:Clean;pkg_dynlib_windows:Clean;pkg_dynlib_posix:Clean;pkg_dynlib:Clean;pkg_threading_common:Clean;pkg_threading_rtl:Clean;pkg_threading:Clean;pkg_platform_common:Clean;pkg_platform_android:Clean;pkg_platform_windows:Clean;pkg_platform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkgDarkGlassCore:Make;DarkGlassCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkg_dynlib_common:Make;pkg_dynlib_windows:Make;pkg_dynlib_posix:Make;pkg_dynlib:Make;pkg_threading_common:Make;pkg_threading_rtl:Make;pkg_threading:Make;pkg_platform_common:Make;pkg_platform_android:Make;pkg_platform_windows:Make;pkg_platform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

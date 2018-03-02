@@ -24,62 +24,75 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.dynamic;
+unit dg.platform.mainloop.windows;
 
 interface
-
-implementation
-uses
-  sysutils,
-  dg.dynlib.dynlib,
-  dg.dynlib.dynlib.standard,
-  darkglass;
-
-const
 {$ifdef MSWINDOWS}
-  cLibName = 'darkglass.core.dll';
-{$endif}
-{$ifdef MACOS}
-  {$ifdef IOS}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$else}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$endif}
-{$endif}
-{$ifdef ANDROID}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
-{$ifdef LINUX}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
+uses
+  system.generics.collections,
+  dg.threading,
+  dg.platform.window;
 
+type
+  TMainLoop = class( TInterfacedObject, ISubSystem )
+  private
+    fMessageChannel: IMessageChannel;
+    fMainWindow: IWindow;
+//    fWindows: TList<IWindow>;
+  private //- ISubSystem
+    procedure Install( MessageBus: IMessageBus );
+    function Initialize( MessageBus: IMessageBus ): boolean;
+    function Execute: boolean;
+    procedure Finalize;
+  end;
 
+{$endif}
+implementation
+{$ifdef MSWINDOWS}
+uses
+  dg.platform.window.windows,
+  Windows,
+  Messages;
+
+function TMainLoop.Execute: boolean;
 var
-  libDarkGlass: IDynLib = nil;
-
-function LoadProcAddress( funcname: string ): pointer;
+  aMessage: tagMsg;
+  anotherMessage: dg.threading.TMessage;
 begin
-  Result := libDarkGlass.GetProcAddress(funcname);
-  if not assigned(Result) then begin
-    raise
-      Exception.Create('Could not bind to function: '+funcname+' in libDakglass');
+  Result := True;
+  //- Check for OS messages
+  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
+     TranslateMessage(aMessage);
+     DispatchMessage(aMessage);
+     if aMessage.message=WM_QUIT then begin
+       Result := False;
+     end;
+  end;
+  //- Check for engine messages
+  if not fMessageChannel.Pull(anotherMessage) then begin
+    exit;
+  end;
+  case anotherMessage.MessageValue of
+    0: begin
+      fMainWindow := TWindow.Create;
+    end;
   end;
 end;
 
-initialization
-  libDarkGlass := TDynLib.Create;
-  if not libDarkGlass.LoadLibrary(cLibName) then begin
-    raise
-      Exception.Create('Cannot find librarby '''+cLibName+'''.');
-  end;
-       dgVersionMajor := LoadProcAddress('dgVersionMajor');
-       dgVersionMinor := LoadProcAddress('dgVersionMinor');
-                dgRun := LoadProcAddress('dgRun');
-  dgGetMessageChannel := LoadProcAddress('dgGetMessageChannel');
-        dgSendMessage := LoadProcAddress('dgSendMessage');
-         dgInitialize := LoadProcAddress('dgInitialize');
+procedure TMainLoop.Finalize;
+begin
+  //- Do nothing
+end;
 
-finalization
-  libDarkGlass := nil;
+function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
+begin
+  Result := True;
+end;
 
+procedure TMainLoop.Install(MessageBus: IMessageBus);
+begin
+  fMessageChannel := MessageBus.CreateMessageChannel('platform');
+end;
+
+{$endif}
 end.

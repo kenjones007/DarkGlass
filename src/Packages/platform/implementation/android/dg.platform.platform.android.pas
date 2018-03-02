@@ -24,62 +24,60 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.dynamic;
+unit dg.platform.platform.android;
 
 interface
-
-implementation
-uses
-  sysutils,
-  dg.dynlib.dynlib,
-  dg.dynlib.dynlib.standard,
-  darkglass;
-
-const
-{$ifdef MSWINDOWS}
-  cLibName = 'darkglass.core.dll';
-{$endif}
-{$ifdef MACOS}
-  {$ifdef IOS}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$else}
-  cLibName = 'libdarkglass.core.dynlib';
-  {$endif}
-{$endif}
 {$ifdef ANDROID}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
-{$ifdef LINUX}
-  cLibName = 'libdarkglass.core.so';
-{$endif}
+uses
+  dg.platform.appglue.android,
+  dg.platform.platform,
+  dg.platform.platform.common;
 
-
-var
-  libDarkGlass: IDynLib = nil;
-
-function LoadProcAddress( funcname: string ): pointer;
-begin
-  Result := libDarkGlass.GetProcAddress(funcname);
-  if not assigned(Result) then begin
-    raise
-      Exception.Create('Could not bind to function: '+funcname+' in libDakglass');
+type
+  TPlatform = class( TCustomPlatform, IPlatform )
+  private
+  protected //- IPlatform -//
+    function Initialize: boolean; override;
+    function Finalize: boolean; override;
+    procedure Run; override;
+  public
+    constructor Create; reintroduce;
+    destructor Destroy; override;
   end;
+
+{$endif}
+implementation
+{$ifdef ANDROID}
+uses
+ dg.platform.mainloop.android,
+ sysutils;
+
+{ TPlatform }
+
+constructor TPlatform.Create;
+begin
+  inherited Create;
 end;
 
-initialization
-  libDarkGlass := TDynLib.Create;
-  if not libDarkGlass.LoadLibrary(cLibName) then begin
-    raise
-      Exception.Create('Cannot find librarby '''+cLibName+'''.');
-  end;
-       dgVersionMajor := LoadProcAddress('dgVersionMajor');
-       dgVersionMinor := LoadProcAddress('dgVersionMinor');
-                dgRun := LoadProcAddress('dgRun');
-  dgGetMessageChannel := LoadProcAddress('dgGetMessageChannel');
-        dgSendMessage := LoadProcAddress('dgSendMessage');
-         dgInitialize := LoadProcAddress('dgInitialize');
+destructor TPlatform.Destroy;
+begin
+  inherited Destroy;
+end;
 
-finalization
-  libDarkGlass := nil;
+function TPlatform.Finalize: boolean;
+begin
+end;
 
+function TPlatform.Initialize: boolean;
+begin
+  Result := True;
+  fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
+end;
+
+procedure TPlatform.Run;
+begin
+  inherited Run;
+end;
+
+{$endif}
 end.
