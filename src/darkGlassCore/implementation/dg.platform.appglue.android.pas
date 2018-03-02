@@ -513,11 +513,7 @@ begin
 end;
 
 procedure ANativeActivity_onCreate(activity: PANativeActivity; savedState: pointer; savedStateSize: nativeuint); cdecl;
-var
-  t: boolean;
 begin
-  t := true;
-  while t do;
   if assigned(System.DelphiActivity) then begin
     exit;
   end;
