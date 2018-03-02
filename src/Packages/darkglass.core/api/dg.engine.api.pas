@@ -73,7 +73,6 @@ procedure dgInitialize;                                                         
 /// </remarks>
 procedure dgRun;                                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
-
 /// <summary>
 ///   This function locates a message channel by name and returns a handle to
 ///   it. <br />Message channels are used to communicate between the
@@ -90,7 +89,6 @@ procedure dgRun;                                                                
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
 function dgGetMessageChannel( ChannelName: string ): THMessageChannel;             {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
-
 
 /// <summary>
 ///   This procedure sends a message into a message channel as specified by
@@ -115,8 +113,7 @@ function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean
 implementation
 uses
   sysutils,
-  dg.platform.platform,
-  dg.platform.platform.standard;
+  dg.platform;
 
 const
   cVersionMajor = 1;
