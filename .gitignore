@@ -66,3 +66,5 @@ __recovery/
 *.stat
 *.res
 *.xml
+out/lib/bpl/AndroidManifest.xml
+src/Packages/platform/pkg.platform.windows.res
