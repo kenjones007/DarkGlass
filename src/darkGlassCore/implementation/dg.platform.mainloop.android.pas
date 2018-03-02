@@ -29,7 +29,10 @@ unit dg.platform.mainloop.android;
 interface
 {$ifdef ANDROID}
 uses
+  AndroidAPI.Looper,
+  AndroidAPI.Input,
   system.generics.collections,
+  dg.platform.appglue.android,
   dg.messaging.messagechannel,
   dg.messaging.messagebus,
   dg.platform.window,
@@ -38,36 +41,90 @@ uses
 type
   TMainLoop = class( TInterfacedObject, ISubSystem )
   private
+    fApp: pandroid_app;
     fMessageChannel: IMessageChannel;
     fMainWindow: IWindow;
+  protected
+    procedure DoApplicationCommand(app: pandroid_app; cmd: int32);
+    function DoInputEvent(app: pandroid_app; Event: PAInputEvent ): int32;
   private //- ISubSystem
     procedure Install( MessageBus: IMessageBus );
     function Initialize( MessageBus: IMessageBus ): boolean;
     function Execute: boolean;
     procedure Finalize;
+  public
+    constructor Create; reintroduce;
+    destructor Destroy; override;
   end;
 
 {$endif}
 implementation
 {$ifdef ANDROID}
 uses
+  sysutils,
+  AndroidAPI.NativeActivity,
   darkglass.types,
   dg.platform.window.windows;
 
-function TMainLoop.Execute: boolean;
 var
-  aMessage: darkglass.types.TMessage;
+  MainLoop: TMainLoop = nil;
+
+procedure onAppCmd(app: pandroid_app; cmd: Integer); cdecl;
 begin
-  Result := True;
-  //- Check for engine messages
-  if not fMessageChannel.Pull(aMessage) then begin
+  MainLoop.DoApplicationCommand(app,cmd);
+end;
+
+function onInputEvent(App: PAndroid_app; Event: PAInputEvent): Int32; cdecl;
+begin
+  Result := MainLoop.DoInputEvent(app,event);
+end;
+
+constructor TMainLoop.Create;
+begin
+  inherited Create;
+  if assigned(MainLoop) then begin
+    raise
+      Exception.Create('TMainLoop is a singleton class.');
     exit;
   end;
-//  case aMessage.MessageValue of
-//    0: begin
-//      fMainWindow := TWindow.Create;
-//    end;
-//  end;
+  MainLoop := Self;
+  fApp := PANativeActivity(System.DelphiActivity)^.instance;
+  fApp.userData := Self;
+  fApp.onAppCmd := OnAppCmd;
+  fApp.onInputEvent := onInputEvent;
+end;
+
+destructor TMainLoop.Destroy;
+begin
+  MainLoop := nil;
+  inherited Destroy;
+end;
+
+procedure TMainLoop.DoApplicationCommand(app: pandroid_app; cmd: int32);
+begin
+  if cmd=APP_CMD_INIT_WINDOW then begin
+  end;
+  if cmd=APP_CMD_WINDOW_REDRAW_NEEDED then begin
+  end;
+end;
+
+function TMainLoop.DoInputEvent(app: pandroid_app; Event: PAInputEvent): int32;
+begin
+  exit;
+end;
+
+function TMainLoop.Execute: boolean;
+var
+  ident : Integer;
+  events: Integer;
+  source: pandroid_poll_source;
+begin
+  Result := True;
+  ident := ALooper_pollAll(1, nil, @events, @source);
+  if (ident >= 0) and (source <> nil) then begin
+    source.process(fApp, source);
+  end;
+  doApplicationCommand( fApp, APP_CMD_WINDOW_REDRAW_NEEDED );
 end;
 
 procedure TMainLoop.Finalize;

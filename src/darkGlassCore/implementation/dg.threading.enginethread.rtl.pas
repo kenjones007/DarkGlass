@@ -109,7 +109,7 @@ begin
     end;
   end;
   fStarted := True;
-  fThreadMethod.Start;
+  fThreadMethod.Resume;
 end;
 
 end.

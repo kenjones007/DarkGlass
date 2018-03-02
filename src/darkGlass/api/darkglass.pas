@@ -49,6 +49,13 @@ var
   /// </returns>
   dgVersionMinor: function: uint32; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
+  ///  <summary>
+  ///    Initializes the DarkGlass engine.
+  ///    You must call dgInitialize() before calling dgRun(),
+  ///    dgGetMessageChannel(), or dgSendMessage(). (Or other messaging functions)
+  ///  </summary>
+  dgInitialize: procedure; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+
   /// <summary>
   ///   This procedure passes execution to the run method of the global IPlatform
   ///   instance, which subsequently passes execution to the application main

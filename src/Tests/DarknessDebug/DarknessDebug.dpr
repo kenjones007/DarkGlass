@@ -37,6 +37,7 @@ var
   PlatformChannel: THMessageChannel;
 
 begin
+  dgInitialize;
   PlatformChannel := dgGetMessageChannel('platform');
   aMessage.MessageValue := 0;
   dgSendMessage(PlatformChannel,aMessage);

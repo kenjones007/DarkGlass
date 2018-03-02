@@ -29,20 +29,13 @@ unit dg.platform.platform.android;
 interface
 {$ifdef ANDROID}
 uses
-  Androidapi.Input,
-  Androidapi.NativeActivity,
-  Androidapi.JNIBridge,
-  Androidapi.JNI.Os,
-  Androidapi.Looper,
-  Androidapi.AppGlue,
+  dg.platform.appglue.android,
   dg.platform.platform,
   dg.platform.platform.custom;
 
 type
   TPlatform = class( TCustomPlatform, IPlatform )
   private
-    procedure HandleApplicationCommand(const App: TAndroidApplicationGlue; const ACommand: TAndroidApplicationCommand);
-    function HandleInputEvent(const App: TAndroidApplicationGlue; const AEvent: PAInputEvent): Int32;
   protected //- IPlatform -//
     function Initialize: boolean; override;
     function Finalize: boolean; override;
@@ -61,22 +54,9 @@ uses
 
 { TPlatform }
 
-procedure TPlatform.HandleApplicationCommand(const App: TAndroidApplicationGlue; const ACommand: TAndroidApplicationCommand);
-begin
-  sleep(1);
-end;
-
-function TPlatform.HandleInputEvent(const App: TAndroidApplicationGlue; const AEvent: PAInputEvent): Int32;
-begin
-  Sleep(1);
-end;
-
 constructor TPlatform.Create;
 begin
   inherited Create;
-  app_dummy;
-  TAndroidApplicationGlue(PANativeActivity(System.DelphiActivity)^.instance).OnApplicationCommandEvent := HandleApplicationCommand;
-  TAndroidApplicationGlue(PANativeActivity(System.DelphiActivity)^.instance).OnInputEvent := HandleInputEvent;
 end;
 
 destructor TPlatform.Destroy;
@@ -86,7 +66,6 @@ end;
 
 function TPlatform.Finalize: boolean;
 begin
-//-
 end;
 
 function TPlatform.Initialize: boolean;
@@ -97,7 +76,7 @@ end;
 
 procedure TPlatform.Run;
 begin
-  inherited;
+  inherited Run;
 end;
 
 {$endif}

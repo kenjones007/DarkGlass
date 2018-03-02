@@ -55,6 +55,12 @@ function dgVersionMajor: uint32;                                                
 /// </remarks>
 function dgVersionMinor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
+///  <summary>
+///    Initializes the DarkGlass engine.
+///    You must call dgInitialize() before calling dgRun(),
+///    dgGetMessageChannel(), or dgSendMessage(). (Or other messaging functions)
+///  </summary>
+procedure dgInitialize;                                                            {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 /// <summary>
 ///   This procedure passes execution to the run method of the global IPlatform
@@ -132,6 +138,8 @@ end;
 procedure dgRun;
 begin
   if not assigned(Platform) then begin
+    raise
+      Exception.Create('Did you call dgInitialize()?');
     exit;
   end;
   Platform.Run;
@@ -139,11 +147,21 @@ end;
 
 function dgGetMessageChannel( ChannelName: string ): THMessageChannel;
 begin
+  if not assigned(Platform) then begin
+    raise
+      Exception.Create('Did you call dgInitialize()?');
+    exit;
+  end;
   Result := Platform.getMessageChannel( ChannelName );
 end;
 
 function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
 begin
+  if not assigned(Platform) then begin
+    raise
+      Exception.Create('Did you call dgInitialize()?');
+    exit;
+  end;
   Result := Platform.SendMessage( Channel, aMessage );
 end;
 
@@ -164,21 +182,15 @@ begin
   end;
 end;
 
-function AlwaysTrue: boolean;
-begin
-  Result := False;
-end;
-
 exports
   dgVersionMajor,
   dgVersionMinor,
+  dgInitialize,
   dgRun,
   dgGetMessageChannel,
   dgSendMessage;
 
 initialization
-  while AlwaysTrue do sleep(1);
-  dgInitialize;
 
 finalization
   dgFinalize;

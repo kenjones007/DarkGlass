@@ -77,6 +77,7 @@ initialization
                 dgRun := LoadProcAddress('dgRun');
   dgGetMessageChannel := LoadProcAddress('dgGetMessageChannel');
         dgSendMessage := LoadProcAddress('dgSendMessage');
+         dgInitialize := LoadProcAddress('dgInitialize');
 
 finalization
   libDarkGlass := nil;
