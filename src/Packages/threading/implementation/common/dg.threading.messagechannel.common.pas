@@ -24,90 +24,81 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.threading.messagebus.rtl;
+unit dg.threading.messagechannel.common;
 
 interface
 uses
   system.generics.collections,
+  dg.threading.types,
   dg.threading.messagepipe,
-  dg.threading.messagechannel,
-  dg.threading.messagebus;
+  dg.threading.messagechannel;
 
 type
-  TMessageBus = class( TInterfacedObject, IMessageBus )
+  TCommonMessageChannel = class( TInterfacedObject, IMessageChannel )
   private
-    fChannels: TList<IMessageChannel>;
-  private //- IMessageBus -//
-    function CreateMessageChannel( name: string ): IMessageChannel;
-    function GetMessagePipe( ChannelName: string ): IMessagePipe;
-  private
-    function FindChannelByName( name: string ): IMessageChannel;
+    fName: string;
+    fPipes: TList<IMessagePipe>;
+    fPipeIndex: uint32;
+  private //- IMessageChannel -//
+    function getName: string;
+    function Pull( var aMessage: TMessage ): boolean;
+    function getPipe: IMessagePipe;
   public
-    constructor Create; reintroduce;
+    constructor Create( aName: string ); reintroduce;
     destructor Destroy; override;
   end;
 
 implementation
 uses
-  sysutils,
-  dg.threading.messagechannel.rtl;
+  dg.threading.messagepipe.common;
 
-{ TMessageBus }
+{ TMessageChannel }
 
-constructor TMessageBus.Create;
+constructor TCommonMessageChannel.Create( aName: string );
 begin
   inherited Create;
-  fChannels := TList<IMessageChannel>.Create;
+  fName := aName;
+  fPipes := TList<IMessagePipe>.Create;
+  fPipeIndex := 0;
 end;
 
-function TMessageBus.CreateMessageChannel(name: string): IMessageChannel;
-var
-  aChannel: IMessageChannel;
+destructor TCommonMessageChannel.Destroy;
 begin
-  Result := nil;
-  aChannel := FindChannelByName( name );
-  if assigned(aChannel) then begin
-    exit;
-  end;
-  aChannel := TMessageChannel.Create( Uppercase(Trim(name)) );
-  fChannels.Add(aChannel);
-  Result := aChannel;
-end;
-
-destructor TMessageBus.Destroy;
-begin
-  fChannels.DisposeOf;
+  fPipes.DisposeOf;
   inherited Destroy;
 end;
 
-function TMessageBus.FindChannelByName(name: string): IMessageChannel;
-var
-  idx: uint32;
-  utName: string;
+function TCommonMessageChannel.getName: string;
 begin
-  Result := nil;
-  utName := Uppercase(Trim(Name));
-  if fChannels.Count=0 then begin
-    exit;
-  end;
-  for idx := 0 to pred(fChannels.Count) do begin
-    if fChannels[idx].Name=utName then begin
-      Result := fChannels[idx];
-      exit;
-    end;
-  end;
+  Result := fName;
 end;
 
-function TMessageBus.GetMessagePipe(ChannelName: string): IMessagePipe;
+function TCommonMessageChannel.getPipe: IMessagePipe;
 var
-  aChannel: IMessageChannel;
+  NewPipe: IMessagePipe;
 begin
-  Result := nil;
-  aChannel := FindChannelByName(ChannelName);
-  if not assigned(aChannel) then begin
-    aChannel := CreateMessageChannel(ChannelName);
+  NewPipe := TCommonMessagePipe.Create;
+  fPipes.Add(NewPipe);
+  Result := NewPipe;
+end;
+
+function TCommonMessageChannel.Pull(var aMessage: TMessage): boolean;
+var
+  idx: uint32;
+begin
+  Result := False;
+  if fPipes.Count=0 then begin
+    exit;
   end;
-  Result := aChannel.getPipe;
+  idx := fPipeIndex;
+  repeat
+    Result := fPipes[idx].Pull(aMessage);
+    inc(idx);
+    if idx>=pred(fPipes.Count) then begin
+      idx := 0;
+    end;
+  until (idx=fPipeIndex) or (Result=True);
+  fPipeIndex := idx;
 end;
 
 end.

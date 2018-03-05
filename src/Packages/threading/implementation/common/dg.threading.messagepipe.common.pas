@@ -24,93 +24,83 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.threading.enginethread.rtl;
+unit dg.threading.messagepipe.common;
 
 interface
 uses
-  system.generics.collections,
-  dg.threading.messagebus,
-  dg.threading.threadmethod.rtl,
-  dg.threading.subsystem,
-  dg.threading.enginethread;
+  dg.threading.types,
+  dg.threading.messagepipe;
 
 type
-  TEngineThread = class( TInterfacedObject, IEngineThread )
+  {$A8} //- Align 8-byte boundary for atomic read/write of fPushIndex and fPullIndex.
+  TCommonMessagePipe = class( TInterfacedObject, IMessagePipe )
   private
-    fMessageBus: IMessageBus;
-    fStarted: boolean;
-    fSubSystems: TList<ISubSystem>;
-    fThreadMethod: TThreadMethod;
-  private //- IEngineThread -//
-    procedure InstallSubsystem( aSubSystem: ISubSystem );
-    procedure Start;
+    fPushIndex: uint32;
+    fPullIndex: uint32;
+    fMessages: array of TMessage;
   private
-    function Execute: boolean;
+    class procedure AssignMessage(SourceMessage: TMessage; var TargetMessage: TMessage); static;
+  private //- IMessagePipe -//
+    function Push( aMessage: TMessage ): boolean;
+    function Pull( var aMessage: TMessage ): boolean;
   public
-    constructor Create( MessageBus: IMessageBus ); reintroduce;
+    constructor Create( BufferSize: uint32 = 128 ); reintroduce;
     destructor Destroy; override;
   end;
 
 implementation
-uses
-  SysUtils;
 
-{ TEngineThread }
-
-procedure TEngineThread.InstallSubsystem(aSubSystem: ISubSystem);
-begin
-  if fStarted then begin
-    exit;
-  end;
-  fSubSystems.Add(aSubSystem);
-  aSubsystem.Install(fMessageBus);
-end;
-
-constructor TEngineThread.Create( MessageBus: IMessageBus );
+constructor TCommonMessagePipe.Create( BufferSize: uint32 );
 begin
   inherited Create;
-  fStarted := False;
-  fSubSystems := TList<ISubSystem>.Create;
-  fThreadMethod := TThreadMethod.Create(Execute);
-  fMessageBus := MessageBus;
+  fPushIndex := 0;
+  fPullIndex := 0;
+  SetLength(fMessages,BufferSize);
 end;
 
-destructor TEngineThread.Destroy;
+destructor TCommonMessagePipe.Destroy;
 begin
-  fThreadMethod.DisposeOf;
-  fSubSystems.DisposeOf;
-  fMessageBus := nil;
+  SetLength(fMessages,0);
   inherited Destroy;
 end;
 
-function TEngineThread.Execute: boolean;
+class procedure TCommonMessagePipe.AssignMessage( SourceMessage: TMessage; var TargetMessage: TMessage );
+begin
+  Move( SourceMessage, TargetMessage, Sizeof(TMessage) );
+end;
+
+function TCommonMessagePipe.Pull(var aMessage: TMessage): boolean;
 var
-  idx: uint32;
+  NewIndex: uint32;
 begin
   Result := False;
-  if fSubSystems.Count=0 then begin
+  if fPullIndex=fPushIndex then begin
     exit;
   end;
-  for idx := 0 to pred(fSubsystems.Count) do begin
-    if not fSubSystems[idx].Execute then begin
-      fSubSystems.Remove(fSubSystems[idx]);
-    end;
+  AssignMessage( fMessages[fPullIndex], aMessage );
+  NewIndex := succ(fPullIndex);
+  if NewIndex>=Length(fMessages) then begin
+    NewIndex := 0;
   end;
+  fPullIndex := NewIndex;
   Result := True;
 end;
 
-procedure TEngineThread.Start;
+function TCommonMessagePipe.Push(aMessage: TMessage): boolean;
 var
-  idx: uint32;
+  NewIndex: uint32;
 begin
-  if fSubSystems.Count>0 then begin
-    for idx := 0 to pred(fSubsystems.Count) do begin
-      fSubSystems[idx].Initialize(fMessageBus);
-    end;
+  Result := False;
+  NewIndex := succ(fPushIndex);
+  if (NewIndex>=Length(fMessages)) then begin
+    NewIndex := 0;
   end;
-  fStarted := True;
-  fThreadMethod.Resume;
+  if NewIndex=fPullIndex then begin
+    Exit;
+  end;
+  AssignMessage( aMessage, fMessages[fPushIndex] );
+  fPushIndex := NewIndex;
+  Result := True;
 end;
 
 end.
-

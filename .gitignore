@@ -90,3 +90,5 @@ src/Packages/threading/pkg.threading.common.res
 src/Packages/threading/pkg.threading.res
 src/Packages/threading/pkg.threading.rtl.res
 src/Tests/DarknessDebug/DarknessDebug.res
+/out/lib/bpl/*.xml
+/out/lib/bpl/*.xml

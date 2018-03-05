@@ -24,7 +24,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.threading.threadengine.rtl;
+unit dg.threading.threadengine.common;
 
 interface
 uses
@@ -34,7 +34,7 @@ uses
   dg.threading.threadengine;
 
 type
-  TThreadEngine = class( TInterfacedObject, IThreadEngine )
+  TCommonThreadEngine = class( TInterfacedObject, IThreadEngine )
   private
     fMessageBus: IMessageBus;
     fThreads: TList<IEngineThread>;
@@ -52,13 +52,13 @@ type
 
 implementation
 uses
-  dg.threading.enginethread.rtl,
-  dg.threading.enginethread.ui.rtl,
-  dg.threading.messagebus.rtl;
+  dg.threading.enginethread.common,
+  dg.threading.enginethread.ui.common,
+  dg.threading.messagebus.common;
 
 { TThreadEngine }
 
-constructor TThreadEngine.Create(ThreadCount: uint32);
+constructor TCommonThreadEngine.Create(ThreadCount: uint32);
 var
   AThread: IEngineThread;
   NoThreads: uint32;
@@ -66,9 +66,9 @@ var
 begin
   inherited Create;
   fThreads := TList<IEngineThread>.Create;
-  fMessageBus := TMessageBus.Create;
+  fMessageBus := TCommonMessageBus.Create;
   //- Create and add the UI thread.
-  aThread := dg.threading.enginethread.ui.rtl.TEngineThread.Create( fMessageBus );
+  aThread := dg.threading.enginethread.ui.common.TCommonEngineThread.Create( fMessageBus );
   fThreads.Add(AThread);
   //- Create ancillary threads
   if ThreadCount=0 then begin
@@ -80,12 +80,12 @@ begin
     exit;
   end;
   for idx := 0 to pred(NoThreads) do begin
-    aThread := dg.threading.enginethread.rtl.TEngineThread.Create( fMessageBus );
+    aThread := dg.threading.enginethread.common.TCommonEngineThread.Create( fMessageBus );
     fThreads.Add(AThread);
   end;
 end;
 
-destructor TThreadEngine.Destroy;
+destructor TCommonThreadEngine.Destroy;
 begin
   fThreads.Clear;
   fThreads.DisposeOf;
@@ -93,22 +93,22 @@ begin
   inherited Destroy;
 end;
 
-function TThreadEngine.getMessageBus: IMessageBus;
+function TCommonThreadEngine.getMessageBus: IMessageBus;
 begin
   Result := fMessageBus;
 end;
 
-function TThreadEngine.getThread(idx: uint32): IEngineThread;
+function TCommonThreadEngine.getThread(idx: uint32): IEngineThread;
 begin
   Result := fThreads[idx];
 end;
 
-function TThreadEngine.getThreadCount: uint32;
+function TCommonThreadEngine.getThreadCount: uint32;
 begin
   Result := fThreads.Count;
 end;
 
-procedure TThreadEngine.Run;
+procedure TCommonThreadEngine.Run;
 var
   idx: uint32;
 begin

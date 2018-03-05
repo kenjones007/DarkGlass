@@ -28,10 +28,10 @@ unit dg.threading.threadengine.standard;
 
 interface
 uses
-  dg.threading.threadengine.rtl;
+  dg.threading.threadengine.common;
 
 type
-  TThreadEngine = dg.threading.threadengine.rtl.TThreadEngine;
+  TThreadEngine = dg.threading.threadengine.common.TCommonThreadEngine;
 
 implementation
 

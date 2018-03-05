@@ -27,8 +27,23 @@
 unit darkglass;
 
 interface
-uses
-  darkglass.types;
+
+
+type
+  ///  <summary>
+  ///    A handle representing a message channel.
+  ///  </summary>
+  THMessageChannel = uint32;
+
+  ///  <summary>
+  ///    A record type representing a communication message between
+  ///    subsystems.
+  ///  </summary>
+  TMessage = record
+    MessageValue: uint32;
+    ParamA: NativeUInt;
+    ParamB: NativeUInt;
+  end;
 
 var
   /// <summary>

@@ -24,7 +24,7 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.threading.enginethread.ui.rtl;
+unit dg.threading.enginethread.ui.common;
 
 interface
 uses
@@ -34,7 +34,7 @@ uses
   dg.threading.enginethread;
 
 type
-  TEngineThread = class( TInterfacedObject, IEngineThread )
+  TCommonEngineThread = class( TInterfacedObject, IEngineThread )
   private
     fMessageBus: IMessageBus;
     fStarted: boolean;
@@ -55,7 +55,7 @@ uses
 
 { TEngineThread }
 
-procedure TEngineThread.InstallSubsystem(aSubSystem: ISubSystem);
+procedure TCommonEngineThread.InstallSubsystem(aSubSystem: ISubSystem);
 begin
   if fStarted then begin
     exit;
@@ -64,7 +64,7 @@ begin
   aSubsystem.Install(fMessageBus);
 end;
 
-constructor TEngineThread.Create( MessageBus: IMessageBus );
+constructor TCommonEngineThread.Create( MessageBus: IMessageBus );
 begin
   inherited Create;
   fStarted := False;
@@ -72,14 +72,14 @@ begin
   fMessageBus := MessageBus;
 end;
 
-destructor TEngineThread.Destroy;
+destructor TCommonEngineThread.Destroy;
 begin
   fSubSystems.DisposeOf;
   fMessageBus := nil;
   inherited Destroy;
 end;
 
-function TEngineThread.Execute: boolean;
+function TCommonEngineThread.Execute: boolean;
 var
   idx: uint32;
 begin
@@ -96,7 +96,7 @@ begin
   Result := True;
 end;
 
-procedure TEngineThread.Start;
+procedure TCommonEngineThread.Start;
 var
   idx: uint32;
 begin

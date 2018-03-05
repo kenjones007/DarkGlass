@@ -24,81 +24,93 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.threading.messagechannel.rtl;
+unit dg.threading.enginethread.common;
 
 interface
 uses
   system.generics.collections,
-  dg.threading.types,
-  dg.threading.messagepipe,
-  dg.threading.messagechannel;
+  dg.threading.messagebus,
+  dg.threading.threadmethod.common,
+  dg.threading.subsystem,
+  dg.threading.enginethread;
 
 type
-  TMessageChannel = class( TInterfacedObject, IMessageChannel )
+  TCommonEngineThread = class( TInterfacedObject, IEngineThread )
   private
-    fName: string;
-    fPipes: TList<IMessagePipe>;
-    fPipeIndex: uint32;
-  private //- IMessageChannel -//
-    function getName: string;
-    function Pull( var aMessage: TMessage ): boolean;
-    function getPipe: IMessagePipe;
+    fMessageBus: IMessageBus;
+    fStarted: boolean;
+    fSubSystems: TList<ISubSystem>;
+    fThreadMethod: TThreadMethod;
+  private //- IEngineThread -//
+    procedure InstallSubsystem( aSubSystem: ISubSystem );
+    procedure Start;
+  private
+    function Execute: boolean;
   public
-    constructor Create( aName: string ); reintroduce;
+    constructor Create( MessageBus: IMessageBus ); reintroduce;
     destructor Destroy; override;
   end;
 
 implementation
 uses
-  dg.threading.messagepipe.rtl;
+  SysUtils;
 
-{ TMessageChannel }
+{ TEngineThread }
 
-constructor TMessageChannel.Create( aName: string );
+procedure TCommonEngineThread.InstallSubsystem(aSubSystem: ISubSystem);
 begin
-  inherited Create;
-  fName := aName;
-  fPipes := TList<IMessagePipe>.Create;
-  fPipeIndex := 0;
+  if fStarted then begin
+    exit;
+  end;
+  fSubSystems.Add(aSubSystem);
+  aSubsystem.Install(fMessageBus);
 end;
 
-destructor TMessageChannel.Destroy;
+constructor TCommonEngineThread.Create( MessageBus: IMessageBus );
 begin
-  fPipes.DisposeOf;
+  inherited Create;
+  fStarted := False;
+  fSubSystems := TList<ISubSystem>.Create;
+  fThreadMethod := TThreadMethod.Create(Execute);
+  fMessageBus := MessageBus;
+end;
+
+destructor TCommonEngineThread.Destroy;
+begin
+  fThreadMethod.DisposeOf;
+  fSubSystems.DisposeOf;
+  fMessageBus := nil;
   inherited Destroy;
 end;
 
-function TMessageChannel.getName: string;
-begin
-  Result := fName;
-end;
-
-function TMessageChannel.getPipe: IMessagePipe;
-var
-  NewPipe: IMessagePipe;
-begin
-  NewPipe := TMessagePipe.Create;
-  fPipes.Add(NewPipe);
-  Result := NewPipe;
-end;
-
-function TMessageChannel.Pull(var aMessage: TMessage): boolean;
+function TCommonEngineThread.Execute: boolean;
 var
   idx: uint32;
 begin
   Result := False;
-  if fPipes.Count=0 then begin
+  if fSubSystems.Count=0 then begin
     exit;
   end;
-  idx := fPipeIndex;
-  repeat
-    Result := fPipes[idx].Pull(aMessage);
-    inc(idx);
-    if idx>=pred(fPipes.Count) then begin
-      idx := 0;
+  for idx := 0 to pred(fSubsystems.Count) do begin
+    if not fSubSystems[idx].Execute then begin
+      fSubSystems.Remove(fSubSystems[idx]);
     end;
-  until (idx=fPipeIndex) or (Result=True);
-  fPipeIndex := idx;
+  end;
+  Result := True;
+end;
+
+procedure TCommonEngineThread.Start;
+var
+  idx: uint32;
+begin
+  if fSubSystems.Count>0 then begin
+    for idx := 0 to pred(fSubsystems.Count) do begin
+      fSubSystems[idx].Initialize(fMessageBus);
+    end;
+  end;
+  fStarted := True;
+  fThreadMethod.Resume;
 end;
 
 end.
+

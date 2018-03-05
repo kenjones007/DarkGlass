@@ -28,10 +28,10 @@ unit dg.threading.enginethread.ui.standard;
 
 interface
 uses
-  dg.threading.enginethread.ui.rtl;
+  dg.threading.enginethread.ui.common;
 
 type
-  TUIEngineThread = dg.threading.enginethread.ui.rtl.TEngineThread;
+  TUIEngineThread = dg.threading.enginethread.ui.common.TCommonEngineThread;
 
 implementation
 

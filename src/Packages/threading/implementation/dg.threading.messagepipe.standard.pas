@@ -28,10 +28,10 @@ unit dg.threading.messagepipe.standard;
 
 interface
 uses
-  dg.threading.messagepipe.rtl;
+  dg.threading.messagepipe.common;
 
 type
-  TMessagePipe = dg.threading.messagepipe.rtl.TMessagePipe;
+  TMessagePipe = dg.threading.messagepipe.common.TCommonMessagePipe;
 
 implementation
 

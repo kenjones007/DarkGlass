@@ -37,6 +37,13 @@ contains
   dg.threading.threadengine in 'interface\dg.threading.threadengine.pas',
   dg.threading.messagebus in 'interface\dg.threading.messagebus.pas',
   dg.threading.messagechannel in 'interface\dg.threading.messagechannel.pas',
-  dg.threading.types in 'api\dg.threading.types.pas';
+  dg.threading.types in 'api\dg.threading.types.pas',
+  dg.threading.messagechannel.common in 'implementation\common\dg.threading.messagechannel.common.pas',
+  dg.threading.messagepipe.common in 'implementation\common\dg.threading.messagepipe.common.pas',
+  dg.threading.threadengine.common in 'implementation\common\dg.threading.threadengine.common.pas',
+  dg.threading.threadmethod.common in 'implementation\common\dg.threading.threadmethod.common.pas',
+  dg.threading.enginethread.common in 'implementation\common\dg.threading.enginethread.common.pas',
+  dg.threading.enginethread.ui.common in 'implementation\common\dg.threading.enginethread.ui.common.pas',
+  dg.threading.messagebus.common in 'implementation\common\dg.threading.messagebus.common.pas';
 
 end.

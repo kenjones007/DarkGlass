@@ -28,10 +28,10 @@ unit dg.threading.messagebus.standard;
 
 interface
 uses
-  dg.threading.messagebus.rtl;
+  dg.threading.messagebus.common;
 
 type
-  TMessageBus = dg.threading.messagebus.rtl.TMessageBus;
+  TMessageBus = dg.threading.messagebus.common.TCommonMessageBus;
 
 implementation
 

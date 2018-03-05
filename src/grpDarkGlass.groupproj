@@ -18,7 +18,10 @@
         <Projects Include="Packages\threading\pkg.threading.common.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Packages\threading\pkg.threading.rtl.dproj">
+        <Projects Include="Packages\threading\pkg.threading.posix.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Packages\threading\pkg.threading.windows.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Packages\threading\pkg.threading.dproj">
@@ -101,14 +104,23 @@
     <Target Name="pkg_threading_common:Make">
         <MSBuild Projects="Packages\threading\pkg.threading.common.dproj" Targets="Make"/>
     </Target>
-    <Target Name="pkg_threading_rtl">
-        <MSBuild Projects="Packages\threading\pkg.threading.rtl.dproj"/>
+    <Target Name="pkg_threading_posix">
+        <MSBuild Projects="Packages\threading\pkg.threading.posix.dproj"/>
     </Target>
-    <Target Name="pkg_threading_rtl:Clean">
-        <MSBuild Projects="Packages\threading\pkg.threading.rtl.dproj" Targets="Clean"/>
+    <Target Name="pkg_threading_posix:Clean">
+        <MSBuild Projects="Packages\threading\pkg.threading.posix.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="pkg_threading_rtl:Make">
-        <MSBuild Projects="Packages\threading\pkg.threading.rtl.dproj" Targets="Make"/>
+    <Target Name="pkg_threading_posix:Make">
+        <MSBuild Projects="Packages\threading\pkg.threading.posix.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkg_threading_windows">
+        <MSBuild Projects="Packages\threading\pkg.threading.windows.dproj"/>
+    </Target>
+    <Target Name="pkg_threading_windows:Clean">
+        <MSBuild Projects="Packages\threading\pkg.threading.windows.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_threading_windows:Make">
+        <MSBuild Projects="Packages\threading\pkg.threading.windows.dproj" Targets="Make"/>
     </Target>
     <Target Name="pkg_threading">
         <MSBuild Projects="Packages\threading\pkg.threading.dproj"/>
@@ -192,13 +204,13 @@
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkg_dynlib_common;pkg_dynlib_windows;pkg_dynlib_posix;pkg_dynlib;pkg_threading_common;pkg_threading_rtl;pkg_threading;pkg_platform_common;pkg_platform_android;pkg_platform_windows;pkg_platform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkg_dynlib_common;pkg_dynlib_windows;pkg_dynlib_posix;pkg_dynlib;pkg_threading_common;pkg_threading_posix;pkg_threading_windows;pkg_threading;pkg_platform_common;pkg_platform_android;pkg_platform_windows;pkg_platform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkg_dynlib_common:Clean;pkg_dynlib_windows:Clean;pkg_dynlib_posix:Clean;pkg_dynlib:Clean;pkg_threading_common:Clean;pkg_threading_rtl:Clean;pkg_threading:Clean;pkg_platform_common:Clean;pkg_platform_android:Clean;pkg_platform_windows:Clean;pkg_platform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkg_dynlib_common:Clean;pkg_dynlib_windows:Clean;pkg_dynlib_posix:Clean;pkg_dynlib:Clean;pkg_threading_common:Clean;pkg_threading_posix:Clean;pkg_threading_windows:Clean;pkg_threading:Clean;pkg_platform_common:Clean;pkg_platform_android:Clean;pkg_platform_windows:Clean;pkg_platform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkg_dynlib_common:Make;pkg_dynlib_windows:Make;pkg_dynlib_posix:Make;pkg_dynlib:Make;pkg_threading_common:Make;pkg_threading_rtl:Make;pkg_threading:Make;pkg_platform_common:Make;pkg_platform_android:Make;pkg_platform_windows:Make;pkg_platform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkg_dynlib_common:Make;pkg_dynlib_windows:Make;pkg_dynlib_posix:Make;pkg_dynlib:Make;pkg_threading_common:Make;pkg_threading_posix:Make;pkg_threading_windows:Make;pkg_threading:Make;pkg_platform_common:Make;pkg_platform_android:Make;pkg_platform_windows:Make;pkg_platform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -1,4 +1,4 @@
-package pkgDarkGlass;
+package pkg.threading.windows;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -30,10 +30,4 @@ package pkgDarkGlass;
 requires
   rtl;
 
-contains
-  darkglass.dynamic in 'api\darkglass.dynamic.pas',
-  darkglass in 'api\darkglass.pas',
-  darkglass.static in 'api\darkglass.static.pas';
-
 end.
-

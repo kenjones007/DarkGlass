@@ -157,6 +157,13 @@
         <DCCReference Include="interface\dg.threading.messagebus.pas"/>
         <DCCReference Include="interface\dg.threading.messagechannel.pas"/>
         <DCCReference Include="api\dg.threading.types.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.messagechannel.common.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.messagepipe.common.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.threadengine.common.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.threadmethod.common.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.enginethread.common.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.enginethread.ui.common.pas"/>
+        <DCCReference Include="implementation\common\dg.threading.messagebus.common.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

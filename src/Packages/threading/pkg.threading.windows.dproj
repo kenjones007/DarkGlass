@@ -1,13 +1,13 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{E8A345F8-8CE9-40CE-81BF-64584417FEDC}</ProjectGuid>
-        <MainSource>pkg.threading.rtl.dpk</MainSource>
+        <ProjectGuid>{904B4F17-16C1-44EB-AB3F-F9C7F93A4B39}</ProjectGuid>
+        <MainSource>pkg.threading.windows.dpk</MainSource>
         <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
-        <TargetedPlatforms>1247</TargetedPlatforms>
+        <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Package</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -76,7 +76,7 @@
         <GenPackage>true</GenPackage>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
-        <SanitizedProjectName>pkg_threading_rtl</SanitizedProjectName>
+        <SanitizedProjectName>pkg_threading_windows</SanitizedProjectName>
         <DCC_UnitSearchPath>..\..\..\out\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_BplOutput>..\..\..\out\lib\bpl</DCC_BplOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
@@ -150,13 +150,6 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
-        <DCCReference Include="implementation\dg.threading.enginethread.ui.rtl.pas"/>
-        <DCCReference Include="implementation\dg.threading.threadengine.rtl.pas"/>
-        <DCCReference Include="implementation\dg.threading.threadmethod.rtl.pas"/>
-        <DCCReference Include="implementation\dg.threading.enginethread.rtl.pas"/>
-        <DCCReference Include="implementation\dg.threading.messagebus.rtl.pas"/>
-        <DCCReference Include="implementation\dg.threading.messagechannel.rtl.pas"/>
-        <DCCReference Include="implementation\dg.threading.messagepipe.rtl.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -175,7 +168,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">pkg.threading.rtl.dpk</Source>
+                    <Source Name="MainSource">pkg.threading.windows.dpk</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k250.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
@@ -205,9 +198,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\..\out\lib\bpl\pkg.threading.rtl.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\..\out\lib\bpl\pkg_threading_windows.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>pkg_threading_rtl.bpl</RemoteName>
+                        <RemoteName>pkg_threading_windows.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -570,12 +563,12 @@
                 <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>
-                <Platform value="Android">True</Platform>
-                <Platform value="iOSDevice32">True</Platform>
-                <Platform value="iOSDevice64">True</Platform>
-                <Platform value="iOSSimulator">True</Platform>
-                <Platform value="Linux64">True</Platform>
-                <Platform value="OSX32">True</Platform>
+                <Platform value="Android">False</Platform>
+                <Platform value="iOSDevice32">False</Platform>
+                <Platform value="iOSDevice64">False</Platform>
+                <Platform value="iOSSimulator">False</Platform>
+                <Platform value="Linux64">False</Platform>
+                <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>

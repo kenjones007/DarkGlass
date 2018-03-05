@@ -28,10 +28,10 @@ unit dg.threading.messagechannel.standard;
 
 interface
 uses
-  dg.threading.messagechannel.rtl;
+  dg.threading.messagechannel.common;
 
 type
-  TMessageChannel = dg.threading.messagechannel.rtl.TMessageChannel;
+  TMessageChannel = dg.threading.messagechannel.common.TCommonMessageChannel;
 
 implementation
 
