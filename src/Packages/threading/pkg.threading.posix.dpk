@@ -30,4 +30,8 @@ package pkg.threading.posix;
 requires
   rtl;
 
+contains
+  dg.threading.messagebus.posix in 'implementation\posix\dg.threading.messagebus.posix.pas',
+  dg.threading.messagechannel.posix in 'implementation\posix\dg.threading.messagechannel.posix.pas';
+
 end.
