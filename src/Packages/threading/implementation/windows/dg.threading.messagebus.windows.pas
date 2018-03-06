@@ -24,41 +24,30 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.threading;
+unit dg.threading.messagebus.windows;
 
 interface
 uses
-  dg.threading.types,
-  dg.threading.messagebus,
   dg.threading.messagechannel,
-  dg.threading.messagepipe,
-  dg.threading.subsystem,
-  dg.threading.enginethread,
-  dg.threading.threadengine,
-  dg.threading.messagebus.standard,
-  dg.threading.messagechannel.standard,
-  dg.threading.messagepipe.standard,
-  dg.threading.enginethread.standard,
-  dg.threading.enginethread.ui.standard,
-  dg.threading.threadengine.standard;
+  dg.threading.messagebus,
+  dg.threading.messagebus.common;
 
 type
-   THChannelConnection = dg.threading.types.THChannelConnection;
-              TMessage = dg.threading.types.TMessage;
-           IMessageBus = dg.threading.messagebus.IMessageBus;
-       IMessageChannel = dg.threading.messagechannel.IMessageChannel;
-          IMessagePipe = dg.threading.messagepipe.IMessagePipe;
-            ISubSystem = dg.threading.subsystem.ISubSystem;
-         IEngineThread = dg.threading.enginethread.IEngineThread;
-         IThreadEngine = dg.threading.threadengine.IThreadEngine;
-           TMessageBus = dg.threading.messagebus.standard.TMessageBus;
-       TMessageChannel = dg.threading.messagechannel.standard.TMessageChannel;
-          TMessagePipe = dg.threading.messagepipe.standard.TMessagePipe;
-         TEngineThread = dg.threading.enginethread.standard.TEngineThread;
-       TUIEngineThread = dg.threading.enginethread.ui.standard.TUIEngineThread;
-         TThreadEngine = dg.threading.threadengine.standard.TThreadEngine;
+  TMessageBus = class( TCommonMessageBus, IMessageBus )
+  protected
+    function NewMessageChannel( ChannelName: string ): IMessageChannel; override;
+  end;
 
 
 implementation
+uses
+  dg.threading.messagechannel.windows;
+
+{ TMessageBus }
+
+function TMessageBus.NewMessageChannel(ChannelName: string): IMessageChannel;
+begin
+  Result := TMessageChannel.Create(ChannelName);
+end;
 
 end.

@@ -47,43 +47,15 @@ type
   IPlatform = interface
     ['{96483AB0-2942-4D7B-9E9D-1473CA32D6CB}']
 
-    /// <summary>
-    ///   Locates a message channel by name, and returns a handle to it. <br />
-    ///   If the named channel does not yet exist, it will be created.
-    /// </summary>
-    /// <param name="ChannelName">
-    ///   The case-insensitive name of a message channel to locate.
-    /// </param>
-    /// <returns>
-    ///   If successful, returns a handle to the message channel. If
-    ///   unsuccessful, returns a null handle (zero value).
-    /// </returns>
-    function GetMessageChannel( ChannelName: string ): THMessageChannel;
+    ///  <summary>
+    ///    Gets a connection to a message channel and returns a handle to it.
+    ///    If the handle returned is non-zero, then this is a valid handle.
+    ///  </summary>
+    function GetChannelConnection( ChannelName: string ): THChannelConnection;
 
     /// <summary>
-    ///   Sends a message to the communication channel, specified by handle.
-    ///   Where the handle is obtained by calling the GetMessageChannel()
-    ///   method. <br /><br />SendMessage() is asynchonous, in-that, a message
-    ///   will be sent into the message channel and then the SendMessage() will
-    ///   return, regardless of the message having been handled by the
-    ///   receiving sub-system.
     /// </summary>
-    /// <param name="Channel">
-    ///   A handle for the message channel, obtained through the
-    ///   GetMessageChannel() method.
-    /// </param>
-    /// <param name="aMessage">
-    ///   A TMessage structure, populated with the message information to be
-    ///   transmitted into the channel.
-    /// </param>
-    /// <returns>
-    ///   Returns true if the message is successfully sent on the message
-    ///   channel (this does not indicate successfully received or handled by
-    ///   the receiving sub-system). Returns false if the message could not be
-    ///   sent - one possible cause of a failure is the message channel becomes
-    ///   full.
-    /// </returns>
-    function SendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
+    function SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
 
     /// <summary>
     ///   Initializes the worker threads, sub-systems, and communication

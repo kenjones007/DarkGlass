@@ -88,14 +88,14 @@ procedure dgRun;                                                                
 /// <remarks>
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
-function dgGetMessageChannel( ChannelName: string ): THMessageChannel;             {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgGetMessageChannelConnection( ChannelName: string ): THChannelConnection;             {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 /// <summary>
 ///   This procedure sends a message into a message channel as specified by
 ///   it's handle (optained using the dggetMessageChannal() function.
 /// </summary>
-/// <param name="Channel">
-///   The handle of a message channel to send a message to.
+/// <param name="ChannelConnection">
+///   The handle of a message channel conneciton to send a message to.
 /// </param>
 /// <param name="aMessage">
 ///   The message to send into the message channel.
@@ -108,7 +108,9 @@ function dgGetMessageChannel( ChannelName: string ): THMessageChannel;          
 /// <remarks>
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
-function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgSendMessage( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+
 
 implementation
 uses
@@ -142,24 +144,25 @@ begin
   Platform.Run;
 end;
 
-function dgGetMessageChannel( ChannelName: string ): THMessageChannel;
+function dgGetMessageChannelConnection( ChannelName: string ): THChannelConnection;
 begin
   if not assigned(Platform) then begin
     raise
       Exception.Create('Did you call dgInitialize()?');
     exit;
   end;
-  Result := Platform.getMessageChannel( ChannelName );
+  Result := Platform.GetChannelConnection( ChannelName );
 end;
 
-function dgSendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
+
+function dgSendMessage( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean;
 begin
   if not assigned(Platform) then begin
     raise
       Exception.Create('Did you call dgInitialize()?');
     exit;
   end;
-  Result := Platform.SendMessage( Channel, aMessage );
+  Result := Platform.SendMessage( ChannelConnection, aMessage );
 end;
 
 procedure dgInitialize;
@@ -184,8 +187,9 @@ exports
   dgVersionMinor,
   dgInitialize,
   dgRun,
-  dgGetMessageChannel,
+  dgGetMessageChannelConnection,
   dgSendMessage;
+
 
 initialization
 

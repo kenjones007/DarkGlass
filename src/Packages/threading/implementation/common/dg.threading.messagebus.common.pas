@@ -29,6 +29,7 @@ unit dg.threading.messagebus.common;
 interface
 uses
   system.generics.collections,
+  dg.threading.types,
   dg.threading.messagepipe,
   dg.threading.messagechannel,
   dg.threading.messagebus;
@@ -37,11 +38,17 @@ type
   TCommonMessageBus = class( TInterfacedObject, IMessageBus )
   private
     fChannels: TList<IMessageChannel>;
-  private //- IMessageBus -//
-    function CreateMessageChannel( name: string ): IMessageChannel;
-    function GetMessagePipe( ChannelName: string ): IMessagePipe;
+    //- For storing handles.
+    fConnectionChannels: TList<IMessageChannel>;
+    fConnectionPipes: TList<IMessagePipe>;
   private
     function FindChannelByName( name: string ): IMessageChannel;
+  private //- IMessageBus -//
+    function CreateMessageChannel( ChannelName: string ): IMessageChannel;
+    function GetConnection( ChannelName: string ): THChannelConnection;
+    function SendMessage( Connection: THChannelConnection; aMessage: TMessage ): boolean;
+  protected //- Override me -//
+    function NewMessageChannel( ChannelName: string ): IMessageChannel; virtual; abstract;
   public
     constructor Create; reintroduce;
     destructor Destroy; override;
@@ -58,24 +65,29 @@ constructor TCommonMessageBus.Create;
 begin
   inherited Create;
   fChannels := TList<IMessageChannel>.Create;
+  fConnectionChannels := TList<IMessageChannel>.Create;
+  fConnectionPipes := TList<IMessagePipe>.Create;
 end;
 
-function TCommonMessageBus.CreateMessageChannel(name: string): IMessageChannel;
+function TCommonMessageBus.CreateMessageChannel(ChannelName: string): IMessageChannel;
 var
   aChannel: IMessageChannel;
 begin
   Result := nil;
-  aChannel := FindChannelByName( name );
+  aChannel := FindChannelByName( ChannelName );
   if assigned(aChannel) then begin
+    Result := aChannel;
     exit;
   end;
-  aChannel := TCommonMessageChannel.Create( Uppercase(Trim(name)) );
+  aChannel := NewMessageChannel( Uppercase(Trim(ChannelName)) );
   fChannels.Add(aChannel);
   Result := aChannel;
 end;
 
 destructor TCommonMessageBus.Destroy;
 begin
+  fConnectionChannels.DisposeOf;
+  fConnectionPipes.DisposeOf;
   fChannels.DisposeOf;
   inherited Destroy;
 end;
@@ -98,16 +110,42 @@ begin
   end;
 end;
 
-function TCommonMessageBus.GetMessagePipe(ChannelName: string): IMessagePipe;
+function TCommonMessageBus.GetConnection(ChannelName: string): THChannelConnection;
 var
   aChannel: IMessageChannel;
+  aPipe: IMessagePipe;
 begin
-  Result := nil;
+  Result := 0;
   aChannel := FindChannelByName(ChannelName);
   if not assigned(aChannel) then begin
-    aChannel := CreateMessageChannel(ChannelName);
+    exit;
   end;
-  Result := aChannel.getPipe;
+  aPipe := aChannel.getPipe;
+  if not assigned(aPipe) then begin
+    exit;
+  end;
+  fConnectionChannels.Add(aChannel);
+  fConnectionPipes.Add(aPipe);
+  Result := fConnectionPipes.Count;
+end;
+
+function TCommonMessageBus.SendMessage(Connection: THChannelConnection; aMessage: TMessage): boolean;
+var
+  idx: uint32;
+  Channel: IMessageChannel;
+  Pipe: IMessagePipe;
+begin
+  Result := False;
+  if Connection=0 then begin
+    exit;
+  end;
+  if Connection>fConnectionPipes.Count then begin
+    exit;
+  end;
+  idx := pred(Connection);
+  Pipe := fConnectionPipes[idx];
+  Channel := fConnectionChannels[idx];
+  Result := Channel.Push( Pipe, aMessage );
 end;
 
 end.

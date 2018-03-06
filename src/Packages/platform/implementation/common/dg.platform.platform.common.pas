@@ -36,10 +36,9 @@ type
   TCustomPlatform = class( TInterfacedObject, IPlatform )
   protected
     fThreadEngine: IThreadEngine;
-    fMessagePipes: TList<IMessagePipe>;
   protected //- IPlatform -//
-    function GetMessageChannel( ChannelName: string ): THMessageChannel;
-    function SendMessage( Channel: THMessageChannel; aMessage: TMessage ): boolean;
+    function GetChannelConnection( ChannelName: string ): THChannelConnection;
+    function SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
     function Initialize: boolean; virtual; abstract;
     function Finalize: boolean; virtual;  abstract;
     procedure Run;  virtual;
@@ -55,29 +54,24 @@ uses
 { TCustomPlatform }
 
 constructor TCustomPlatform.Create;
+var
+  AMessageBus: IMessageBus;
 begin
   inherited Create;
-  fThreadEngine := TThreadEngine.Create;
-  fMessagePipes := TList<IMessagePipe>.Create;
+  AMessageBus := TMessageBus.Create;
+  fThreadEngine := TThreadEngine.Create(AMessageBus);
 end;
 
 destructor TCustomPlatform.Destroy;
 begin
-   fThreadEngine := nil;
-  fMessagePipes.DisposeOf;
+  fThreadEngine := nil;
   inherited Destroy;
 end;
 
-function TCustomPlatform.GetMessageChannel(ChannelName: string): THMessageChannel;
-var
-  Pipe: IMessagePipe;
+
+function TCustomPlatform.GetChannelConnection(ChannelName: string): THChannelConnection;
 begin
-  Pipe := fThreadEngine.getMessageBus.GetMessagePipe(ChannelName);
-  if not assigned(Pipe) then begin
-    Result := 0;
-  end;
-  fMessagePipes.Add(Pipe);
-  Result := fMessagePipes.Count;
+  Result := fThreadEngine.getMessageBus.GetConnection(ChannelName);
 end;
 
 procedure TCustomPlatform.Run;
@@ -85,13 +79,9 @@ begin
   fThreadEngine.Run;
 end;
 
-function TCustomPlatform.SendMessage(Channel: THMessageChannel; aMessage: TMessage): boolean;
+function TCustomPlatform.SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
 begin
-  Result := False;
-  if (Channel=0) or (Channel>fMessagePipes.Count) then begin
-    exit;
-  end;
-  Result := fMessagePipes.Items[pred(Channel)].Push(aMessage);
+  Result := fThreadEngine.getMessageBus.SendMessage(ConnectionHandle,aMessage);
 end;
 
 end.

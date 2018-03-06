@@ -31,9 +31,10 @@ interface
 
 type
   ///  <summary>
-  ///    A handle representing a message channel.
+  ///    Represents a handle to a connection object, conecting to a message
+  ///    channel.
   ///  </summary>
-  THMessageChannel = uint32;
+  THChannelConnection = uint32;
 
   ///  <summary>
   ///    A record type representing a communication message between
@@ -80,8 +81,8 @@ var
   dgRun: procedure(); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
   /// <summary>
-  ///   This function locates a message channel by name and returns a handle to
-  ///   it. <br />Message channels are used to communicate between the
+  ///   This function locates a message channel by name and returns a connection
+  ///   handle to it. <br />Message channels are used to communicate between the
   ///   sub-systems of the application during execution.
   /// </summary>
   /// <param name="ChannelName">
@@ -89,16 +90,17 @@ var
   /// </param>
   /// <returns>
   ///   If this method is unsuccessful a value of zero is returned, otherwise a
-  ///   handle to the message channel is returned.
+  ///   handle to the message channel connection is returned.
   /// </returns>
-  dgGetMessageChannel: function( ChannelName: string ): THMessageChannel; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  dgGetMessageChannelConnection: function ( ChannelName: string ): THChannelConnection; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
   /// <summary>
   ///   This procedure sends a message into a message channel as specified by
-  ///   it's handle (optained using the dggetMessageChannal() function.
+  ///   it's connection handle (optained using the
+  ///   dgGetMessageChannelConnection() function.
   /// </summary>
-  /// <param name="Channel">
-  ///   The handle of a message channel to send a message to.
+  /// <param name="ChannelConnection">
+  ///   The handle of a message channel connection to send a message to.
   /// </param>
   /// <param name="aMessage">
   ///   The message to send into the message channel.
@@ -108,7 +110,7 @@ var
   ///   Possible causes of failure include the message channel being full, or an
   ///   invalid message channel handle being specified.
   /// </returns>
-  dgSendMessage: function( Channel: THMessageChannel; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  dgSendMessage: function ( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
 implementation
 

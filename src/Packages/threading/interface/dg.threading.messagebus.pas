@@ -28,6 +28,7 @@ unit dg.threading.messagebus;
 
 interface
 uses
+  dg.threading.types,
   dg.threading.messagepipe,
   dg.threading.messagechannel;
 
@@ -46,12 +47,18 @@ type
     ///  </summary>
     function CreateMessageChannel( name: string ): IMessageChannel;
 
+    ///  <summary>
+    ///    Called by a subsystem during initialization, to get a connection
+    ///    to a message channel for sending messages. Each thread must have
+    ///    it's own connection to the channel.
+    ///  </summary>
+    function GetConnection( ChannelName: string ): THChannelConnection;
 
     ///  <summary>
-    ///    Called by a subsystem during initialization, to create a message
-    ///    pipe on another subsystem, for injecting messages to that target.
+    ///    Sends a message into the message channel, using the given connection handle.
     ///  </summary>
-    function GetMessagePipe( ChannelName: string ): IMessagePipe;
+    function SendMessage( Connection: THChannelConnection; aMessage: TMessage ): boolean;
+
 
   end;
 

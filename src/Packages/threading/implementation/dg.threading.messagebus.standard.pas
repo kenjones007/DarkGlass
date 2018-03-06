@@ -28,10 +28,19 @@ unit dg.threading.messagebus.standard;
 
 interface
 uses
-  dg.threading.messagebus.common;
+  {$ifdef MSWINDOWS}
+    dg.threading.messagebus.windows;
+  {$else}
+    dg.threading.messagebus.posix;
+  {$endif}
 
 type
-  TMessageBus = dg.threading.messagebus.common.TCommonMessageBus;
+  {$ifdef MSWINDOWS}
+    TMessageBus = dg.threading.messagebus.windows.TMessageBus;
+  {$else}
+    TMessageBus = dg.threading.messagebus.posix.TMessageBus;
+  {$endif}
+
 
 implementation
 

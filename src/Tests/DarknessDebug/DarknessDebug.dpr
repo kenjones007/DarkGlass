@@ -33,11 +33,11 @@ uses
 
 var
   aMessage: TMessage;
-  PlatformChannel: THMessageChannel;
+  PlatformChannel: THChannelConnection = 0;
 
 begin
   dgInitialize;
-  PlatformChannel := dgGetMessageChannel('platform');
+  PlatformChannel := dgGetMessageChannelConnection('platform');
   aMessage.MessageValue := 0;
   dgSendMessage(PlatformChannel,aMessage);
   dgRun();

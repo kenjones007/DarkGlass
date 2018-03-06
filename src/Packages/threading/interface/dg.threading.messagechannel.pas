@@ -69,20 +69,26 @@ type
     ///   aMessage parameter and return true. If there are no messages waiting
     ///   to be retrieved, this method will simply return false.
     /// </returns>
-    function Pull( var aMessage: TMessage ): boolean;
+    function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean;
 
     /// <summary>
-    ///   Returns an implementation of IMessagePipe, which may be used to
-    ///   inject messages into this channel.
+    ///    Pushes a message into the message channel using the pipe associated
+    ///    with the message originator thread.
+    /// </summary>
+    function Push( Pipe: IMessagePipe; aMessage: TMessage ): boolean;
+
+    /// <summary>
+    ///   Returns a handle to a message pipe, which the calling thread may
+    ///   use to inject messages into this channel.
     /// </summary>
     /// <returns>
-    ///   Returns an instance of IMessagePipe.
+    ///   Returns a handle to the message pipe.
     /// </returns>
     /// <remarks>
     ///   Each originating sub-system must call this method to obtain it's own
-    ///   dedicated message pipe into this channel. Pipes are only thread-safe
-    ///   between two threads, the originator and the target, they may not be
-    ///   shared between multiple originators.
+    ///   dedicated message pipe handle for this channel. Pipes are only
+    //    thread-safe between two threads, the originator and the target,
+    //    they may not be shared between multiple originators.
     /// </remarks>
     function getPipe: IMessagePipe;
 

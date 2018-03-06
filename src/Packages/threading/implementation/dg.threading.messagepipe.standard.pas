@@ -31,7 +31,7 @@ uses
   dg.threading.messagepipe.common;
 
 type
-  TMessagePipe = dg.threading.messagepipe.common.TCommonMessagePipe;
+    TMessagePipe = dg.threading.messagepipe.common.TCommonMessagePipe;
 
 implementation
 

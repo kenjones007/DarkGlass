@@ -30,9 +30,10 @@ interface
 
 type
   ///  <summary>
-  ///    A handle representing a message channel.
+  ///    Represents a connection to a message channel for sending
+  ///    messages.
   ///  </summary>
-  THMessageChannel = uint32;
+  THChannelConnection = uint32;
 
   ///  <summary>
   ///    A record type representing a communication message between

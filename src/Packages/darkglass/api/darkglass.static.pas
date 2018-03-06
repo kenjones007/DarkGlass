@@ -34,11 +34,11 @@ uses
   darkglass;
 
 initialization
-       dgVersionMajor := @dg.engine.api.dgVersionMajor;
-       dgVersionMinor := @dg.engine.api.dgVersionMinor;
-         dgInitialize := @dg.engine.api.dgInitialize;
-                dgRun := @dg.engine.api.dgRun;
-  dgGetMessageChannel := @dg.engine.api.dgGetMessageChannel;
-        dgSendMessage := @dg.engine.api.dgSendMessage;
+                 dgVersionMajor := @dg.engine.api.dgVersionMajor;
+                 dgVersionMinor := @dg.engine.api.dgVersionMinor;
+                   dgInitialize := @dg.engine.api.dgInitialize;
+                          dgRun := @dg.engine.api.dgRun;
+  dgGetMessageChannelConnection := @dg.engine.api.dgGetMessageChannelConnection;
+                  dgSendMessage := @dg.engine.api.dgSendMessage;
 
 end.

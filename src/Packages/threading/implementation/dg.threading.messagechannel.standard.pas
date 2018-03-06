@@ -28,10 +28,18 @@ unit dg.threading.messagechannel.standard;
 
 interface
 uses
-  dg.threading.messagechannel.common;
+  {$ifdef MSWINDOWS}
+    dg.threading.messagechannel.windows;
+  {$else}
+    dg.threading.messagechannel.posix;
+  {$endif}
 
 type
-  TMessageChannel = dg.threading.messagechannel.common.TCommonMessageChannel;
+  {$ifdef MSWINDOWS}
+    TMessageChannel = dg.threading.messagechannel.windows.TMessageChannel;
+  {$else}
+    TMessageChannel = dg.threading.messagechannel.posix.TMessageChannel;
+  {$endif}
 
 implementation
 

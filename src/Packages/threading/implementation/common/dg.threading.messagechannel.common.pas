@@ -41,8 +41,12 @@ type
     fPipeIndex: uint32;
   private //- IMessageChannel -//
     function getName: string;
-    function Pull( var aMessage: TMessage ): boolean;
     function getPipe: IMessagePipe;
+
+  protected //- IMessageChannel -// - Must be overridden
+    function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean; virtual;
+    function Push( Pipe: IMessagePipe; aMessage: TMessage ): boolean; virtual;
+
   public
     constructor Create( aName: string ); reintroduce;
     destructor Destroy; override;
@@ -50,6 +54,7 @@ type
 
 implementation
 uses
+  sysutils,
   dg.threading.messagepipe.common;
 
 { TMessageChannel }
@@ -77,12 +82,12 @@ function TCommonMessageChannel.getPipe: IMessagePipe;
 var
   NewPipe: IMessagePipe;
 begin
-  NewPipe := TCommonMessagePipe.Create;
+  NewPipe := TCommonMessagePipe.Create();
   fPipes.Add(NewPipe);
   Result := NewPipe;
 end;
 
-function TCommonMessageChannel.Pull(var aMessage: TMessage): boolean;
+function TCommonMessageChannel.Pull(var aMessage: TMessage; WaitFor: boolean): boolean;
 var
   idx: uint32;
 begin
@@ -99,6 +104,13 @@ begin
     end;
   until (idx=fPipeIndex) or (Result=True);
   fPipeIndex := idx;
+end;
+
+
+function TCommonMessageChannel.Push(Pipe: IMessagePipe; aMessage: TMessage): boolean;
+begin
+  //- This should be overriden and therefore never called.
+  Sleep(1);
 end;
 
 end.

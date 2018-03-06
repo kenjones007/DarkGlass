@@ -46,7 +46,7 @@ type
   public
     // If thread count is zero, or the parameter omitted, the thread engine
     // will determine the optimal number of threads to start.
-    constructor Create( ThreadCount: uint32 = 0 ); reintroduce;
+    constructor Create( MessageBus: IMessageBus; ThreadCount: uint32 = 0 ); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -58,7 +58,7 @@ uses
 
 { TThreadEngine }
 
-constructor TCommonThreadEngine.Create(ThreadCount: uint32);
+constructor TCommonThreadEngine.Create(MessageBus: IMessageBus; ThreadCount: uint32);
 var
   AThread: IEngineThread;
   NoThreads: uint32;
@@ -66,7 +66,7 @@ var
 begin
   inherited Create;
   fThreads := TList<IEngineThread>.Create;
-  fMessageBus := TCommonMessageBus.Create;
+  fMessageBus := MessageBus;
   //- Create and add the UI thread.
   aThread := dg.threading.enginethread.ui.common.TCommonEngineThread.Create( fMessageBus );
   fThreads.Add(AThread);

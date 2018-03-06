@@ -30,4 +30,8 @@ package pkg.threading.windows;
 requires
   rtl;
 
+contains
+  dg.threading.messagebus.windows in 'implementation\windows\dg.threading.messagebus.windows.pas',
+  dg.threading.messagechannel.windows in 'implementation\windows\dg.threading.messagechannel.windows.pas';
+
 end.
