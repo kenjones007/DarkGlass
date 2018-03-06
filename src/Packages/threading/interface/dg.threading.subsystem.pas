@@ -59,7 +59,7 @@ type
     ///   A reference to the global message bus, through which sub-systems
     ///   communicate.
     /// </param>
-    procedure Install( MessageBus: IMessageBus );
+    procedure Install;
 
     /// <summary>
     ///   The initialize method is called by the execution thread immediately
@@ -72,7 +72,7 @@ type
     ///   thread-safety of the messaging system, which is lose to enable
     ///   lock-less threading).
     /// </summary>
-    function Initialize( MessageBus: IMessageBus ): boolean;
+    function Initialize: boolean;
 
     /// <summary>
     ///   The execute() method will be called repeatedly by the execution

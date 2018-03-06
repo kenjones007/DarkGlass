@@ -27,14 +27,12 @@
 unit dg.platform.platform.android;
 
 interface
-{$ifdef ANDROID}
 uses
-  dg.platform.appglue.android,
   dg.platform.platform,
   dg.platform.platform.common;
 
 type
-  TPlatform = class( TCustomPlatform, IPlatform )
+  TPlatform = class( TCommonPlatform, IPlatform )
   private
   protected //- IPlatform -//
     function Initialize: boolean; override;
@@ -45,9 +43,7 @@ type
     destructor Destroy; override;
   end;
 
-{$endif}
 implementation
-{$ifdef ANDROID}
 uses
  dg.platform.mainloop.android,
  sysutils;
@@ -79,5 +75,4 @@ begin
   inherited Run;
 end;
 
-{$endif}
 end.

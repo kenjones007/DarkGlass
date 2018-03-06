@@ -37,7 +37,6 @@ uses
 type
   TCommonEngineThread = class( TInterfacedObject, IEngineThread )
   private
-    fMessageBus: IMessageBus;
     fStarted: boolean;
     fSubSystems: TList<ISubSystem>;
     fThreadMethod: TThreadMethod;
@@ -47,7 +46,7 @@ type
   private
     function Execute: boolean;
   public
-    constructor Create( MessageBus: IMessageBus ); reintroduce;
+    constructor Create; reintroduce;
     destructor Destroy; override;
   end;
 
@@ -63,23 +62,21 @@ begin
     exit;
   end;
   fSubSystems.Add(aSubSystem);
-  aSubsystem.Install(fMessageBus);
+  aSubsystem.Install;
 end;
 
-constructor TCommonEngineThread.Create( MessageBus: IMessageBus );
+constructor TCommonEngineThread.Create;
 begin
   inherited Create;
   fStarted := False;
   fSubSystems := TList<ISubSystem>.Create;
   fThreadMethod := TThreadMethod.Create(Execute);
-  fMessageBus := MessageBus;
 end;
 
 destructor TCommonEngineThread.Destroy;
 begin
   fThreadMethod.DisposeOf;
   fSubSystems.DisposeOf;
-  fMessageBus := nil;
   inherited Destroy;
 end;
 
@@ -105,7 +102,7 @@ var
 begin
   if fSubSystems.Count>0 then begin
     for idx := 0 to pred(fSubsystems.Count) do begin
-      fSubSystems[idx].Initialize(fMessageBus);
+      fSubSystems[idx].Initialize;
     end;
   end;
   fStarted := True;

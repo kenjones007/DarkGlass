@@ -27,22 +27,19 @@
 unit dg.platform.platform.windows;
 
 interface
-{$ifdef MSWINDOWS}
 uses
   dg.platform.platform,
   dg.platform.platform.common;
 
 type
-  TPlatform = class( TCustomPlatform, IPlatform )
+  TPlatform = class( TCommonPlatform, IPlatform )
   private
     function Initialize: boolean; override;
     procedure Run;  override;
     function Finalize: boolean;  override;
   end;
 
-{$endif}
 implementation
-{$ifdef MSWINDOWS}
 uses
   dg.platform.mainloop.windows,
   Windows,
@@ -67,5 +64,4 @@ begin
   inherited Run;
 end;
 
-{$endif}
 end.

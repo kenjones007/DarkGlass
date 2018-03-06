@@ -36,17 +36,15 @@ uses
 type
   TCommonThreadEngine = class( TInterfacedObject, IThreadEngine )
   private
-    fMessageBus: IMessageBus;
     fThreads: TList<IEngineThread>;
   private //- IThreadEngine -//
-    function getMessageBus: IMessageBus;
     function getThreadCount: uint32;
     function getThread( idx: uint32 ): IEngineThread;
     procedure Run;
   public
     // If thread count is zero, or the parameter omitted, the thread engine
     // will determine the optimal number of threads to start.
-    constructor Create( MessageBus: IMessageBus; ThreadCount: uint32 = 0 ); reintroduce;
+    constructor Create(ThreadCount: uint32 = 0 ); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -58,7 +56,7 @@ uses
 
 { TThreadEngine }
 
-constructor TCommonThreadEngine.Create(MessageBus: IMessageBus; ThreadCount: uint32);
+constructor TCommonThreadEngine.Create(ThreadCount: uint32);
 var
   AThread: IEngineThread;
   NoThreads: uint32;
@@ -66,9 +64,8 @@ var
 begin
   inherited Create;
   fThreads := TList<IEngineThread>.Create;
-  fMessageBus := MessageBus;
   //- Create and add the UI thread.
-  aThread := dg.threading.enginethread.ui.common.TCommonEngineThread.Create( fMessageBus );
+  aThread := dg.threading.enginethread.ui.common.TCommonEngineThread.Create;
   fThreads.Add(AThread);
   //- Create ancillary threads
   if ThreadCount=0 then begin
@@ -80,7 +77,7 @@ begin
     exit;
   end;
   for idx := 0 to pred(NoThreads) do begin
-    aThread := dg.threading.enginethread.common.TCommonEngineThread.Create( fMessageBus );
+    aThread := dg.threading.enginethread.common.TCommonEngineThread.Create;
     fThreads.Add(AThread);
   end;
 end;
@@ -89,13 +86,7 @@ destructor TCommonThreadEngine.Destroy;
 begin
   fThreads.Clear;
   fThreads.DisposeOf;
-  fMessageBus := nil;
   inherited Destroy;
-end;
-
-function TCommonThreadEngine.getMessageBus: IMessageBus;
-begin
-  Result := fMessageBus;
 end;
 
 function TCommonThreadEngine.getThread(idx: uint32): IEngineThread;

@@ -27,24 +27,22 @@
 unit darkglass;
 
 interface
-
+uses
+  dg.threading.types,
+  dg.darkmessages.platform;
 
 type
   ///  <summary>
   ///    Represents a handle to a connection object, conecting to a message
   ///    channel.
   ///  </summary>
-  THChannelConnection = uint32;
+  THChannelConnection = dg.threading.types.THChannelConnection;
 
   ///  <summary>
   ///    A record type representing a communication message between
   ///    subsystems.
   ///  </summary>
-  TMessage = record
-    MessageValue: uint32;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
-  end;
+  TMessage = dg.threading.types.TMessage;
 
 var
   /// <summary>
@@ -111,6 +109,14 @@ var
   ///   invalid message channel handle being specified.
   /// </returns>
   dgSendMessage: function ( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+
+//------------------------------------------------------------------------------
+// Platform messages.
+//------------------------------------------------------------------------------
+const
+      MSG_CREATE_WINDOW = dg.darkmessages.platform.MSG_CREATE_WINDOW;
+     MSG_WINDOW_CREATED = dg.darkmessages.platform.MSG_WINDOW_CREATED;
+  MSG_SET_GAME_CALLBACK = dg.darkmessages.platform.MSG_SET_GAME_CALLBACK;
 
 implementation
 

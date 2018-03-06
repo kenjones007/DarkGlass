@@ -31,6 +31,11 @@ uses
   dg.threading.types;
 
 type
+  ///  <summary>
+  ///    A function to handle any messages found by calling Pull() on the
+  ///    message pipe.
+  ///  </summary>
+  TMessageHandlerProc = function( var aMessage: TMessage ): boolean of object;
 
   /// <summary>
   ///   An implementation of IMessagePipe provides a thread-safe unidirectional
@@ -65,7 +70,6 @@ type
     ///   full, and a re-try later may be successful.
     /// </returns>
     function Push( aMessage: TMessage ): boolean;
-
 
     /// <summary>
     ///   The Pull() method is polled by the message target, and retreieves

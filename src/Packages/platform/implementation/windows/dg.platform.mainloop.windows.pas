@@ -27,72 +27,38 @@
 unit dg.platform.mainloop.windows;
 
 interface
-{$ifdef MSWINDOWS}
 uses
-  system.generics.collections,
-  dg.threading,
-  dg.platform.window;
+  dg.threading.subsystem,
+  dg.platform.window,
+  dg.platform.mainloop.common;
 
 type
-  TMainLoop = class( TInterfacedObject, ISubSystem )
-  private
-    fMessageChannel: IMessageChannel;
-    fMainWindow: IWindow;
-//    fWindows: TList<IWindow>;
-  private //- ISubSystem
-    procedure Install( MessageBus: IMessageBus );
-    function Initialize( MessageBus: IMessageBus ): boolean;
-    function Execute: boolean;
-    procedure Finalize;
+  TMainLoop = class( TCommonMainLoop, ISubSystem )
+  protected //- Overrides of TCommonMainLoop -//
+    procedure HandleOSMessages; override;
+    function CreateWindow(): IWindow; override;
   end;
 
-{$endif}
 implementation
-{$ifdef MSWINDOWS}
 uses
   dg.platform.window.windows,
   Windows,
   Messages;
 
-function TMainLoop.Execute: boolean;
+function TMainLoop.CreateWindow: IWindow;
+begin
+  Result := TWindow.Create;
+end;
+
+procedure TMainLoop.HandleOSMessages;
 var
   aMessage: tagMsg;
-  anotherMessage: dg.threading.TMessage;
 begin
-  Result := True;
   //- Check for OS messages
   if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-     TranslateMessage(aMessage);
-     DispatchMessage(aMessage);
-     if aMessage.message=WM_QUIT then begin
-       Result := False;
-     end;
-  end;
-  //- Check for engine messages
-  if not fMessageChannel.Pull(anotherMessage) then begin
-    exit;
-  end;
-  case anotherMessage.MessageValue of
-    0: begin
-      fMainWindow := TWindow.Create;
-    end;
+    TranslateMessage(aMessage);
+    DispatchMessage(aMessage);
   end;
 end;
 
-procedure TMainLoop.Finalize;
-begin
-  //- Do nothing
-end;
-
-function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
-begin
-  Result := True;
-end;
-
-procedure TMainLoop.Install(MessageBus: IMessageBus);
-begin
-  fMessageChannel := MessageBus.CreateMessageChannel('platform');
-end;
-
-{$endif}
 end.

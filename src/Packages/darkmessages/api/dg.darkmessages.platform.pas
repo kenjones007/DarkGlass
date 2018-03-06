@@ -24,60 +24,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.platform.common;
+unit dg.darkmessages.platform;
 
 interface
-uses
-  system.generics.collections,
-  dg.threading,
-  dg.platform.platform;
 
-type
-  TCommonPlatform = class( TInterfacedObject, IPlatform )
-  protected
-    fThreadEngine: IThreadEngine;
-  protected //- IPlatform -//
-    function GetChannelConnection( ChannelName: string ): THChannelConnection;
-    function SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
-    function Initialize: boolean; virtual; abstract;
-    function Finalize: boolean; virtual;  abstract;
-    procedure Run;  virtual;
-  public
-    constructor Create; reintroduce; virtual;
-    destructor Destroy; override;
-  end;
+const
+      MSG_CREATE_WINDOW = $000001;
+     MSG_WINDOW_CREATED = $000002;
+  MSG_SET_GAME_CALLBACK = $000003;
 
 implementation
-uses
-  dg.threading.threadengine.standard;
-
-{ TCustomPlatform }
-
-constructor TCommonPlatform.Create;
-begin
-  inherited Create;
-  fThreadEngine := TThreadEngine.Create;
-end;
-
-destructor TCommonPlatform.Destroy;
-begin
-  fThreadEngine := nil;
-  inherited Destroy;
-end;
-
-function TCommonPlatform.GetChannelConnection(ChannelName: string): THChannelConnection;
-begin
-  Result := MessageBus.GetConnection(ChannelName);
-end;
-
-procedure TCommonPlatform.Run;
-begin
-  fThreadEngine.Run;
-end;
-
-function TCommonPlatform.SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
-begin
-  Result := MessageBus.SendMessage(ConnectionHandle,aMessage);
-end;
 
 end.

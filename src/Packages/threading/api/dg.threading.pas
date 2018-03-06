@@ -58,7 +58,23 @@ type
        TUIEngineThread = dg.threading.enginethread.ui.standard.TUIEngineThread;
          TThreadEngine = dg.threading.threadengine.standard.TThreadEngine;
 
+function MessageBus: IMessageBus;
 
 implementation
 
+var
+  SingletonMessageBus: IMessageBus = nil;
+
+function MessageBus: IMessageBus;
+begin
+  if not assigned(SingletonMessageBus) then begin
+    SingletonMessageBus := TMessageBus.Create;
+  end;
+  Result := SingletonMessageBus;
+end;
+
+initialization
+
+finalization
+  SingletonMessageBus := nil;
 end.

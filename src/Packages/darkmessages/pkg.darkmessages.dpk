@@ -1,4 +1,4 @@
-package pkg.platform.common;
+package pkg.darkmessages;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -31,9 +31,6 @@ requires
   rtl;
 
 contains
-  dg.platform.window in 'interfaces\dg.platform.window.pas',
-  dg.platform.platform in 'interfaces\dg.platform.platform.pas',
-  dg.platform.platform.common in 'implementation\common\dg.platform.platform.common.pas',
-  dg.platform.mainloop.common in 'implementation\common\dg.platform.mainloop.common.pas';
+  dg.darkmessages.platform in 'api\dg.darkmessages.platform.pas';
 
 end.

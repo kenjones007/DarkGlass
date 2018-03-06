@@ -27,18 +27,40 @@
 program DarknessDebug;
 uses
   darkglass,
-  darkglass.static,
-//  darkglass.dynamic,
+//  darkglass.static,
+  darkglass.dynamic,
   sysutils;
+
+procedure HandleMessage( aMessage: TMessage );
+begin
+  case aMessage.MessageValue of
+    MSG_WINDOW_CREATED: begin
+      Sleep(1);
+    end;
+  end;
+end;
 
 var
   aMessage: TMessage;
   PlatformChannel: THChannelConnection = 0;
 
+procedure SetMessageHandler;
+var
+  aMessage: TMessage;
+begin
+  aMessage.MessageValue := MSG_SET_GAME_CALLBACK;
+  aMessage.ParamA := NativeUInt(@HandleMessage);
+  dgSendMessage(PlatformChannel,aMessage);
+end;
+
 begin
   dgInitialize;
   PlatformChannel := dgGetMessageChannelConnection('platform');
-  aMessage.MessageValue := 0;
+
+  SetMessageHandler;
+
+  aMessage.MessageValue := MSG_CREATE_WINDOW;
   dgSendMessage(PlatformChannel,aMessage);
+
   dgRun();
 end.

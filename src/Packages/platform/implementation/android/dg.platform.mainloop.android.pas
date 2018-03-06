@@ -27,40 +27,32 @@
 unit dg.platform.mainloop.android;
 
 interface
-{$ifdef ANDROID}
 uses
-  AndroidAPI.Looper,
   AndroidAPI.Input,
-  system.generics.collections,
   dg.platform.appglue.android,
-  dg.threading,
+  dg.platform.mainloop.common,
   dg.platform.window,
   dg.threading.subsystem;
 
 type
-  TMainLoop = class( TInterfacedObject, ISubSystem )
+  TMainLoop = class( TCommonMainLoop, ISubSystem )
   private
     fApp: pandroid_app;
-    fMessageChannel: IMessageChannel;
-    fMainWindow: IWindow;
   protected
     procedure DoApplicationCommand(app: pandroid_app; cmd: int32);
     function DoInputEvent(app: pandroid_app; Event: PAInputEvent ): int32;
-  private //- ISubSystem
-    procedure Install( MessageBus: IMessageBus );
-    function Initialize( MessageBus: IMessageBus ): boolean;
-    function Execute: boolean;
-    procedure Finalize;
+  protected //- Override me -//
+    procedure HandleOSMessages; override;
+    function CreateWindow(): IWindow; override;
   public
-    constructor Create; reintroduce;
+    constructor Create; override;
     destructor Destroy; override;
   end;
 
-{$endif}
 implementation
-{$ifdef ANDROID}
 uses
   sysutils,
+  AndroidAPI.Looper,
   AndroidAPI.NativeActivity;
 
 var
@@ -91,6 +83,11 @@ begin
   fApp.onInputEvent := onInputEvent;
 end;
 
+function TMainLoop.CreateWindow: IWindow;
+begin
+  Result := nil;
+end;
+
 destructor TMainLoop.Destroy;
 begin
   MainLoop := nil;
@@ -110,13 +107,12 @@ begin
   exit;
 end;
 
-function TMainLoop.Execute: boolean;
+procedure TMainLoop.HandleOSMessages;
 var
   ident : Integer;
   events: Integer;
   source: pandroid_poll_source;
 begin
-  Result := True;
   ident := ALooper_pollAll(1, nil, @events, @source);
   if (ident >= 0) and (source <> nil) then begin
     source.process(fApp, source);
@@ -124,20 +120,4 @@ begin
   doApplicationCommand( fApp, APP_CMD_WINDOW_REDRAW_NEEDED );
 end;
 
-procedure TMainLoop.Finalize;
-begin
-  //- Do nothing
-end;
-
-function TMainLoop.Initialize(MessageBus: IMessageBus): boolean;
-begin
-  Result := True;
-end;
-
-procedure TMainLoop.Install(MessageBus: IMessageBus);
-begin
-  fMessageChannel := MessageBus.CreateMessageChannel('platform');
-end;
-
-{$endif}
 end.

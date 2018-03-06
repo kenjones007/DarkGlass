@@ -44,16 +44,6 @@ type
     ['{30780107-FED7-4A3B-BF80-742FDE3A8620}']
 
     /// <summary>
-    ///   Returns a reference to the message bus, which is used to configure
-    ///   communication channels and pipes between the sub-systems. This
-    ///   reference should only be used before the run() method is called to
-    ///   start the threads running as the message bus is not inherently
-    ///   thread-safe. ( It's lose thread safety being a trade-off for
-    ///   lock-less communication between threads ).
-    /// </summary>
-    function getMessageBus: IMessageBus;
-
-    /// <summary>
     ///   Returns the number of execution threads operating within the thread
     ///   engine, including the main application thread, which is always at
     ///   index zero.

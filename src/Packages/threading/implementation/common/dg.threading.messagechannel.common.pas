@@ -45,7 +45,7 @@ type
 
   protected //- IMessageChannel -// - Must be overridden
     function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean; virtual;
-    function Push( Pipe: IMessagePipe; aMessage: TMessage ): boolean; virtual;
+    function Push( Pipe: IMessagePipe; aMessage: TMessage ): boolean; virtual; abstract;
 
   public
     constructor Create( aName: string ); reintroduce;
@@ -104,13 +104,6 @@ begin
     end;
   until (idx=fPipeIndex) or (Result=True);
   fPipeIndex := idx;
-end;
-
-
-function TCommonMessageChannel.Push(Pipe: IMessagePipe; aMessage: TMessage): boolean;
-begin
-  //- This should be overriden and therefore never called.
-  Sleep(1);
 end;
 
 end.
