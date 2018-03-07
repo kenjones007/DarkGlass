@@ -35,7 +35,7 @@ type
   TPlatform = class( TCommonPlatform, IPlatform )
   private
   protected //- IPlatform -//
-    function Initialize: boolean; override;
+    function Initialize( GameMessageHandler: TMessageHandler ): boolean; override;
     function Finalize: boolean; override;
     procedure Run; override;
   public
@@ -65,9 +65,9 @@ begin
   Result := True;
 end;
 
-function TPlatform.Initialize: boolean;
+function TPlatform.Initialize( GameMessageHandler: TMessageHandler ): boolean;
 begin
-  Result := inherited Initialize;
+  Result := inherited Initialize( GameMessageHandler );
   fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
 end;
 

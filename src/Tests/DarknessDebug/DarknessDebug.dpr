@@ -47,7 +47,6 @@ begin
         raise
           Exception.Create('Message buffer full when attempting to create window');
       end;
-      Writeln('Window handle = '+IntToStr(Response.ParamA));
     end
 
     else begin

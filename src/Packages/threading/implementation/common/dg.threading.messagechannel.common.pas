@@ -132,7 +132,7 @@ begin
   repeat
     Result := fPipes[idx].Pull(aMessage);
     inc(idx);
-    if idx>=pred(fPipes.Count) then begin
+    if idx>=fPipes.Count then begin
       idx := 0;
     end;
   until (idx=fPipeIndex) or (Result=True);

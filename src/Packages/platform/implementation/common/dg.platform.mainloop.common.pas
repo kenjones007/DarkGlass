@@ -146,7 +146,7 @@ end;
 
 procedure TCommonMainLoop.SendInitializedMessage;
 begin
-  if not MessageBus.SendMessage(fGameChannel,MSG_PLATFORM_INITIALIZED,0,0,True).Sent then begin
+  if not MessageBus.SendMessage(fGameChannel,MSG_PLATFORM_INITIALIZED,0,0,False).Sent then begin
     raise Exception.Create('Main loop could not initialized game thread, due to full message buffer.');
   end;
 end;
