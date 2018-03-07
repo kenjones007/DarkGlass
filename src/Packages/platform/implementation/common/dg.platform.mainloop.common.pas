@@ -35,11 +35,11 @@ uses
 
 type
   // Handler proc for 'game' messages
-  TMessageHandler = procedure( aMessage: TMessage );
+  TMessageHandler = function( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
 
   TCommonMainLoop = class( TInterfacedObject, ISubSystem )
   private //- Platform Message Channel
-    fMessageChannel: IMessageChannel;
+    fPlatformChannel: IMessageChannel;
   private //- Game message channel.
     fGameChannel: IMessageChannel;
     fGameChannelSend: THChannelConnection;
@@ -49,10 +49,10 @@ type
     fMainWindow: IWindow;
     fWindows: TList<IWindow>;
   private
-    procedure HandleEngineMessages;
-    procedure doCreateWindow( aMessage: TMessage );
-    procedure doSetCallback( aMessage: TMessage );
-    procedure HandleGameMessages;
+    procedure HandlePlatformMessages( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean );
+    procedure HandleGameMessages( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean );
+    procedure doCreateWindow( var ParamA: NativeUInt; var ParamB: NativeUInt );
+    procedure doSetCallback( var ParamA: NativeUInt; var ParamB: NativeUInt );
   protected //- ISubSystem -//
     procedure Install; virtual;
     function Initialize: boolean; virtual;
@@ -80,7 +80,7 @@ begin
   fGameChannelSend := 0;
   fGameMessageHandler := nil;
   fGameChannel := nil;
-  fMessageChannel := nil;
+  fPlatformChannel := nil;
   fMainWindow := nil;
   fWindows := TList<IWindow>.Create;
   fGameMessageHandlerCS := TCriticalSection.Create;
@@ -92,18 +92,18 @@ begin
   fGameChannelSend := 0;
   fGameMessageHandlerCS.DisposeOf;
   fGameChannel := nil;
-  fMessageChannel := nil;
+  fPlatformChannel := nil;
   fMainWindow := nil;
   fWindows.DisposeOf;
   inherited Destroy;
 end;
 
-procedure TCommonMainLoop.doCreateWindow(aMessage: TMessage);
+procedure TCommonMainLoop.doCreateWindow(var ParamA: NativeUInt; var ParamB: NativeUInt);
 var
   NewWindow: IWindow;
-  ReplyMessage: TMessage;
 begin
   NewWindow := CreateWindow();
+  ParamA := NativeUInt(pointer(NewWindow));
   if not assigned(NewWindow) then begin
     exit;
   end;
@@ -111,16 +111,13 @@ begin
     fMainWindow := NewWindow;
   end;
   fWindows.Add(NewWindow);
-  //- Let game know a window was created.
-  ReplyMessage.MessageValue := MSG_WINDOW_CREATED;
-  MessageBus.SendMessage(fGameChannelSend,ReplyMessage);
 end;
 
-procedure TCommonMainLoop.doSetCallback(aMessage: TMessage);
+procedure TCommonMainLoop.doSetCallback(var ParamA: NativeUInt; var ParamB: NativeUInt);
 begin
   fGameMessageHandlerCS.Acquire;
   try
-    fGameMessageHandler := TMessageHandler(pointer(aMessage.ParamA));
+    fGameMessageHandler := TMessageHandler(pointer(ParamA));
   finally
     fGameMessageHandlerCS.Release;
   end;
@@ -130,42 +127,36 @@ function TCommonMainLoop.Execute: boolean;
 begin
   Result := True;
   HandleOSMessages;
-  HandleEngineMessages;
+  fPlatformChannel.ProcessMessages(HandlePlatformMessages, False);
+  fGameChannel.ProcessMessages(HandleGameMessages, False);
   //- Render
-  HandleGameMessages;
 end;
 
 procedure TCommonMainLoop.Finalize;
 begin
-  fMessageChannel := nil;
+  fPlatformChannel := nil;
 end;
 
-procedure TCommonMainLoop.HandleGameMessages;
+procedure TCommonMainLoop.HandleGameMessages( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean );
 var
-  aMessage: TMessage;
   GameMessageHandler: TMessageHandler;
 begin
-  if not fGameChannel.Pull(aMessage) then begin
-    exit;
-  end;
   GameMessageHandler := fGameMessageHandler; //- Atomic
   if assigned(GameMessageHandler) then begin
-    GameMessageHandler( aMessage );
+    Handled := GameMessageHandler( MessageValue, ParamA, ParamB );
   end;
 end;
 
-procedure TCommonMainLoop.HandleEngineMessages;
-var
-  aMessage: TMessage;
+procedure TCommonMainLoop.HandlePlatformMessages( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean );
 begin
-  //- Check for engine messages
-  if not fMessageChannel.Pull(aMessage) then begin
-    exit;
-  end;
+  Handled := True;
   //- Handle Message.
-  case aMessage.MessageValue of
-    MSG_SET_GAME_CALLBACK: doSetCallback( aMessage );
-    MSG_CREATE_WINDOW: doCreateWindow( aMessage );
+  case MessageValue of
+    MSG_SET_GAME_CALLBACK: doSetCallback( ParamA, ParamB );
+    MSG_CREATE_WINDOW: doCreateWindow( ParamA, ParamB );
+    else begin
+      Handled := False;
+    end;
   end;
 end;
 
@@ -177,7 +168,7 @@ end;
 
 procedure TCommonMainLoop.Install;
 begin
-  fMessageChannel := MessageBus.CreateMessageChannel('platform');
+  fPlatformChannel := MessageBus.CreateMessageChannel('platform');
   fGameChannel := MessageBus.CreateMessageChannel('game');
 end;
 

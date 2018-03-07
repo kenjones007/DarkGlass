@@ -36,13 +36,29 @@ type
   THChannelConnection = uint32;
 
   ///  <summary>
+  ///     This record is returned from a call to SendMessage() to indicate
+  ///     if the message was successfully sent, and to return any response
+  ///     value.
+  ///  </summary>
+  TMessageResponse = record
+    Sent: boolean;
+    ParamA: NativeUInt;
+    ParamB: NativeUInt;
+  end;
+
+  ///  <summary>
   ///    A record type representing a communication message between
   ///    subsystems.
   ///  </summary>
+  PMessage = ^TMessage;
   TMessage = record
     MessageValue: uint32;
     ParamA: NativeUInt;
     ParamB: NativeUInt;
+    Original: PMessage;
+    Handled: Boolean;
+    LockResponse: procedure of object;
+    UnlockResponse: procedure of object;
   end;
 
 implementation

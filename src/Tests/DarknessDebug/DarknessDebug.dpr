@@ -27,40 +27,42 @@
 program DarknessDebug;
 uses
   darkglass,
-//  darkglass.static,
-  darkglass.dynamic,
+  darkglass.static,
+//  darkglass.dynamic,
   sysutils;
 
-procedure HandleMessage( aMessage: TMessage );
+function HandleMessage( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
 begin
-  case aMessage.MessageValue of
-    MSG_WINDOW_CREATED: begin
-      Sleep(1);
-    end;
-  end;
+//  Result := True;
+//  case MessageValue of
+//
+//    else begin
+  Result := False;
+//    end;
+//  end;
 end;
 
 var
-  aMessage: TMessage;
   PlatformChannel: THChannelConnection = 0;
-
-procedure SetMessageHandler;
-var
-  aMessage: TMessage;
-begin
-  aMessage.MessageValue := MSG_SET_GAME_CALLBACK;
-  aMessage.ParamA := NativeUInt(@HandleMessage);
-  dgSendMessage(PlatformChannel,aMessage);
-end;
+  Response: TMessageResponse;
 
 begin
   dgInitialize;
   PlatformChannel := dgGetMessageChannelConnection('platform');
 
-  SetMessageHandler;
+  //- Test for buffer full (sent is false if buffer full when WaitFor is false)
+  if not dgSendMessage(PlatformChannel, MSG_SET_GAME_CALLBACK, NativeUInt(@HandleMessage), 0, False ).Sent then begin
+    raise
+      Exception.Create('Unabled to set message handler for ''game'' message channel.');
+  end;
 
-  aMessage.MessageValue := MSG_CREATE_WINDOW;
-  dgSendMessage(PlatformChannel,aMessage);
+  Response := dgSendMessage(PlatformChannel, MSG_CREATE_WINDOW, 0, 0, False );
+//  Response := dgSendMessage(PlatformChannel, MSG_CREATE_WINDOW, 0, 0, True );
+//  if not Response.Sent then begin
+//    raise
+//      Exception.Create('Message buffer full when attempting to create window');
+//  end;
+//  Writeln('Window handle = '+IntToStr(Response.ParamA));
 
   dgRun();
 end.

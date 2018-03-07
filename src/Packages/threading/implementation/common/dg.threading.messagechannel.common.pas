@@ -42,10 +42,13 @@ type
   private //- IMessageChannel -//
     function getName: string;
     function getPipe: IMessagePipe;
+  protected
+    function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean; virtual;
+    procedure SignalHandled; virtual; abstract;
 
   protected //- IMessageChannel -// - Must be overridden
-    function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean; virtual;
-    function Push( Pipe: IMessagePipe; aMessage: TMessage ): boolean; virtual; abstract;
+    function ProcessMessages( MessageHandler: TMessageHandlerProc; WaitFor: Boolean = False ): boolean; virtual;
+    function Push( Pipe: IMessagePipe; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse; virtual; abstract;
 
   public
     constructor Create( aName: string ); reintroduce;
@@ -87,9 +90,39 @@ begin
   Result := NewPipe;
 end;
 
+function TCommonMessageChannel.ProcessMessages(MessageHandler: TMessageHandlerProc; WaitFor: Boolean): boolean;
+var
+  aMessage: TMessage;
+  Handled: Boolean;
+begin
+  Result := False;
+  if not Pull(aMessage,WaitFor) then begin
+    exit;
+  end;
+  if not assigned(MessageHandler) then begin
+    Result := True;
+    exit;
+  end;
+  Handled := False;
+  MessageHandler(aMessage.MessageValue,aMessage.ParamA,aMessage.ParamB,Handled);
+  if assigned(aMessage.LockResponse) then begin
+    aMessage.LockResponse;
+  end;
+  try
+    aMessage.Original^.ParamA := aMessage.ParamA;
+    aMessage.Original^.ParamB := aMessage.ParamB;
+    aMessage.Original^.Handled := Handled;
+    SignalHandled();
+  finally
+    if assigned(aMessage.UnlockResponse) then begin
+      aMessage.UnlockResponse;
+    end;
+  end;
+end;
+
 function TCommonMessageChannel.Pull(var aMessage: TMessage; WaitFor: boolean): boolean;
 var
-  idx: uint32;
+  idx: int32;
 begin
   Result := False;
   if fPipes.Count=0 then begin

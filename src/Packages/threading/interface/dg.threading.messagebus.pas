@@ -57,7 +57,7 @@ type
     ///  <summary>
     ///    Sends a message into the message channel, using the given connection handle.
     ///  </summary>
-    function SendMessage( Connection: THChannelConnection; aMessage: TMessage ): boolean;
+    function SendMessage( Connection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
 
 
   end;

@@ -28,21 +28,25 @@ unit darkglass;
 
 interface
 uses
-  dg.threading.types,
   dg.darkmessages.platform;
 
 type
   ///  <summary>
-  ///    Represents a handle to a connection object, conecting to a message
-  ///    channel.
+  ///    Represents a connection to a message channel for sending
+  ///    messages.
   ///  </summary>
-  THChannelConnection = dg.threading.types.THChannelConnection;
+  THChannelConnection = uint32;
 
   ///  <summary>
-  ///    A record type representing a communication message between
-  ///    subsystems.
+  ///     This record is returned from a call to SendMessage() to indicate
+  ///     if the message was successfully sent, and to return any response
+  ///     value.
   ///  </summary>
-  TMessage = dg.threading.types.TMessage;
+  TMessageResponse = record
+    Sent: boolean;
+    ParamA: NativeUInt;
+    ParamB: NativeUInt;
+  end;
 
 var
   /// <summary>
@@ -108,14 +112,13 @@ var
   ///   Possible causes of failure include the message channel being full, or an
   ///   invalid message channel handle being specified.
   /// </returns>
-  dgSendMessage: function ( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  dgSendMessage: function ( ChannelConnection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
 //------------------------------------------------------------------------------
 // Platform messages.
 //------------------------------------------------------------------------------
 const
       MSG_CREATE_WINDOW = dg.darkmessages.platform.MSG_CREATE_WINDOW;
-     MSG_WINDOW_CREATED = dg.darkmessages.platform.MSG_WINDOW_CREATED;
   MSG_SET_GAME_CALLBACK = dg.darkmessages.platform.MSG_SET_GAME_CALLBACK;
 
 implementation

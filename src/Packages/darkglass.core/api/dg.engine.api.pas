@@ -28,6 +28,7 @@ unit dg.engine.api;
 
 interface
 uses
+  dg.threading.types,
   dg.threading;
 
 
@@ -108,7 +109,7 @@ function dgGetMessageChannelConnection( ChannelName: string ): THChannelConnecti
 /// <remarks>
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
-function dgSendMessage( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgSendMessage( ChannelConnection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 
 
@@ -155,14 +156,14 @@ begin
 end;
 
 
-function dgSendMessage( ChannelConnection: THChannelConnection; aMessage: TMessage ): boolean;
+function dgSendMessage( ChannelConnection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse;
 begin
   if not assigned(Platform) then begin
     raise
       Exception.Create('Did you call dgInitialize()?');
     exit;
   end;
-  Result := Platform.SendMessage( ChannelConnection, aMessage );
+  Result := Platform.SendMessage( ChannelConnection, MessageValue, ParamA, ParamB, WaitFor );
 end;
 
 procedure dgInitialize;

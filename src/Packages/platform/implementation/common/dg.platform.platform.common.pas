@@ -38,7 +38,7 @@ type
     fThreadEngine: IThreadEngine;
   protected //- IPlatform -//
     function GetChannelConnection( ChannelName: string ): THChannelConnection;
-    function SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
+    function SendMessage( ConnectionHandle: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False  ): TMessageResponse;
     function Initialize: boolean; virtual; abstract;
     function Finalize: boolean; virtual;  abstract;
     procedure Run;  virtual;
@@ -75,9 +75,9 @@ begin
   fThreadEngine.Run;
 end;
 
-function TCommonPlatform.SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
+function TCommonPlatform.SendMessage( ConnectionHandle: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
 begin
-  Result := MessageBus.SendMessage(ConnectionHandle,aMessage);
+  Result := MessageBus.SendMessage(ConnectionHandle, MessageValue, ParamA, ParamB, WaitFor );
 end;
 
 end.

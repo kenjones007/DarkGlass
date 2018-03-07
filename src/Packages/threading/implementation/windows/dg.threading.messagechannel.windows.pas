@@ -40,19 +40,28 @@ type
   TMessageChannel = class( TCommonMessageChannel, IMessageChannel )
   private
     fMessagesWaiting: boolean;
-    fMessagesWaitingCS: _RTL_CRITICAL_SECTION;
+    fMessagesWaitingSpin: _RTL_SRWLOCK;
     fMessagesWaitingSignal: CONDITION_VARIABLE;
-  protected //- IMessageChannel -//
+    fResponseSpin: _RTL_SRWLOCK;
+    fResponseSignal: CONDITION_VARIABLE;
+  private
+    procedure LockResponse;
+    procedure UnlockResponse;
+  protected
     function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean; override;
-    function Push(Pipe: IMessagePipe; aMessage: TMessage ): boolean; override;
+    procedure SignalHandled; override;
+
+  protected //- IMessageChannel -//
+    function Push( Pipe: IMessagePipe; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse; override;
 
   public
     constructor Create( aName: string ); reintroduce;
-    destructor Destroy; override;
   end;
 
 
 implementation
+uses
+  Sysutils;
 
 { TMessageChannel }
 
@@ -61,23 +70,21 @@ begin
   inherited Create( aName );
   fMessagesWaiting := False;
   InitializeConditionVariable(fMessagesWaitingSignal);
-  InitializeCriticalSection(fMessagesWaitingCS);
-end;
-
-destructor TMessageChannel.Destroy;
-begin
-  DeleteCriticalSection(fMessagesWaitingCS);
-  inherited Destroy;
+  InitializeConditionVariable(fResponseSignal);
+  InitializeSRWLock(fMessagesWaitingSpin);
+  InitializeSRWLock(fResponseSpin);
 end;
 
 function TMessageChannel.Pull(var aMessage: TMessage; WaitFor: boolean): boolean;
+var
+  Error: dword;
 begin
   if not WaitFor then begin
     Result := inherited Pull(aMessage,FALSE);
     exit;
   end;
   //-
-  EnterCriticalSection(fMessagesWaitingCS);
+  AcquireSRWLockExclusive(fMessagesWaitingSpin);
   try
     //- Check for a message, no point waiting if there are messages.
     fMessagesWaiting := inherited Pull(aMessage,FALSE);
@@ -87,34 +94,99 @@ begin
     end;
     //- Wait for a message
     while not fMessagesWaiting do begin
-      SleepConditionVariableCS(fMessagesWaitingSignal, fMessagesWaitingCS, INFINITE);
+      if not SleepConditionVariableSRW(fMessagesWaitingSignal, fMessagesWaitingSpin, INFINITE, 0) then begin
+        Error:=GetLastError;
+        if Error<>ERROR_TIMEOUT then begin
+          raise
+            Exception.Create('A windows API error occurred on SleepConditionVariableSRW. ('+IntToStr(Error)+')');
+        end;
+      end;
       fMessagesWaiting := inherited Pull(aMessage,FALSE);
     end;
     Result := True;
   finally
-    LeaveCriticalSection(fMessagesWaitingCS);
+    ReleaseSRWLockExclusive(fMessagesWaitingSpin);
   end;
 end;
 
-function TMessageChannel.Push(Pipe: IMessagePipe; aMessage: TMessage): boolean;
+procedure TMessageChannel.LockResponse;
 begin
-  Result := False;
+  AcquireSRWLockExclusive(fResponseSpin);
+end;
+
+procedure TMessageChannel.UnlockResponse;
+begin
+  ReleaseSRWLockExclusive(fResponseSpin);
+end;
+
+function TMessageChannel.Push( Pipe: IMessagePipe; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
+var
+  aMessage: TMessage;
+  Error: DWord;
+  Status: boolean;
+begin
+  //- Send the message to the target thread.
+  Result.Sent := False;
   if not assigned(Pipe) then begin
     exit;
   end;
-  EnterCriticalSection(fMessagesWaitingCS);
+  AcquireSRWLockExclusive(fMessagesWaitingSpin);
   try
+    aMessage.MessageValue := MessageValue;
+    aMessage.ParamA := ParamA;
+    aMessage.ParamB := ParamB;
+    aMessage.Handled := False;
+    aMessage.Original := @aMessage;
+    aMessage.LockResponse := nil;
+    aMessage.UnLockResponse := nil;
+    if WaitFor then begin
+      aMessage.LockResponse := LockResponse;
+      aMessage.UnlockResponse := UnlockResponse;
+    end;
     //- Push message
-    Result := Pipe.Push(aMessage);
-    if not Result then begin
+    Status := Pipe.Push(aMessage);
+    if not Status then begin
       exit;
     end;
     //-
     fMessagesWaiting := True;
     WakeConditionVariable(fMessagesWaitingSignal);
   finally
-    LeaveCriticalSection(fMessagesWaitingCS);
+    ReleaseSRWLockExclusive(fMessagesWaitingSpin);
   end;
+  Result.Sent := True;
+  //- If WaitFor, then look for a message response.
+  if not WaitFor then begin
+    exit;
+  end;
+  AcquireSRWLockExclusive(fResponseSpin);
+  try
+    //- Check for a message, no point waiting if there are messages.
+    if aMessage.Handled then begin
+      Result.ParamA := aMessage.ParamA;
+      Result.ParamB := aMessage.ParamB;
+      exit;
+    end;
+    //- Wait for a message
+    while not aMessage.Handled do begin
+      if not SleepConditionVariableSRW(fResponseSignal, fResponseSpin, INFINITE, 0) then begin
+        Error:=GetLastError;
+        if Error<>ERROR_TIMEOUT then begin
+          raise
+            Exception.Create('A windows API error occurred on SleepConditionVariableSRW. ('+IntToStr(Error)+')');
+        end;
+      end;
+    end;
+    Result.ParamA := aMessage.ParamA;
+    Result.ParamB := aMessage.ParamB;
+  finally
+    ReleaseSRWLockExclusive(fResponseSpin);
+  end;
+end;
+
+procedure TMessageChannel.SignalHandled;
+begin
+  WakeConditionVariable(fResponseSignal);
 end;
 
 end.

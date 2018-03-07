@@ -55,7 +55,7 @@ type
 
     /// <summary>
     /// </summary>
-    function SendMessage( ConnectionHandle: THChannelConnection; aMessage: TMessage ): boolean;
+    function SendMessage( ConnectionHandle: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False  ): TMessageResponse;
 
     /// <summary>
     ///   Initializes the worker threads, sub-systems, and communication

@@ -30,7 +30,6 @@ interface
 
 const
       MSG_CREATE_WINDOW = $000001;
-     MSG_WINDOW_CREATED = $000002;
   MSG_SET_GAME_CALLBACK = $000003;
 
 implementation

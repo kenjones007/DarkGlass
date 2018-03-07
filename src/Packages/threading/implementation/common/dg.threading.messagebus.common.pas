@@ -46,7 +46,7 @@ type
   private //- IMessageBus -//
     function CreateMessageChannel( ChannelName: string ): IMessageChannel;
     function GetConnection( ChannelName: string ): THChannelConnection;
-    function SendMessage( Connection: THChannelConnection; aMessage: TMessage ): boolean;
+    function SendMessage( Connection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
   protected //- Override me -//
     function NewMessageChannel( ChannelName: string ): IMessageChannel; virtual; abstract;
   public
@@ -129,13 +129,13 @@ begin
   Result := fConnectionPipes.Count;
 end;
 
-function TCommonMessageBus.SendMessage(Connection: THChannelConnection; aMessage: TMessage): boolean;
+function TCommonMessageBus.SendMessage( Connection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
 var
   idx: uint32;
   Channel: IMessageChannel;
   Pipe: IMessagePipe;
 begin
-  Result := False;
+  Result.Sent := False;
   if Connection=0 then begin
     exit;
   end;
@@ -145,7 +145,7 @@ begin
   idx := pred(Connection);
   Pipe := fConnectionPipes[idx];
   Channel := fConnectionChannels[idx];
-  Result := Channel.Push( Pipe, aMessage );
+  Result := Channel.Push(Pipe, MessageValue, ParamA, ParamB, WaitFor );
 end;
 
 end.

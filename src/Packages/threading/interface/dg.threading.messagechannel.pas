@@ -32,6 +32,10 @@ uses
   dg.threading.messagepipe;
 
 type
+  ///  <summary>
+  ///    A procedure callback for handling messages from the channel.
+  ///  </summary>
+  TMessageHandlerProc = procedure ( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean ) of object;
 
   /// <summary>
   ///   An implementation of IMessageChannel provides a named mechanism for
@@ -55,27 +59,15 @@ type
     ///  </summary>
     function getName: string;
 
-    /// <summary>
-    ///   Pulls a message from the pipes of the message channel. Returns true
-    ///   if a message is returned, else returns false. This method is called
-    ///   by the target sub-system, which owns the message channel.
-    /// </summary>
-    /// <param name="aMessage">
-    ///   A TMessage structure which will be populated with the message which
-    ///   is retrieved from the channel.
-    /// </param>
-    /// <returns>
-    ///   If a message is waiting to be received, this method will populate its
-    ///   aMessage parameter and return true. If there are no messages waiting
-    ///   to be retrieved, this method will simply return false.
-    /// </returns>
-    function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean;
+    ///  <summary>
+    ///  </summary>
+    function ProcessMessages( MessageHandler: TMessageHandlerProc; WaitFor: Boolean = False ): boolean;
 
     /// <summary>
     ///    Pushes a message into the message channel using the pipe associated
     ///    with the message originator thread.
     /// </summary>
-    function Push( Pipe: IMessagePipe; aMessage: TMessage ): boolean;
+    function Push( Pipe: IMessagePipe; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
 
     /// <summary>
     ///   Returns a handle to a message pipe, which the calling thread may

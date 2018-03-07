@@ -42,8 +42,11 @@ type
     fMessagesWaiting: boolean;
     fMessagesWaitingCS: pthread_mutex_t;
     fMessagesWaitingSignal: pthread_cond_t;
-  protected //- IMessageChannel -//
+  protected
     function Pull( var aMessage: TMessage; WaitFor: boolean = False ): boolean; override;
+
+  protected //- IMessageChannel -//
+    function ProcessMessages( MessageHandler: TMessageHandlerProc; WaitFor: Boolean = False ): boolean; override;
     function Push(Pipe: IMessagePipe; aMessage: TMessage ): boolean; override;
 
   public
@@ -80,6 +83,11 @@ begin
   pthread_mutex_destroy(fMessagesWaitingCS);
   pthread_cond_destroy(fMessagesWaitingSignal);
   inherited Destroy;
+end;
+
+function TMessageChannel.ProcessMessages(MessageHandler: TMessageHandlerProc; WaitFor: Boolean): boolean;
+begin
+  Result := inherited ProcessMessages(MessageHandler,WaitFor);
 end;
 
 function TMessageChannel.Pull(var aMessage: TMessage; WaitFor: boolean): boolean;
