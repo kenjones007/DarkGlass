@@ -33,7 +33,7 @@ uses
 
 type
   TPlatform = class( TCommonPlatform, IPlatform )
-  private
+  protected
     function Initialize: boolean; override;
     procedure Run;  override;
     function Finalize: boolean;  override;

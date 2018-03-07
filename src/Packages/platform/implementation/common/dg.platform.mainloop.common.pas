@@ -117,9 +117,6 @@ begin
 end;
 
 procedure TCommonMainLoop.doSetCallback(aMessage: TMessage);
-var
-  GameMessageHandlerPtr: pointer;
-  GameMessageHandler: TMessageHandler;
 begin
   fGameMessageHandlerCS.Acquire;
   try

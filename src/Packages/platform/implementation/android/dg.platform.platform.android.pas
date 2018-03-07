@@ -62,6 +62,7 @@ end;
 
 function TPlatform.Finalize: boolean;
 begin
+  Result := True;
 end;
 
 function TPlatform.Initialize: boolean;

@@ -72,7 +72,6 @@ end;
 
 function TDynLib.FreeLibrary: boolean;
 begin
-  Result := False;
   if fHandle=nil then begin
     Result := True;
     exit;

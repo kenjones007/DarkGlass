@@ -60,8 +60,6 @@ uses
 { TMessageChannel }
 
 constructor TMessageChannel.Create( aName: string );
-var
-  Attr: pthread_mutexattr_t;
 begin
   inherited Create( aName );
   fMessagesWaiting := False;
@@ -86,7 +84,6 @@ end;
 
 function TMessageChannel.Pull(var aMessage: TMessage; WaitFor: boolean): boolean;
 begin
-  Result := False;
   if not WaitFor then begin
     Result := inherited Pull(aMessage,FALSE);
     exit;

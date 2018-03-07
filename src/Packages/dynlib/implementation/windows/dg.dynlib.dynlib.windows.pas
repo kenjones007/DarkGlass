@@ -68,6 +68,7 @@ end;
 
 function TDynLib.FreeLibrary: boolean;
 begin
+  Result := True;
   Windows.FreeLibrary(fHandle);
   fHandle := null;
 end;
