@@ -148,7 +148,6 @@ begin
     if not Status then begin
       exit;
     end;
-    //-
     fMessagesWaiting := True;
     WakeConditionVariable(fMessagesWaitingSignal);
   finally
