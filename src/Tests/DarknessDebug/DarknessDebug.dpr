@@ -31,38 +31,34 @@ uses
 //  darkglass.dynamic,
   sysutils;
 
-function HandleMessage( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
-begin
-//  Result := True;
-//  case MessageValue of
-//
-//    else begin
-  Result := False;
-//    end;
-//  end;
-end;
-
 var
   PlatformChannel: THChannelConnection = 0;
+  GameChannel: THChannelConnection = 0;
   Response: TMessageResponse;
 
+function HandleMessage( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
 begin
-  dgInitialize;
-  PlatformChannel := dgGetMessageChannelConnection('platform');
+  Result := True;
+  case MessageValue of
 
-  //- Test for buffer full (sent is false if buffer full when WaitFor is false)
-  if not dgSendMessage(PlatformChannel, MSG_SET_GAME_CALLBACK, NativeUInt(@HandleMessage), 0, False ).Sent then begin
-    raise
-      Exception.Create('Unabled to set message handler for ''game'' message channel.');
+    MSG_PLATFORM_INITIALIZED: begin
+      Response := dgSendMessage(PlatformChannel, MSG_CREATE_WINDOW, 0, 0, True );
+      if not Response.Sent then begin
+        raise
+          Exception.Create('Message buffer full when attempting to create window');
+      end;
+      Writeln('Window handle = '+IntToStr(Response.ParamA));
+    end
+
+    else begin
+      Result := False;
+    end;
   end;
+end;
 
-  Response := dgSendMessage(PlatformChannel, MSG_CREATE_WINDOW, 0, 0, False );
-//  Response := dgSendMessage(PlatformChannel, MSG_CREATE_WINDOW, 0, 0, True );
-//  if not Response.Sent then begin
-//    raise
-//      Exception.Create('Message buffer full when attempting to create window');
-//  end;
-//  Writeln('Window handle = '+IntToStr(Response.ParamA));
-
-  dgRun();
+begin
+  dgInitialize(HandleMessage);
+  PlatformChannel := dgGetMessageChannelConnection('platform');
+  GameChannel := dgGetMessageChannelConnection('game');
+  dgRun;
 end.

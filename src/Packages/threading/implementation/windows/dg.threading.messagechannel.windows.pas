@@ -119,7 +119,7 @@ begin
   ReleaseSRWLockExclusive(fResponseSpin);
 end;
 
-function TMessageChannel.Push( Pipe: IMessagePipe; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
+function TMessageChannel.Push( Pipe: IMessagePipe; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse;
 var
   aMessage: TMessage;
   Error: DWord;

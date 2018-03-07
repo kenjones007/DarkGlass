@@ -129,7 +129,7 @@ begin
   Result := fConnectionPipes.Count;
 end;
 
-function TCommonMessageBus.SendMessage( Connection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False ): TMessageResponse;
+function TCommonMessageBus.SendMessage( Connection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse;
 var
   idx: uint32;
   Channel: IMessageChannel;

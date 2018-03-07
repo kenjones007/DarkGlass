@@ -31,6 +31,7 @@ requires
   rtl;
 
 contains
-  dg.darkmessages.platform in 'api\dg.darkmessages.platform.pas';
+  dg.darkmessages.platform in 'api\dg.darkmessages.platform.pas',
+  dg.darkmessages.game in 'api\dg.darkmessages.game.pas';
 
 end.

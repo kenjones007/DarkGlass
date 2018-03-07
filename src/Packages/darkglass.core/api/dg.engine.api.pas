@@ -28,8 +28,9 @@ unit dg.engine.api;
 
 interface
 uses
-  dg.threading.types,
-  dg.threading;
+//  dg.threading.types,
+  dg.threading,
+  dg.platform;
 
 
 /// <summary>
@@ -61,7 +62,7 @@ function dgVersionMinor: uint32;                                                
 ///    You must call dgInitialize() before calling dgRun(),
 ///    dgGetMessageChannel(), or dgSendMessage(). (Or other messaging functions)
 ///  </summary>
-procedure dgInitialize;                                                            {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+procedure dgInitialize( GameMessageHandler: TMessageHandler );                     {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 /// <summary>
 ///   This procedure passes execution to the run method of the global IPlatform
@@ -115,8 +116,7 @@ function dgSendMessage( ChannelConnection: THChannelConnection; MessageValue: ui
 
 implementation
 uses
-  sysutils,
-  dg.platform;
+  sysutils;
 
 const
   cVersionMajor = 1;
@@ -166,10 +166,10 @@ begin
   Result := Platform.SendMessage( ChannelConnection, MessageValue, ParamA, ParamB, WaitFor );
 end;
 
-procedure dgInitialize;
+procedure dgInitialize( GameMessageHandler: TMessageHandler );
 begin
   Platform := TPlatform.Create;
-  if not Platform.Initialize then begin
+  if not Platform.Initialize( GameMessageHandler ) then begin
     raise
       Exception.Create('DarkGlass engine failed to initialize.');
   end;

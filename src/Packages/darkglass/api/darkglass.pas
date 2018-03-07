@@ -28,6 +28,7 @@ unit darkglass;
 
 interface
 uses
+  dg.darkmessages.game,
   dg.darkmessages.platform;
 
 type
@@ -36,6 +37,12 @@ type
   ///    messages.
   ///  </summary>
   THChannelConnection = uint32;
+
+  ///  <summary>
+  ///    A message handling procedure for responding to messages on the game
+  ///    channel.
+  ///  </summary>
+  TMessageHandler = function( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
 
   ///  <summary>
   ///     This record is returned from a call to SendMessage() to indicate
@@ -72,7 +79,7 @@ var
   ///    You must call dgInitialize() before calling dgRun(),
   ///    dgGetMessageChannel(), or dgSendMessage(). (Or other messaging functions)
   ///  </summary>
-  dgInitialize: procedure; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  dgInitialize: procedure( GameMessageHandler: TMessageHandler ); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
   /// <summary>
   ///   This procedure passes execution to the run method of the global IPlatform
@@ -80,7 +87,7 @@ var
   ///   loop. This procedure will therefore not return until execution of the
   ///   application has ended.
   /// </summary>
-  dgRun: procedure(); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  dgRun: procedure; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
   /// <summary>
   ///   This function locates a message channel by name and returns a connection
@@ -118,8 +125,9 @@ var
 // Platform messages.
 //------------------------------------------------------------------------------
 const
-      MSG_CREATE_WINDOW = dg.darkmessages.platform.MSG_CREATE_WINDOW;
-  MSG_SET_GAME_CALLBACK = dg.darkmessages.platform.MSG_SET_GAME_CALLBACK;
+          MSG_CREATE_WINDOW = dg.darkmessages.platform.MSG_CREATE_WINDOW;
+   MSG_PLATFORM_INITIALIZED = dg.darkmessages.game.MSG_PLATFORM_INITIALIZED;
+      MSG_SET_GAME_CALLBACK = dg.darkmessages.game.MSG_SET_GAME_CALLBACK;
 
 implementation
 

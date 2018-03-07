@@ -33,9 +33,10 @@ uses
   dg.platform.platform.standard;
 
 type
-   IPlatform = dg.platform.platform.IPlatform;
-     IWindow = dg.platform.window.IWindow;
-   TPlatform = dg.platform.platform.standard.TPlatform;
+  TMessageHandler = dg.platform.platform.TMessageHandler;
+        IPlatform = dg.platform.platform.IPlatform;
+          IWindow = dg.platform.window.IWindow;
+        TPlatform = dg.platform.platform.standard.TPlatform;
 
 implementation
 

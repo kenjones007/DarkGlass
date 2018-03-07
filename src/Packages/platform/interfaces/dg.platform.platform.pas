@@ -31,6 +31,12 @@ uses
   dg.threading;
 
 type
+  ///  <summary>
+  ///    A message handling procedure for responding to messages on the game
+  ///    channel.
+  ///  </summary>
+  TMessageHandler = function( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
+
   /// <summary>
   ///   An implementation of IPlatform represents, through abstraction, the
   ///   available capabilities of the target platform.
@@ -66,7 +72,7 @@ type
     ///   return false if the application fails to start for any reason (which
     ///   may also be accompanied by an exception).
     /// </returns>
-    function Initialize: boolean;
+    function Initialize( GameMessageHandler: TMessageHandler ): boolean;
 
     /// <summary>
     ///   Starts the worker threads and sub-systems of the application, and

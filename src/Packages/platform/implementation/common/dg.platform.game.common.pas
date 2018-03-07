@@ -24,56 +24,73 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.platform.android;
+unit dg.platform.game.common;
 
 interface
 uses
+  SyncObjs,
   dg.platform.platform,
-  dg.platform.platform.common;
+  dg.threading;
 
 type
-  TPlatform = class( TCommonPlatform, IPlatform )
+  //- Handles messages being sent back to game-land.
+  TCommonGame = class( TInterfacedObject, ISubSystem )
+  private //- Game message channel.
+    fGameChannel: IMessageChannel;
+    fGameMessageHandler: TMessageHandler;
   private
-  protected //- IPlatform -//
-    function Initialize: boolean; override;
-    function Finalize: boolean; override;
-    procedure Run; override;
+    procedure HandleGameMessages( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean );
+  protected //- ISubSystem -//
+    procedure Install;
+    function Initialize: boolean;
+    function Execute: boolean;
+    procedure Finalize;
   public
-    constructor Create; reintroduce;
-    destructor Destroy; override;
+    constructor Create( MessageHandler: TMessageHandler ); reintroduce;
   end;
 
 implementation
 uses
- dg.platform.mainloop.android,
- sysutils;
+  dg.darkmessages.game;
 
-{ TPlatform }
+{ TCommonGame }
 
-constructor TPlatform.Create;
+constructor TCommonGame.Create(MessageHandler: TMessageHandler);
 begin
   inherited Create;
+  fGameMessageHandler := MessageHandler;
 end;
 
-destructor TPlatform.Destroy;
+function TCommonGame.Execute: boolean;
 begin
-  inherited Destroy;
+  fGameChannel.ProcessMessages(HandleGameMessages, True);
 end;
 
-function TPlatform.Finalize: boolean;
+procedure TCommonGame.Finalize;
+begin
+  exit;
+end;
+
+procedure TCommonGame.HandleGameMessages(MessageValue: uint32; var ParamA, ParamB: NativeUInt; var Handled: boolean);
+var
+  GameMessageHandler: TMessageHandler;
+begin
+  //-  Handle messages intended for the game.
+  GameMessageHandler := fGameMessageHandler; //- Atomic
+  if assigned(GameMessageHandler) then begin
+    Handled := GameMessageHandler( MessageValue, ParamA, ParamB );
+  end;
+end;
+
+function TCommonGame.Initialize: boolean;
 begin
   Result := True;
 end;
 
-function TPlatform.Initialize: boolean;
+procedure TCommonGame.Install;
 begin
-  Result := inherited Initialize;
-  fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
+  fGameChannel := MessageBus.CreateMessageChannel('game');
 end;
 
-procedure TPlatform.Run;
-begin
-  inherited Run;
-end;
 
 end.

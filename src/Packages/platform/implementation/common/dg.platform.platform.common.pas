@@ -39,9 +39,9 @@ type
   protected //- IPlatform -//
     function GetChannelConnection( ChannelName: string ): THChannelConnection;
     function SendMessage( ConnectionHandle: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean = False  ): TMessageResponse;
-    function Initialize: boolean; virtual; abstract;
-    function Finalize: boolean; virtual;  abstract;
-    procedure Run;  virtual;
+    function Initialize( GameMessageHandler: TMessageHandler ): boolean; virtual;
+    function Finalize: boolean; virtual; abstract;
+    procedure Run; virtual;
   public
     constructor Create; reintroduce; virtual;
     destructor Destroy; override;
@@ -49,6 +49,8 @@ type
 
 implementation
 uses
+  sysutils,
+  dg.platform.game.common,
   dg.threading.threadengine.standard;
 
 { TCustomPlatform }
@@ -68,6 +70,17 @@ end;
 function TCommonPlatform.GetChannelConnection(ChannelName: string): THChannelConnection;
 begin
   Result := MessageBus.GetConnection(ChannelName);
+end;
+
+function TCommonPlatform.Initialize( GameMessageHandler: TMessageHandler ): boolean;
+begin
+  Result := True;
+  if fThreadEngine.Count<2 then begin
+    Result := False;
+    raise
+      Exception.Create('Insuficient CPU Cores (threads) to execute DarkGlass.');
+  end;
+  fThreadEngine.Threads[1].InstallSubsystem(TCommonGame.Create(GameMessageHandler));
 end;
 
 procedure TCommonPlatform.Run;

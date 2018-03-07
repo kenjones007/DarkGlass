@@ -24,13 +24,14 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.darkmessages.platform;
+unit dg.darkmessages.game;
 
 interface
 
 const
-  MSG_PLATFORM_FIRST = $0;
-   MSG_CREATE_WINDOW = MSG_PLATFORM_FIRST + $1;
+            MSG_GAME_FIRST = $100000;
+     MSG_SET_GAME_CALLBACK = MSG_GAME_FIRST + $1;
+  MSG_PLATFORM_INITIALIZED = MSG_GAME_FIRST + $2;
 
 implementation
 
