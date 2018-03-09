@@ -7,7 +7,7 @@
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Linux64</Platform>
-        <TargetedPlatforms>128</TargetedPlatforms>
+        <TargetedPlatforms>129</TargetedPlatforms>
         <AppType>Package</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -123,6 +123,8 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="implementation\linux\dg.platform.linux.binding.xlib.pas"/>
         <DCCReference Include="implementation\linux\dg.platform.linux.binding.x.pas"/>
+        <DCCReference Include="implementation\linux\dg.platform.platform.linux.pas"/>
+        <DCCReference Include="implementation\linux\dg.platform.mainloop.linux.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -548,7 +550,7 @@
                 <Platform value="iOSSimulator">False</Platform>
                 <Platform value="Linux64">True</Platform>
                 <Platform value="OSX32">False</Platform>
-                <Platform value="Win32">False</Platform>
+                <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
         </BorlandProject>

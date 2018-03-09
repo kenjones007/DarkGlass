@@ -24,51 +24,23 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.displaymanager;
 
 interface
 uses
-  dg.threading.subsystem,
-  dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.display;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  IDisplayManager = interface
+    ['{25007309-5C37-4DE7-BC6E-513B3F7FE9E9}']
+    function getCount: uint32;
+    function getDisplay( idx: uint32 ): IDisplay;
+
+    //- Pascal Only, properties -//
+    property Count: uint32 read getCount;
+    property Displays[ idx: uint32 ]: IDisplay read getDisplay;
   end;
 
 implementation
-uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
-
-function TMainLoop.CreateDisplayManager: IDisplayManager;
-begin
-  Result := TDisplayManager.Create;
-end;
-
-function TMainLoop.CreateWindowManager: IWindowManager;
-begin
-  Result := TWindowManager.Create;
-end;
-
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
-begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
-  end;
-end;
 
 end.

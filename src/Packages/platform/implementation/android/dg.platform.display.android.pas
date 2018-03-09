@@ -24,51 +24,26 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.display.android;
 
 interface
 uses
-  dg.threading.subsystem,
-  dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.display;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  TDisplay = class( TInterfacedObject, IDisplay )
+  private //- IDisplay -//
+    function getName: string;
   end;
+
 
 implementation
-uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
-begin
-  Result := TDisplayManager.Create;
-end;
+{ TDisplay }
 
-function TMainLoop.CreateWindowManager: IWindowManager;
+function TDisplay.getName: string;
 begin
-  Result := TWindowManager.Create;
-end;
-
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
-begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
-  end;
+  Result := 'primary';
 end;
 
 end.

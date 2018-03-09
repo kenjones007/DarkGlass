@@ -24,51 +24,61 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.displaymanager.android;
 
 interface
 uses
-  dg.threading.subsystem,
-  dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.display,
+  dg.platform.displaymanager;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  TDisplayManager = class( TInterfacedObject, IDisplayManager )
+  private
+    fDisplay: IDisplay;
+  private //- IDisplayManager -//
+    function getCount: uint32;
+    function getDisplay( idx: uint32 ): IDisplay;
+  public
+    constructor Create; reintroduce;
+    destructor Destroy; override;
   end;
 
 implementation
 uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
+  dg.platform.display.android;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
+{ TDisplayManager }
+
+constructor TDisplayManager.Create;
 begin
-  Result := TDisplayManager.Create;
+  inherited Create;
+  fDisplay := TDisplay.Create;
 end;
 
-function TMainLoop.CreateWindowManager: IWindowManager;
+destructor TDisplayManager.Destroy;
 begin
-  Result := TWindowManager.Create;
+  fDisplay := nil;
+  inherited Destroy;
 end;
 
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
+function TDisplayManager.getCount: uint32;
 begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
+  Result := 0;
+  if assigned(fDisplay) then begin
+    Result := 1;
   end;
+end;
+
+function TDisplayManager.getDisplay(idx: uint32): IDisplay;
+begin
+  Result := nil;
+  if idx<>0 then begin
+    exit;
+  end;
+  if not assigned(fDisplay) then begin
+    exit;
+  end;
+  Result := fDisplay;
 end;
 
 end.

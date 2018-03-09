@@ -24,51 +24,41 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.platform.linux;
 
 interface
 uses
-  dg.threading.subsystem,
-  dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.platform,
+  dg.platform.platform.common;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  TPlatform = class( TCommonPlatform, IPlatform )
+  protected
+    function Initialize( GameMessageHandler: TMessageHandler ): boolean; override;
+    procedure Run;  override;
+    function Finalize: boolean;  override;
   end;
 
 implementation
 uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
+  dg.platform.mainloop.linux;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
+{ TPlatform }
+
+function TPlatform.Finalize: boolean;
 begin
-  Result := TDisplayManager.Create;
+  Result := True;
 end;
 
-function TMainLoop.CreateWindowManager: IWindowManager;
+function TPlatform.Initialize( GameMessageHandler: TMessageHandler ): boolean;
 begin
-  Result := TWindowManager.Create;
+  Result := inherited Initialize( GameMessageHandler );
+  fThreadEngine.Threads[0].InstallSubsystem(TMainLoop.Create);
 end;
 
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
+procedure TPlatform.Run;
 begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
-  end;
+  inherited Run;
 end;
 
 end.

@@ -24,51 +24,39 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.mainloop.linux;
 
 interface
 uses
   dg.threading.subsystem,
   dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.mainloop.common;
 
 type
   TMainLoop = class( TCommonMainLoop, ISubSystem )
   protected //- Overrides of TCommonMainLoop -//
     procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+    function CreateWindow(): IWindow; override;
   end;
 
 implementation
-uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
+//uses
+//  dg.platform.window.linux;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
+function TMainLoop.CreateWindow: IWindow;
 begin
-  Result := TDisplayManager.Create;
-end;
-
-function TMainLoop.CreateWindowManager: IWindowManager;
-begin
-  Result := TWindowManager.Create;
+  Result := nil;
+  //Result := TWindow.Create;
 end;
 
 procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
+//var
+//  Event: XEvent;
 begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
-  end;
+//  while XPending(_display)>0 do begin
+//    XNextEvent(_display,Event);
+//    HandleEvent(Event,MyWindow,KeepGoing);
+//  end;
 end;
 
 end.

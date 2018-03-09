@@ -165,6 +165,9 @@
         <DCCReference Include="implementation\common\dg.platform.platform.common.pas"/>
         <DCCReference Include="implementation\common\dg.platform.mainloop.common.pas"/>
         <DCCReference Include="implementation\common\dg.platform.game.common.pas"/>
+        <DCCReference Include="interfaces\dg.platform.windowmanager.pas"/>
+        <DCCReference Include="interfaces\dg.platform.displaymanager.pas"/>
+        <DCCReference Include="interfaces\dg.platform.display.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

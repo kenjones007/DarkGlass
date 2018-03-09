@@ -24,51 +24,44 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.display.windows;
 
 interface
 uses
-  dg.threading.subsystem,
-  dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.display;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  TDisplay = class( TInterfacedObject, IDisplay )
+  private
+    fName: string;
+    fleft: int32;
+    ftop: int32;
+    fright: int32;
+    fbottom: int32;
+
+  private //- IDisplay -//
+    function getName: string;
+  public
+    constructor Create( aName: string; aleft: int32; atop: int32; aright: int32; abottom: int32 ); reintroduce;
   end;
 
 implementation
-uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
+{ TDisplay }
+
+constructor TDisplay.Create(aName: string; aleft: int32; atop: int32; aright: int32; abottom: int32);
 begin
-  Result := TDisplayManager.Create;
+  inherited Create;
+  fName := aName;
+  fleft := aleft;
+  ftop := atop;
+  fright := aright;
+  fbottom := abottom;
 end;
 
-function TMainLoop.CreateWindowManager: IWindowManager;
+function TDisplay.getName: string;
 begin
-  Result := TWindowManager.Create;
-end;
-
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
-begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
-  end;
+  Result := fName;
 end;
 
 end.

@@ -24,51 +24,72 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.windowmanager.android;
 
 interface
 uses
-  dg.threading.subsystem,
   dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
+  dg.platform.display,
   dg.platform.windowmanager;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  TWindowManager = class( TInterfacedObject, IWindowManager )
+  private
+    fWindow: IWindow;
+  private //- IWindowManager -//
+    function getCount: uint32;
+    function getWindow( idx: uint32 ): IWindow;
+    function CreateWindow( Display: IDisplay ): IWindow;
+  public
+    constructor Create; reintroduce;
+    destructor Destroy; override;
   end;
 
 implementation
 uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
+  dg.platform.window.android;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
+{ TWindowManager }
+
+constructor TWindowManager.Create;
 begin
-  Result := TDisplayManager.Create;
+  inherited Create;
+  fWindow := nil;
 end;
 
-function TMainLoop.CreateWindowManager: IWindowManager;
+function TWindowManager.CreateWindow(Display: IDisplay): IWindow;
 begin
-  Result := TWindowManager.Create;
-end;
-
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
-begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
+  if not assigned(fWindow) then begin
+    fWindow := TWindow.Create(Display);
   end;
+  Result := fWindow;
+end;
+
+destructor TWindowManager.Destroy;
+begin
+  fWindow := nil;
+  inherited Destroy;
+end;
+
+function TWindowManager.getCount: uint32;
+begin
+  Result := 0;
+  if assigned(fWindow) then begin
+    Result := 1;
+  end;
+
+end;
+
+function TWindowManager.getWindow(idx: uint32): IWindow;
+begin
+  Result := nil;
+  if idx<>0 then begin
+    exit;
+  end;
+  if not assigned(fWindow) then begin
+    exit;
+  end;
+  Result := fWindow;
 end;
 
 end.

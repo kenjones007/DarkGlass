@@ -29,19 +29,21 @@ unit dg.platform.window.windows;
 interface
 uses
   Windows,
+  dg.platform.display,
   dg.platform.window;
 
 type
   TWindow = class( TInterfacedObject, IWindow )
   private
     fHandle: hwnd;
+    fDisplay: IDisplay;
   private
     procedure CreateWindow(aTitle: pWideChar; aTop, aLeft, aWidth, aHeight: int32; aFullscreen: boolean);
   protected
     function getHandle: pointer;
     function HandleWindowMessage( uMsg: uint32; wParam: NativeUInt; lParam: NativeUInt ): NativeUInt;
   public
-    constructor Create; reintroduce;
+    constructor Create( aDisplay: IDisplay ); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -57,10 +59,11 @@ const
 var
   WindowList: TList;
 
-constructor TWindow.Create;
+constructor TWindow.Create( aDisplay: IDisplay );
 begin
   inherited Create;
   fHandle := hwnd(nil);
+  fDisplay := aDisplay;
   WindowList.Add(Self);
   CreateWindow( 'Darkglass test',0,0,200,200,FALSE );
 end;

@@ -33,6 +33,10 @@ requires
 contains
   dg.platform.mainloop.android in 'implementation\android\dg.platform.mainloop.android.pas',
   dg.platform.platform.android in 'implementation\android\dg.platform.platform.android.pas',
-  dg.platform.appglue.android in 'implementation\android\dg.platform.appglue.android.pas';
+  dg.platform.appglue.android in 'implementation\android\dg.platform.appglue.android.pas',
+  dg.platform.display.android in 'implementation\android\dg.platform.display.android.pas',
+  dg.platform.displaymanager.android in 'implementation\android\dg.platform.displaymanager.android.pas',
+  dg.platform.window.android in 'implementation\android\dg.platform.window.android.pas',
+  dg.platform.windowmanager.android in 'implementation\android\dg.platform.windowmanager.android.pas';
 
 end.

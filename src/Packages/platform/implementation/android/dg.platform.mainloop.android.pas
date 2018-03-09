@@ -32,7 +32,9 @@ uses
   dg.platform.appglue.android,
   dg.platform.mainloop.common,
   dg.platform.window,
-  dg.threading.subsystem;
+  dg.threading.subsystem,
+  dg.platform.displaymanager,
+  dg.platform.windowmanager;
 
 type
   TMainLoop = class( TCommonMainLoop, ISubSystem )
@@ -43,7 +45,8 @@ type
     function DoInputEvent(app: pandroid_app; Event: PAInputEvent ): int32;
   protected //- Override me -//
     procedure HandleOSMessages; override;
-    function CreateWindow(): IWindow; override;
+    function CreateDisplayManager: IDisplayManager; override;
+    function CreateWindowManager: IWindowManager; override;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -53,7 +56,9 @@ implementation
 uses
   sysutils,
   AndroidAPI.Looper,
-  AndroidAPI.NativeActivity;
+  AndroidAPI.NativeActivity,
+  dg.platform.displaymanager.android,
+  dg.platform.windowmanager.android;
 
 var
   MainLoop: TMainLoop = nil;
@@ -83,9 +88,14 @@ begin
   fApp.onInputEvent := onInputEvent;
 end;
 
-function TMainLoop.CreateWindow: IWindow;
+function TMainLoop.CreateDisplayManager: IDisplayManager;
 begin
-  Result := nil;
+  Result := TDisplayManager.Create;
+end;
+
+function TMainLoop.CreateWindowManager: IWindowManager;
+begin
+  Result := TWindowManager.Create;
 end;
 
 destructor TMainLoop.Destroy;

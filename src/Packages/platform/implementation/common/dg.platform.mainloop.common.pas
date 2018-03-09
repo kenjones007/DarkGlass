@@ -28,10 +28,11 @@ unit dg.platform.mainloop.common;
 
 interface
 uses
-  system.generics.collections,
   SyncObjs,
   dg.threading,
-  dg.platform.window;
+  dg.platform.window,
+  dg.platform.displaymanager,
+  dg.platform.windowmanager;
 
 type
   TCommonMainLoop = class( TInterfacedObject, ISubSystem )
@@ -39,9 +40,9 @@ type
     fFirstRun: boolean;
     fPlatformChannel: IMessageChannel;
     fGameChannel: THChannelConnection;
-  private //- Window management -//
-    fMainWindow: IWindow;
-    fWindows: TList<IWindow>;
+  private //- Window & Display management -//
+    fDisplayManager: IDisplayManager;
+    fWindowManager: IWindowManager;
   private
     procedure SendInitializedMessage;
     procedure HandlePlatformMessages( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt; var Handled: boolean );
@@ -53,8 +54,9 @@ type
     procedure Finalize; virtual;
 
   protected //- Override me -//
+    function CreateDisplayManager: IDisplayManager; virtual; abstract;
+    function CreateWindowManager: IWindowManager; virtual; abstract;
     procedure HandleOSMessages; virtual; abstract;
-    function CreateWindow(): IWindow; virtual; abstract;
 
   public
     constructor Create; reintroduce; virtual;
@@ -74,15 +76,13 @@ begin
   inherited Create;
   fFirstRun := True;
   fPlatformChannel := nil;
-  fMainWindow := nil;
-  fWindows := TList<IWindow>.Create;
+  fDisplayManager := CreateDisplayManager;
+  fWindowManager := CreateWindowManager;
 end;
 
 destructor TCommonMainLoop.Destroy;
 begin
   fPlatformChannel := nil;
-  fMainWindow := nil;
-  fWindows.DisposeOf;
   inherited Destroy;
 end;
 
@@ -90,15 +90,8 @@ procedure TCommonMainLoop.doCreateWindow(var ParamA: NativeUInt; var ParamB: Nat
 var
   NewWindow: IWindow;
 begin
-  NewWindow := CreateWindow();
+  NewWindow := fWindowManager.CreateWindow(nil);
   ParamA := NativeUInt(pointer(NewWindow));
-  if not assigned(NewWindow) then begin
-    exit;
-  end;
-  if not assigned(fMainWindow) then begin
-    fMainWindow := NewWindow;
-  end;
-  fWindows.Add(NewWindow);
 end;
 
 function TCommonMainLoop.Execute: boolean;

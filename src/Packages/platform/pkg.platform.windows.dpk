@@ -33,6 +33,9 @@ requires
 contains
   dg.platform.platform.windows in 'implementation\windows\dg.platform.platform.windows.pas',
   dg.platform.window.windows in 'implementation\windows\dg.platform.window.windows.pas',
-  dg.platform.mainloop.windows in 'implementation\windows\dg.platform.mainloop.windows.pas';
+  dg.platform.mainloop.windows in 'implementation\windows\dg.platform.mainloop.windows.pas',
+  dg.platform.displaymanager.windows in 'implementation\windows\dg.platform.displaymanager.windows.pas',
+  dg.platform.windowmanager.windows in 'implementation\windows\dg.platform.windowmanager.windows.pas',
+  dg.platform.display.windows in 'implementation\windows\dg.platform.display.windows.pas';
 
 end.

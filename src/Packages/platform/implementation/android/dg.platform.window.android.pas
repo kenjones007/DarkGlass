@@ -24,51 +24,49 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.platform.mainloop.windows;
+unit dg.platform.window.android;
 
 interface
 uses
-  dg.threading.subsystem,
-  dg.platform.window,
-  dg.platform.mainloop.common,
-  dg.platform.displaymanager,
-  dg.platform.windowmanager;
+  dg.platform.display,
+  dg.platform.window;
 
 type
-  TMainLoop = class( TCommonMainLoop, ISubSystem )
-  protected //- Overrides of TCommonMainLoop -//
-    procedure HandleOSMessages; override;
-    function CreateDisplayManager: IDisplayManager; override;
-    function CreateWindowManager: IWindowManager; override;
+  TWindow = class( TInterfacedObject, IWindow )
+  private
+    fHandle: pointer;
+    fDisplay: IDisplay;
+  private //- IWindow -//
+    function getHandle: pointer;
+  public
+    constructor Create( Display: IDisplay ); reintroduce;
+    destructor Destroy; override;
   end;
 
 implementation
 uses
-  dg.platform.displaymanager.windows,
-  dg.platform.windowmanager.windows,
-  dg.platform.window.windows,
-  Windows,
-  Messages;
+  AndroidAPI.NativeActivity,
+  dg.platform.appglue.android;
 
-function TMainLoop.CreateDisplayManager: IDisplayManager;
+{ TWindow }
+
+constructor TWindow.Create( Display: IDisplay );
 begin
-  Result := TDisplayManager.Create;
+  inherited Create;
+  fDisplay := Display;
+  fHandle := Pandroid_app(PANativeActivity(System.DelphiActivity)^.instance)^.Window;
 end;
 
-function TMainLoop.CreateWindowManager: IWindowManager;
+destructor TWindow.Destroy;
 begin
-  Result := TWindowManager.Create;
+  fHandle := nil;
+  fDisplay := nil;
+  inherited Destroy;
 end;
 
-procedure TMainLoop.HandleOSMessages;
-var
-  aMessage: tagMsg;
+function TWindow.getHandle: pointer;
 begin
-  //- Check for OS messages
-  if Windows.PeekMessage(aMessage,0,0,0,PM_REMOVE) then begin
-    TranslateMessage(aMessage);
-    DispatchMessage(aMessage);
-  end;
+  Result := fHandle;
 end;
 
 end.

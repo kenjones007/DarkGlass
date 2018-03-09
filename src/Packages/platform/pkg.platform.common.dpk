@@ -35,6 +35,9 @@ contains
   dg.platform.platform in 'interfaces\dg.platform.platform.pas',
   dg.platform.platform.common in 'implementation\common\dg.platform.platform.common.pas',
   dg.platform.mainloop.common in 'implementation\common\dg.platform.mainloop.common.pas',
-  dg.platform.game.common in 'implementation\common\dg.platform.game.common.pas';
+  dg.platform.game.common in 'implementation\common\dg.platform.game.common.pas',
+  dg.platform.windowmanager in 'interfaces\dg.platform.windowmanager.pas',
+  dg.platform.displaymanager in 'interfaces\dg.platform.displaymanager.pas',
+  dg.platform.display in 'interfaces\dg.platform.display.pas';
 
 end.
