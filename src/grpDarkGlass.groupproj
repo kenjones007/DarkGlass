@@ -36,6 +36,9 @@
         <Projects Include="Packages\platform\pkg.platform.android.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Packages\platform\pkg.platform.linux.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Packages\platform\pkg.platform.windows.dproj">
             <Dependencies/>
         </Projects>
@@ -161,6 +164,15 @@
     <Target Name="pkg_platform_android:Make">
         <MSBuild Projects="Packages\platform\pkg.platform.android.dproj" Targets="Make"/>
     </Target>
+    <Target Name="pkg_platform_linux">
+        <MSBuild Projects="Packages\platform\pkg.platform.linux.dproj"/>
+    </Target>
+    <Target Name="pkg_platform_linux:Clean">
+        <MSBuild Projects="Packages\platform\pkg.platform.linux.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkg_platform_linux:Make">
+        <MSBuild Projects="Packages\platform\pkg.platform.linux.dproj" Targets="Make"/>
+    </Target>
     <Target Name="pkg_platform_windows">
         <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj"/>
     </Target>
@@ -216,13 +228,13 @@
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkg_dynlib_common;pkg_dynlib_windows;pkg_dynlib_posix;pkg_dynlib;pkg_threading_common;pkg_threading_posix;pkg_threading_windows;pkg_threading;pkg_darkmessages;pkg_platform_common;pkg_platform_android;pkg_platform_windows;pkg_platform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkg_dynlib_common;pkg_dynlib_windows;pkg_dynlib_posix;pkg_dynlib;pkg_threading_common;pkg_threading_posix;pkg_threading_windows;pkg_threading;pkg_darkmessages;pkg_platform_common;pkg_platform_android;pkg_platform_linux;pkg_platform_windows;pkg_platform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkg_dynlib_common:Clean;pkg_dynlib_windows:Clean;pkg_dynlib_posix:Clean;pkg_dynlib:Clean;pkg_threading_common:Clean;pkg_threading_posix:Clean;pkg_threading_windows:Clean;pkg_threading:Clean;pkg_darkmessages:Clean;pkg_platform_common:Clean;pkg_platform_android:Clean;pkg_platform_windows:Clean;pkg_platform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkg_dynlib_common:Clean;pkg_dynlib_windows:Clean;pkg_dynlib_posix:Clean;pkg_dynlib:Clean;pkg_threading_common:Clean;pkg_threading_posix:Clean;pkg_threading_windows:Clean;pkg_threading:Clean;pkg_darkmessages:Clean;pkg_platform_common:Clean;pkg_platform_android:Clean;pkg_platform_linux:Clean;pkg_platform_windows:Clean;pkg_platform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkg_dynlib_common:Make;pkg_dynlib_windows:Make;pkg_dynlib_posix:Make;pkg_dynlib:Make;pkg_threading_common:Make;pkg_threading_posix:Make;pkg_threading_windows:Make;pkg_threading:Make;pkg_darkmessages:Make;pkg_platform_common:Make;pkg_platform_android:Make;pkg_platform_windows:Make;pkg_platform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkg_dynlib_common:Make;pkg_dynlib_windows:Make;pkg_dynlib_posix:Make;pkg_dynlib:Make;pkg_threading_common:Make;pkg_threading_posix:Make;pkg_threading_windows:Make;pkg_threading:Make;pkg_darkmessages:Make;pkg_platform_common:Make;pkg_platform_android:Make;pkg_platform_linux:Make;pkg_platform_windows:Make;pkg_platform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
