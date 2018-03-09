@@ -43,8 +43,8 @@ uses
 const
            XlibSpecificationRelease = 6;
                  X_HAVE_UTF8_STRING = 1;
-                              xTrue = 1;  // -CC- Renamed 'xTrue' because 'True' is existing reserved word in pascal.
-                             xFalse = 0;  // -CC- Renamed 'xFalse' because 'False' is existing reserved word in pascal.
+                              xTrue = TRUE;  // -CC- Renamed 'xTrue' because 'True' is existing reserved word in pascal.
+                             xFalse = FALSE;  // -CC- Renamed 'xFalse' because 'False' is existing reserved word in pascal.
                       QueuedAlready = 0;
                  QueuedAfterReading = 1;
                    QueuedAfterFlush = 2;

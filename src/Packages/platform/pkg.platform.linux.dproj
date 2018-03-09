@@ -125,6 +125,10 @@
         <DCCReference Include="implementation\linux\dg.platform.linux.binding.x.pas"/>
         <DCCReference Include="implementation\linux\dg.platform.platform.linux.pas"/>
         <DCCReference Include="implementation\linux\dg.platform.mainloop.linux.pas"/>
+        <DCCReference Include="implementation\linux\dg.platform.display.linux.pas"/>
+        <DCCReference Include="implementation\linux\dg.platform.displaymanager.linux.pas"/>
+        <DCCReference Include="implementation\linux\dg.platform.window.linux.pas"/>
+        <DCCReference Include="implementation\linux\dg.platform.windowmanager.linux.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

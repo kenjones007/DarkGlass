@@ -32,10 +32,21 @@ type
   IDisplay = interface
     ['{596F1AE9-E2D4-463C-A59B-3A4877FC6885}']
 
+    /// <summary>
+    ///    Returns the OS handle to the display.
+    ///    If the handle can be cast as a pointer, then it will be returned
+    ///    as a pointer from getOSHandle. Otherwise the result will point to
+    ///    the handle.
+    /// </summary>
+    function getOSHandle: pointer;
+
     ///  <summary>
     ///    Returns a string which describes the display.
     ///  </summary>
     function getName: string;
+
+    //- Pascal Only, Properties -//
+    property Name: string read getName;
   end;
 
 implementation

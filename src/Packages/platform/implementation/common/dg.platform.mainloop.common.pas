@@ -40,7 +40,7 @@ type
     fFirstRun: boolean;
     fPlatformChannel: IMessageChannel;
     fGameChannel: THChannelConnection;
-  private //- Window & Display management -//
+  protected //- Window & Display management -//
     fDisplayManager: IDisplayManager;
     fWindowManager: IWindowManager;
   private

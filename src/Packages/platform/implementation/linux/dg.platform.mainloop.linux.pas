@@ -36,27 +36,26 @@ type
   TMainLoop = class( TCommonMainLoop, ISubSystem )
   protected //- Overrides of TCommonMainLoop -//
     procedure HandleOSMessages; override;
-    function CreateWindow(): IWindow; override;
   end;
 
 implementation
-//uses
-//  dg.platform.window.linux;
-
-function TMainLoop.CreateWindow: IWindow;
-begin
-  Result := nil;
-  //Result := TWindow.Create;
-end;
+uses
+  dg.platform.windowmanager.linux,
+  dg.platform.linux.binding.xlib;
 
 procedure TMainLoop.HandleOSMessages;
-//var
-//  Event: XEvent;
+var
+  Event: XEvent;
+  _Display: Display;
+  idx: uint32;
 begin
-//  while XPending(_display)>0 do begin
-//    XNextEvent(_display,Event);
-//    HandleEvent(Event,MyWindow,KeepGoing);
-//  end;
+  for idx := 0 to pred(fDisplayManager.Count) do begin
+    _Display := fDisplayManager.Displays[idx].getOSHandle;
+    while XPending(_Display)>0 do begin
+      XNextEvent(_display,Event);
+      TWindowManager( fWindowManager ).HandleWindowMessage( Event );
+    end;
+  end;
 end;
 
 end.

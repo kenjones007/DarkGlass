@@ -39,15 +39,12 @@ type
     ['{87174835-FEAA-4ED1-8E5B-94F3D7C3654E}']
 
     /// <summary>
-    ///   Returns a pointer to the OS-level window handle. <br />Except on
-    ///   target platforms where a window handle is a pointer type, in which
-    ///   case this method returns that pointer.
+    ///    Returns the OS handle to the window.
+    ///    If the handle can be cast as a pointer, then it will be returned
+    ///    as a pointer from getOSHandle. Otherwise the result will point to
+    ///    the handle.
     /// </summary>
-    /// <returns>
-    ///   The OS-Level window handle, or a pointer to it. (Platform specific
-    ///   behavior).
-    /// </returns>
-    function getHandle: pointer;
+    function getOSHandle: pointer;
   end;
 
 implementation
