@@ -90,7 +90,7 @@ procedure TCommonMainLoop.doCreateWindow(var ParamA: NativeUInt; var ParamB: Nat
 var
   NewWindow: IWindow;
 begin
-  NewWindow := fWindowManager.CreateWindow(nil);
+  NewWindow := fWindowManager.CreateWindow(fDisplayManager.Displays[0]);
   ParamA := NativeUInt(pointer(NewWindow));
 end;
 

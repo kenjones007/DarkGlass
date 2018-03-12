@@ -2159,7 +2159,7 @@ uses
 {           Constants and variables used to load the X11 library               }
 {------------------------------------------------------------------------------}
 const
-  cLibName = 'libX11.so'; //- using symlink present on most *nix variants.
+  cLibName = 'libX11.so.6'; //- using symlink present on most *nix variants.
 
 var
   XLibrary: IDynLib = nil;

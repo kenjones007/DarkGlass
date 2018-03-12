@@ -29,6 +29,8 @@ unit dg.platform.mainloop.linux;
 interface
 uses
   dg.threading.subsystem,
+  dg.platform.displaymanager,
+  dg.platform.windowmanager,
   dg.platform.window,
   dg.platform.mainloop.common;
 
@@ -36,12 +38,25 @@ type
   TMainLoop = class( TCommonMainLoop, ISubSystem )
   protected //- Overrides of TCommonMainLoop -//
     procedure HandleOSMessages; override;
+    function CreateDisplayManager: IDisplayManager; override;
+    function CreateWindowManager: IWindowManager; override;
   end;
 
 implementation
 uses
+  dg.platform.displaymanager.linux,
   dg.platform.windowmanager.linux,
   dg.platform.linux.binding.xlib;
+
+function TMainLoop.CreateDisplayManager: IDisplayManager;
+begin
+  Result := TDisplayManager.Create;
+end;
+
+function TMainLoop.CreateWindowManager: IWindowManager;
+begin
+  Result := TWindowManager.Create;
+end;
 
 procedure TMainLoop.HandleOSMessages;
 var
