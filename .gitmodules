@@ -4,3 +4,6 @@
 [submodule "src/Packages/darkThreading"]
 	path = src/Packages/darkThreading
 	url = https://github.com/chapmanworld/darkThreading.git
+[submodule "src/Packages/darkPlatform"]
+	path = src/Packages/darkPlatform
+	url = https://github.com/chapmanworld/darkPlatform.git

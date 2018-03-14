@@ -9,22 +9,7 @@
         <Projects Include="Packages\darkThreading\src\pkgDarkThreading.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Packages\darkmessages\pkg.darkmessages.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\platform\pkg.platform.common.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\platform\pkg.platform.android.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\platform\pkg.platform.linux.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\platform\pkg.platform.windows.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\platform\pkg.platform.dproj">
+        <Projects Include="Packages\darkPlatform\src\pkgDarkPlatform.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Packages\darkglass.core\pkg.darkglass.core.dproj">
@@ -65,59 +50,14 @@
     <Target Name="pkgDarkThreading:Make">
         <MSBuild Projects="Packages\darkThreading\src\pkgDarkThreading.dproj" Targets="Make"/>
     </Target>
-    <Target Name="pkg_darkmessages">
-        <MSBuild Projects="Packages\darkmessages\pkg.darkmessages.dproj"/>
+    <Target Name="pkgDarkPlatform">
+        <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj"/>
     </Target>
-    <Target Name="pkg_darkmessages:Clean">
-        <MSBuild Projects="Packages\darkmessages\pkg.darkmessages.dproj" Targets="Clean"/>
+    <Target Name="pkgDarkPlatform:Clean">
+        <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="pkg_darkmessages:Make">
-        <MSBuild Projects="Packages\darkmessages\pkg.darkmessages.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkg_platform_common">
-        <MSBuild Projects="Packages\platform\pkg.platform.common.dproj"/>
-    </Target>
-    <Target Name="pkg_platform_common:Clean">
-        <MSBuild Projects="Packages\platform\pkg.platform.common.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkg_platform_common:Make">
-        <MSBuild Projects="Packages\platform\pkg.platform.common.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkg_platform_android">
-        <MSBuild Projects="Packages\platform\pkg.platform.android.dproj"/>
-    </Target>
-    <Target Name="pkg_platform_android:Clean">
-        <MSBuild Projects="Packages\platform\pkg.platform.android.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkg_platform_android:Make">
-        <MSBuild Projects="Packages\platform\pkg.platform.android.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkg_platform_linux">
-        <MSBuild Projects="Packages\platform\pkg.platform.linux.dproj"/>
-    </Target>
-    <Target Name="pkg_platform_linux:Clean">
-        <MSBuild Projects="Packages\platform\pkg.platform.linux.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkg_platform_linux:Make">
-        <MSBuild Projects="Packages\platform\pkg.platform.linux.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkg_platform_windows">
-        <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj"/>
-    </Target>
-    <Target Name="pkg_platform_windows:Clean">
-        <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkg_platform_windows:Make">
-        <MSBuild Projects="Packages\platform\pkg.platform.windows.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkg_platform">
-        <MSBuild Projects="Packages\platform\pkg.platform.dproj"/>
-    </Target>
-    <Target Name="pkg_platform:Clean">
-        <MSBuild Projects="Packages\platform\pkg.platform.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkg_platform:Make">
-        <MSBuild Projects="Packages\platform\pkg.platform.dproj" Targets="Make"/>
+    <Target Name="pkgDarkPlatform:Make">
+        <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj" Targets="Make"/>
     </Target>
     <Target Name="pkg_darkglass_core">
         <MSBuild Projects="Packages\darkglass.core\pkg.darkglass.core.dproj"/>
@@ -156,13 +96,13 @@
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkgDarkDynlib;pkgDarkThreading;pkg_darkmessages;pkg_platform_common;pkg_platform_android;pkg_platform_linux;pkg_platform_windows;pkg_platform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkgDarkDynlib;pkgDarkThreading;pkgDarkPlatform;pkg_darkglass_core;darkglass_core;pkgDarkGlass;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkg_darkmessages:Clean;pkg_platform_common:Clean;pkg_platform_android:Clean;pkg_platform_linux:Clean;pkg_platform_windows:Clean;pkg_platform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkPlatform:Clean;pkg_darkglass_core:Clean;darkglass_core:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkg_darkmessages:Make;pkg_platform_common:Make;pkg_platform_android:Make;pkg_platform_linux:Make;pkg_platform_windows:Make;pkg_platform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkPlatform:Make;pkg_darkglass_core:Make;darkglass_core:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
