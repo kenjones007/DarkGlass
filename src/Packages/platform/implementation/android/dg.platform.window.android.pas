@@ -37,7 +37,7 @@ type
     fHandle: pointer;
     fDisplay: IDisplay;
   private //- IWindow -//
-    function getHandle: pointer;
+    function getOSHandle: pointer;
   public
     constructor Create( Display: IDisplay ); reintroduce;
     destructor Destroy; override;
@@ -64,7 +64,7 @@ begin
   inherited Destroy;
 end;
 
-function TWindow.getHandle: pointer;
+function TWindow.getOSHandle: pointer;
 begin
   Result := fHandle;
 end;

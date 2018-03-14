@@ -33,6 +33,7 @@ uses
 type
   TDisplay = class( TInterfacedObject, IDisplay )
   private //- IDisplay -//
+    function getOSHandle: pointer;
     function getName: string;
   end;
 
@@ -44,6 +45,11 @@ implementation
 function TDisplay.getName: string;
 begin
   Result := 'primary';
+end;
+
+function TDisplay.getOSHandle: pointer;
+begin
+  Result := nil;
 end;
 
 end.

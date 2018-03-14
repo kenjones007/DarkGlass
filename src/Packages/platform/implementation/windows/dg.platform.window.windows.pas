@@ -40,7 +40,7 @@ type
   private
     procedure CreateWindow(aTitle: pWideChar; aTop, aLeft, aWidth, aHeight: int32; aFullscreen: boolean);
   protected
-    function getHandle: pointer;
+    function getOSHandle: pointer;
     function HandleWindowMessage( uMsg: uint32; wParam: NativeUInt; lParam: NativeUInt ): NativeUInt;
   public
     constructor Create( aDisplay: IDisplay ); reintroduce;
@@ -75,7 +75,7 @@ begin
   inherited Destroy;
 end;
 
-function TWindow.getHandle: pointer;
+function TWindow.getOSHandle: pointer;
 begin
   result := pointer(fHandle);
 end;
@@ -122,7 +122,7 @@ begin
     exit;
   end;
   for idx := 0 to pred(WindowList.Count) do begin
-    if TWindow(WindowList.Items[idx]).getHandle=pointer(Handle) then begin
+    if TWindow(WindowList.Items[idx]).getOSHandle=pointer(Handle) then begin
       Result := TWindow(WindowList.Items[idx]).HandleWindowMessage( uMsg, wParam, lParam );
       Exit;
     end;

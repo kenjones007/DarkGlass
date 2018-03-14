@@ -33,25 +33,27 @@ uses
 type
   TDisplay = class( TInterfacedObject, IDisplay )
   private
+    fHandle: nativeuint;
     fName: string;
     fleft: int32;
     ftop: int32;
     fright: int32;
     fbottom: int32;
-
   private //- IDisplay -//
+    function getOSHandle: pointer;
     function getName: string;
   public
-    constructor Create( aName: string; aleft: int32; atop: int32; aright: int32; abottom: int32 ); reintroduce;
+    constructor Create( handle: nativeuint; aName: string; aleft: int32; atop: int32; aright: int32; abottom: int32 ); reintroduce;
   end;
 
 implementation
 
 { TDisplay }
 
-constructor TDisplay.Create(aName: string; aleft: int32; atop: int32; aright: int32; abottom: int32);
+constructor TDisplay.Create( handle: nativeuint; aName: string; aleft: int32; atop: int32; aright: int32; abottom: int32);
 begin
   inherited Create;
+  fHandle := handle;
   fName := aName;
   fleft := aleft;
   ftop := atop;
@@ -62,6 +64,11 @@ end;
 function TDisplay.getName: string;
 begin
   Result := fName;
+end;
+
+function TDisplay.getOSHandle: pointer;
+begin
+  Result := pointer(fHandle);
 end;
 
 end.

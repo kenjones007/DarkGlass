@@ -85,7 +85,7 @@ procedure TDisplayManager.CreateDisplayWithDimensions( Name: string; left: int32
 var
   NewDisplay: IDisplay;
 begin
-  NewDisplay := TDisplay.Create( Name, left, top, right, bottom );
+  NewDisplay := TDisplay.Create( fDisplays.Count, Name, left, top, right, bottom );
   fDisplays.Add(NewDisplay);
 end;
 

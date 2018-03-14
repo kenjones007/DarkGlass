@@ -2153,7 +2153,7 @@ function ScreenOfDisplay( dpy: Display; scr: int32): Screen;
 implementation
 uses
   sysutils,
-  dg.dynlib;
+  darkDynlib;
 
 {------------------------------------------------------------------------------}
 {           Constants and variables used to load the X11 library               }
