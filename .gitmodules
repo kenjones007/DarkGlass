@@ -1,0 +1,3 @@
+[submodule "src/Packages/darkDynlib"]
+	path = src/Packages/darkDynlib
+	url = https://github.com/chapmanworld/darkDynlib.git

@@ -92,3 +92,4 @@ src/Packages/threading/pkg.threading.rtl.res
 src/Tests/DarknessDebug/DarknessDebug.res
 /out/lib/bpl/*.xml
 /out/lib/bpl/*.xml
+out/bin/Linux64/Debug/DarknessDebug
