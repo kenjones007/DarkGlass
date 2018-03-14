@@ -6,7 +6,7 @@
         <MainSource>DarknessDebug.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Linux64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>1247</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
@@ -83,8 +83,6 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_DcuOutput>..\..\..\out\lib\$(Platform)\$(Config)</DCC_DcuOutput>
-        <DCC_ExeOutput>..\..\..\out\bin\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_E>false</DCC_E>
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
@@ -104,9 +102,8 @@
         <AUP_READ_PHONE_STATE>true</AUP_READ_PHONE_STATE>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
+        <DCC_UnitSearchPath>..\..\Packages\darkDynlib\src\implementation\posix;..\..\Packages\darkDynlib\src\api;..\..\Packages\darkDynlib\src\implementation\windows;..\..\Packages\darkThreading\src\api;..\..\Packages\darkThreading\src\implementation\common;..\..\Packages\darkThreading\src\implementation\posix;..\..\Packages\darkThreading\src\implementation\windows;..\..\Packages\darkThreading\src\interfaces;..\..\Packages\darkPlatform\src\api;..\..\Packages\darkPlatform\src\interfaces;..\..\Packages\darkPlatform\src\implementation\android;..\..\Packages\darkPlatform\src\implementation\common;..\..\Packages\darkPlatform\src\implementation\linux;..\..\Packages\darkPlatform\src\implementation\windows;..\..\Packages\darkCore\src\api;..\..\Packages\darkGlass\src\api;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>DarknessDebug</SanitizedProjectName>
-        <DCC_BplOutput>..\..\..\out\lib\bpl</DCC_BplOutput>
-        <DCC_UnitSearchPath>..\..\..\out\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;DBXInterBaseDriver;tethering;bindcompfmx;FmxTeeUI;fmx;FireDACDBXDriver;dbexpress;IndyCore;dsnap;DataSnapCommon;bindengine;DataSnapClient;IndyIPCommon;bindcompdbx;IndyIPServer;IndySystem;fmxFireDAC;ibmonitor;FMXTee;DbxCommonDriver;ibxpress;xmlrtl;DataSnapNativeClient;FireDACDSDriver;rtl;ibxbindings;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;dbxcds;dsnapxml;DataSnapProviderClient;dbrtl;IndyProtocols;$(DCC_UsePackage)</DCC_UsePackage>
@@ -300,6 +297,8 @@
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>

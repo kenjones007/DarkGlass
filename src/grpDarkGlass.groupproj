@@ -22,7 +22,7 @@
             <Dependencies/>
         </Projects>
         <Projects Include="Tests\DarknessDebug\DarknessDebug.dproj">
-            <Dependencies/>
+            <Dependencies>Packages\darkDynlib\src\pkgDarkDynlib.dproj;Packages\darkThreading\src\pkgDarkThreading.dproj;Packages\darkPlatform\src\pkgDarkPlatform.dproj;Packages\darkCore\src\pkgDarkCore.dproj;Packages\darkGlass\src\pkgDarkGlass.dproj</Dependencies>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -86,13 +86,13 @@
     <Target Name="pkgDarkGlass:Make">
         <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DarknessDebug">
+    <Target Name="DarknessDebug" DependsOnTargets="pkgDarkDynlib;pkgDarkThreading;pkgDarkPlatform;pkgDarkCore;pkgDarkGlass">
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj"/>
     </Target>
-    <Target Name="DarknessDebug:Clean">
+    <Target Name="DarknessDebug:Clean" DependsOnTargets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;pkgDarkGlass:Clean">
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DarknessDebug:Make">
+    <Target Name="DarknessDebug:Make" DependsOnTargets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;pkgDarkGlass:Make">
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
