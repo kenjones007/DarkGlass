@@ -24,13 +24,12 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit dg.engine.api;
+unit darkCore.api;
 
 interface
 uses
-//  dg.threading.types,
-  dg.threading,
-  dg.platform;
+  darkThreading,
+  darkPlatform;
 
 
 /// <summary>

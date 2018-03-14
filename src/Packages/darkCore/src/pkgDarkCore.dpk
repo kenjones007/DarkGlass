@@ -1,4 +1,4 @@
-package pkg.darkglass.core;
+package pkgDarkCore;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -31,6 +31,6 @@ requires
   rtl;
 
 contains
-  dg.engine.api in 'api\dg.engine.api.pas';
+  darkCore.api in 'api\darkCore.api.pas';
 
 end.

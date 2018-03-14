@@ -95,3 +95,8 @@ src/Tests/DarknessDebug/DarknessDebug.res
 out/bin/Linux64/Debug/DarknessDebug
 /src/Packages/darkglass.core/*.xml
 /src/Packages/darkglass.core/*.res
+Linux64
+bpl
+Linux64
+Android
+*.xml
