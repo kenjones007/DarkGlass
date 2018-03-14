@@ -18,7 +18,7 @@
         <Projects Include="Packages\darkCore\src\DarkCore.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Packages\darkglass\pkgDarkGlass.dproj">
+        <Projects Include="Packages\darkGlass\src\pkgDarkGlass.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Tests\DarknessDebug\DarknessDebug.dproj">
@@ -78,13 +78,13 @@
         <MSBuild Projects="Packages\darkCore\src\DarkCore.dproj" Targets="Make"/>
     </Target>
     <Target Name="pkgDarkGlass">
-        <MSBuild Projects="Packages\darkglass\pkgDarkGlass.dproj"/>
+        <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj"/>
     </Target>
     <Target Name="pkgDarkGlass:Clean">
-        <MSBuild Projects="Packages\darkglass\pkgDarkGlass.dproj" Targets="Clean"/>
+        <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj" Targets="Clean"/>
     </Target>
     <Target Name="pkgDarkGlass:Make">
-        <MSBuild Projects="Packages\darkglass\pkgDarkGlass.dproj" Targets="Make"/>
+        <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj" Targets="Make"/>
     </Target>
     <Target Name="DarknessDebug">
         <MSBuild Projects="Tests\DarknessDebug\DarknessDebug.dproj"/>

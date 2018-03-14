@@ -28,8 +28,7 @@ unit darkglass;
 
 interface
 uses
-  dg.darkmessages.game,
-  dg.darkmessages.platform;
+  darkPlatform;
 
 type
   ///  <summary>
@@ -125,9 +124,9 @@ var
 // Platform messages.
 //------------------------------------------------------------------------------
 const
-          MSG_CREATE_WINDOW = dg.darkmessages.platform.MSG_CREATE_WINDOW;
-   MSG_PLATFORM_INITIALIZED = dg.darkmessages.game.MSG_PLATFORM_INITIALIZED;
-      MSG_SET_GAME_CALLBACK = dg.darkmessages.game.MSG_SET_GAME_CALLBACK;
+          MSG_CREATE_WINDOW = darkPlatform.MSG_CREATE_WINDOW;
+   MSG_PLATFORM_INITIALIZED = darkPlatform.MSG_PLATFORM_INITIALIZED;
+      MSG_SET_GAME_CALLBACK = darkPlatform.MSG_SET_GAME_CALLBACK;
 
 implementation
 
