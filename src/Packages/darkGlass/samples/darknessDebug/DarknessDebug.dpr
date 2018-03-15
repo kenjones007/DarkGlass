@@ -28,7 +28,6 @@ program DarknessDebug;
 uses
   darkglass,
   darkglass.static,
-//  darkglass.dynamic,
   sysutils;
 
 var
@@ -56,7 +55,7 @@ begin
 end;
 
 begin
-  dgInitialize(HandleMessage);
+   dgInitialize(HandleMessage);
   PlatformChannel := dgGetMessageChannelConnection('platform');
   GameChannel := dgGetMessageChannelConnection('game');
   dgRun;
