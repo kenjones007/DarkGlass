@@ -7,3 +7,6 @@
 [submodule "src/Packages/darkPlatform"]
 	path = src/Packages/darkPlatform
 	url = https://github.com/chapmanworld/darkPlatform.git
+[submodule "src/Packages/darkTest"]
+	path = src/Packages/darkTest
+	url = https://github.com/chapmanworld/darkTest.git

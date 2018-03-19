@@ -3,6 +3,9 @@
         <ProjectGuid>{8084854E-5FED-4EAA-AC3D-647F5C1F58A4}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
+        <Projects Include="Packages\darkTest\src\pkgdarkTest.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Packages\darkDynlib\src\pkgDarkDynlib.dproj">
             <Dependencies/>
         </Projects>
@@ -32,6 +35,15 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="pkgdarkTest">
+        <MSBuild Projects="Packages\darkTest\src\pkgdarkTest.dproj"/>
+    </Target>
+    <Target Name="pkgdarkTest:Clean">
+        <MSBuild Projects="Packages\darkTest\src\pkgdarkTest.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkgdarkTest:Make">
+        <MSBuild Projects="Packages\darkTest\src\pkgdarkTest.dproj" Targets="Make"/>
+    </Target>
     <Target Name="pkgDarkDynlib">
         <MSBuild Projects="Packages\darkDynlib\src\pkgDarkDynlib.dproj"/>
     </Target>
@@ -96,13 +108,13 @@
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkgDarkDynlib;pkgDarkThreading;pkgDarkPlatform;pkgDarkCore;DarkCore;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkgdarkTest;pkgDarkDynlib;pkgDarkThreading;pkgDarkPlatform;pkgDarkCore;DarkCore;pkgDarkGlass;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;DarkCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkgdarkTest:Clean;pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;DarkCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;DarkCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkgdarkTest:Make;pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;DarkCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
