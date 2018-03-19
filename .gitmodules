@@ -10,3 +10,15 @@
 [submodule "src/Packages/darkTest"]
 	path = src/Packages/darkTest
 	url = https://github.com/chapmanworld/darkTest.git
+[submodule "src/Packages/darkUnicode"]
+	path = src/Packages/darkUnicode
+	url = https://github.com/chapmanworld/darkUnicode.git
+[submodule "src/Packages/darkIO"]
+	path = src/Packages/darkIO
+	url = https://github.com/chapmanworld/darkIO.git
+[submodule "src/Packages/darkCollections"]
+	path = src/Packages/darkCollections
+	url = https://github.com/chapmanworld/darkCollections.git
+[submodule "src/Packages/darkLog"]
+	path = src/Packages/darkLog
+	url = https://github.com/chapmanworld/darkLog.git
