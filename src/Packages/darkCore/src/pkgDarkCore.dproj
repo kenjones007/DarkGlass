@@ -89,7 +89,7 @@
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
         <SanitizedProjectName>pkgDarkCore</SanitizedProjectName>
-        <DCC_UnitSearchPath>api;..\..\darkDynlib\src\implementation\posix;..\..\darkDynlib\src\api;..\..\darkDynlib\src\implementation\windows;..\..\darkThreading\src\api;..\..\darkThreading\src\implementation\common;..\..\darkThreading\src\implementation\posix;..\..\darkThreading\src\implementation\windows;..\..\darkThreading\src\interfaces;..\..\darkPlatform\src\api;..\..\darkPlatform\src\interfaces;..\..\darkPlatform\src\implementation\android;..\..\darkPlatform\src\implementation\common;..\..\darkPlatform\src\implementation\linux;..\..\darkPlatform\src\implementation\windows;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>api;interfaces;implementation\common;implementation\android;implementation\linux;implementation\windows;..\..\darkThreading\out\lib\$(Platform)\$(Config);..\..\darkDynlib\out\lib\$(Platform)\$(Config);..\..\darkCollections\out\lib\$(Platform)\$(Config);..\..\darkLog\out\lib\$(Platform)\$(Config);..\..\darkIO\out\lib\$(Platform)\$(Config);..\..\darkUnicode\out\lib\$(Platform)\$(Config);..\..\darkPlatform\out\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_BplOutput>..\out\lib\bpl</DCC_BplOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
