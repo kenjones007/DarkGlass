@@ -102,7 +102,7 @@
         <AUP_READ_PHONE_STATE>true</AUP_READ_PHONE_STATE>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
-        <DCC_UnitSearchPath>..\..\out\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..\..\darkThreading\out\lib\$(Platform)\$(Config);..\..\..\darkDynlib\out\lib\$(Platform)\$(Config);..\..\..\darkCollections\out\lib\$(Platform)\$(Config);..\..\..\darkLog\out\lib\$(Platform)\$(Config);..\..\..\darkIO\out\lib\$(Platform)\$(Config);..\..\..\darkUnicode\out\lib\$(Platform)\$(Config);..\..\..\darkPlatform\out\lib\$(Platform)\$(Config);..\..\..\darkCore\out\lib\$(Platform)\$(Config);..\..\..\darkGlass\out\lib\$(Platform)\$(Config);..\..\..\darkHandles\out\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>DarknessDebug</SanitizedProjectName>
         <DCC_ExeOutput>..\..\out\bin\$(Platform)\$(Config)</DCC_ExeOutput>
         <DCC_BplOutput>..\..\out\lib\bpl</DCC_BplOutput>

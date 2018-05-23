@@ -28,9 +28,12 @@ unit darkCore.api;
 
 interface
 uses
+  darkHandles,
   darkThreading,
   darkPlatform;
 
+const
+  cMaxStringLength = 255;
 
 /// <summary>
 ///   Returns the major part of the library version number. For example, if the
@@ -42,7 +45,7 @@ uses
 /// <remarks>
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
-function dgVersionMajor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgVersionMajor: uint32; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 /// <summary>
 ///   Returns the minor part of the library version number. For example, if the
@@ -54,14 +57,19 @@ function dgVersionMajor: uint32;                                                
 /// <remarks>
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
-function dgVersionMinor: uint32;                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+function dgVersionMinor: uint32; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 ///  <summary>
 ///    Initializes the DarkGlass engine.
-///    You must call dgInitialize() before calling dgRun(),
-///    dgGetMessageChannel(), or dgSendMessage(). (Or other messaging functions)
+///    You must call dgInitialize() before calling dgRun()
 ///  </summary>
-procedure dgInitialize( GameMessageHandler: TMessageHandler );                     {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+procedure dgInitialize( MessageHandler: TExternalMessageHandler ); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+///  <summary>
+///    Finalizes the DarkGlass engine.
+///    You must call dgFinalize() after calling dgRun()
+///  </summary>
+procedure dgFinalize; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 /// <summary>
 ///   This procedure passes execution to the run method of the global IPlatform
@@ -72,49 +80,37 @@ procedure dgInitialize( GameMessageHandler: TMessageHandler );                  
 /// <remarks>
 ///   This function is exposed as an exported symbol from the library.
 /// </remarks>
-procedure dgRun;                                                                   {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+procedure dgRun; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
-/// <summary>
-///   This function locates a message channel by name and returns a handle to
-///   it. <br />Message channels are used to communicate between the
-///   sub-systems of the application during execution.
-/// </summary>
-/// <param name="ChannelName">
-///   The case-insensitive name of the message channel to be located.
-/// </param>
-/// <returns>
-///   If this method is unsuccessful a value of zero is returned, otherwise a
-///   handle to the message channel is returned.
-/// </returns>
-/// <remarks>
-///   This function is exposed as an exported symbol from the library.
-/// </remarks>
-function dgGetMessageChannelConnection( ChannelName: string ): THChannelConnection;             {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+///  <summary>
+///    This function returns a handle to a commincation channel, allowing
+///    messages to be sent into the communication channel.
+///  </summary>
+function dgGetMessagePipe( lpszChannelName: pointer ): THandle; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
-/// <summary>
-///   This procedure sends a message into a message channel as specified by
-///   it's handle (optained using the dggetMessageChannal() function.
-/// </summary>
-/// <param name="ChannelConnection">
-///   The handle of a message channel conneciton to send a message to.
-/// </param>
-/// <param name="aMessage">
-///   The message to send into the message channel.
-/// </param>
-/// <returns>
-///   Returns true if the message was sent to the channel, else returns false. <br />
-///   Possible causes of failure include the message channel being full, or an
-///   invalid message channel handle being specified.
-/// </returns>
-/// <remarks>
-///   This function is exposed as an exported symbol from the library.
-/// </remarks>
-function dgSendMessage( ChannelConnection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+///  <summary>
+///    Sends a message into the specified message pipe.
+///    This function immediately returns without waiting for a response from
+///    the message channel. If the message cannot be sent, this function returns
+///    false, else it returns true on successful transmission of the message.
+///  </summary>
+function dgSendMessage( PipeHandle: THandle; MessageValue, ParamA, ParamB, ParamC, ParamD: nativeuint ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
+///  <summary>
+///    Sends a message into the specified message pipe.
+///    This function will wait for a response from the message channel.
+///  </summary>
+function dgSendMessageWait( PipeHandle: THandle; MessageValue, ParamA, ParamB, ParamC, ParamD: nativeuint ): nativeuint;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+
+///  <summary>
+///    This procedure frees a handle to an object within the system.
+///  </summary>
+procedure dgFreeHandle( Handle: THandle ); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
 
 
 implementation
 uses
+  darkIO.buffers,
   sysutils;
 
 const
@@ -122,7 +118,7 @@ const
   cVersionMinor = 0;
 
 var
-  Platform: IPlatform = nil;
+  ThreadSystem: IThreadSystem = nil;
 
 function dgVersionMajor: uint32;
 begin
@@ -136,65 +132,109 @@ end;
 
 procedure dgRun;
 begin
-  if not assigned(Platform) then begin
+  if not assigned(ThreadSystem) then begin
     raise
       Exception.Create('Did you call dgInitialize()?');
     exit;
   end;
-  Platform.Run;
+  ThreadSystem.Run;
 end;
 
-function dgGetMessageChannelConnection( ChannelName: string ): THChannelConnection;
+procedure dgInitialize( MessageHandler: TExternalMessageHandler );
+const
+  cExternalChannelName = '{9BA27E0F-89AC-4689-80E8-53A7E4ABF082}';
 begin
-  if not assigned(Platform) then begin
-    raise
-      Exception.Create('Did you call dgInitialize()?');
-    exit;
-  end;
-  Result := Platform.GetChannelConnection( ChannelName );
-end;
-
-
-function dgSendMessage( ChannelConnection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse;
-begin
-  if not assigned(Platform) then begin
-    raise
-      Exception.Create('Did you call dgInitialize()?');
-    exit;
-  end;
-  Result := Platform.SendMessage( ChannelConnection, MessageValue, ParamA, ParamB, WaitFor );
-end;
-
-procedure dgInitialize( GameMessageHandler: TMessageHandler );
-begin
-  Platform := TPlatform.Create;
-  if not Platform.Initialize( GameMessageHandler ) then begin
-    raise
-      Exception.Create('DarkGlass engine failed to initialize.');
-  end;
+  ThreadSystem := TThreadSystem.Create;
+  ThreadSystem.InstallSubSystem(TMainLoop.Create( cExternalChannelName ));
+  ThreadSystem.InstallSubSystem(TExternalMessages.Create( cExternalChannelName, MessageHandler ));
 end;
 
 procedure dgFinalize;
 begin
-  if not Platform.Finalize then begin
+  ThreadSystem := nil;
+end;
+
+function dgGetMessagePipe( lpszChannelName: pointer ): THandle;
+var
+  ChannelName: string;
+  ChannelNameBuffer: IUnicodeBuffer;
+  StrLen: uint32;
+  PtrData: ^uint8;
+  KeepGoing: boolean;
+  Pipe: IMessagePipe;
+begin
+  Result := nil;
+  if not assigned(ThreadSystem) then begin
     raise
-      Exception.Create('DarkGlass engine failed to finalize.');
+      Exception.Create('Did you call dgInitialize()?');
+    exit;
   end;
+  strlen := 0;
+  PtrData := lpszChannelName;
+  KeepGoing := True;
+  while (strlen<cMaxStringLength) and KeepGoing do begin
+    if PtrData^=0 then begin
+      KeepGoing := False;
+      Continue;
+    end;
+    inc(strLen);
+    inc(PtrData);
+  end;
+  if KeepGoing then begin
+    exit;
+  end;
+  ChannelNameBuffer := TBuffer.Create(0);
+  ChannelNameBuffer.AppendData(lpszChannelName,strlen);
+  ChannelName := ChannelNameBuffer.ReadString(TUnicodeFormat.utf8);
+  Pipe := ThreadSystem.MessageBus.GetMessagePipe(ChannelName);
+  if not assigned(Pipe) then begin
+    exit;
+  end;
+  Result := THandles.CreateHandle(THandleKind.hkMessagePipe,Pipe,nil);
+end;
+
+procedure dgFreeHandle( Handle: THandle );
+begin
+  THandles.FreeHandle(Handle);
+end;
+
+function dgSendMessage( PipeHandle: THandle; MessageValue, ParamA, ParamB, ParamC, ParamD: nativeuint ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+begin
+  if not assigned(ThreadSystem) then begin
+    raise
+      Exception.Create('Did you call dgInitialize()?');
+    exit;
+  end;
+  if not THandles.VerifyHandle( PipeHandle, THandleKind.hkMessagePipe ) then begin
+    raise
+      Exception.Create('Invalid handle for message pipe.');
+  end;
+  Result := (THandles.InstanceOf(PipeHandle) as IMessagePipe).SendMessage( MessageValue, ParamA, ParamB, ParamC, ParamD );
+end;
+
+function dgSendMessageWait( PipeHandle: THandle; MessageValue, ParamA, ParamB, ParamC, ParamD: nativeuint ): nativeuint;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif} export;
+begin
+  if not assigned(ThreadSystem) then begin
+    raise
+      Exception.Create('Did you call dgInitialize()?');
+    exit;
+  end;
+  if not THandles.VerifyHandle( PipeHandle, THandleKind.hkMessagePipe ) then begin
+    raise
+      Exception.Create('Invalid handle for message pipe.');
+  end;
+  Result := (THandles.InstanceOf(PipeHandle) as IMessagePipe).SendMessageWait( MessageValue, ParamA, ParamB, ParamC, ParamD );
 end;
 
 exports
   dgVersionMajor,
   dgVersionMinor,
   dgInitialize,
+  dgFinalize,
   dgRun,
-  dgGetMessageChannelConnection,
-  dgSendMessage;
-
-
-initialization
-
-finalization
-  dgFinalize;
-  Platform := nil;
+  dgGetMessagePipe,
+  dgSendMessage,
+  dgSendMessageWait,
+  dgFreeHandle;
 
 end.

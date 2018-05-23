@@ -21,6 +21,9 @@
         <Projects Include="Packages\darkThreading\src\pkgDarkThreading.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Packages\darkHandles\src\pkgDarkHandles.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Packages\darkPlatform\src\pkgDarkPlatform.dproj">
             <Dependencies/>
         </Projects>
@@ -34,7 +37,7 @@
             <Dependencies/>
         </Projects>
         <Projects Include="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj">
-            <Dependencies>Packages\darkDynlib\src\pkgDarkDynlib.dproj;Packages\darkThreading\src\pkgDarkThreading.dproj;Packages\darkPlatform\src\pkgDarkPlatform.dproj;Packages\darkCore\src\pkgDarkCore.dproj;Packages\darkGlass\src\pkgDarkGlass.dproj</Dependencies>
+            <Dependencies>Packages\darkDynlib\src\pkgDarkDynlib.dproj;Packages\darkThreading\src\pkgDarkThreading.dproj;Packages\darkCore\src\pkgDarkCore.dproj;Packages\darkGlass\src\pkgDarkGlass.dproj</Dependencies>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -98,6 +101,15 @@
     <Target Name="pkgDarkThreading:Make">
         <MSBuild Projects="Packages\darkThreading\src\pkgDarkThreading.dproj" Targets="Make"/>
     </Target>
+    <Target Name="pkgDarkHandles">
+        <MSBuild Projects="Packages\darkHandles\src\pkgDarkHandles.dproj"/>
+    </Target>
+    <Target Name="pkgDarkHandles:Clean">
+        <MSBuild Projects="Packages\darkHandles\src\pkgDarkHandles.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkgDarkHandles:Make">
+        <MSBuild Projects="Packages\darkHandles\src\pkgDarkHandles.dproj" Targets="Make"/>
+    </Target>
     <Target Name="pkgDarkPlatform">
         <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj"/>
     </Target>
@@ -134,23 +146,23 @@
     <Target Name="pkgDarkGlass:Make">
         <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DarknessDebug" DependsOnTargets="pkgDarkDynlib;pkgDarkThreading;pkgDarkPlatform;pkgDarkCore;pkgDarkGlass">
+    <Target Name="DarknessDebug" DependsOnTargets="pkgDarkDynlib;pkgDarkThreading;pkgDarkCore;pkgDarkGlass">
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj"/>
     </Target>
-    <Target Name="DarknessDebug:Clean" DependsOnTargets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;pkgDarkGlass:Clean">
+    <Target Name="DarknessDebug:Clean" DependsOnTargets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkCore:Clean;pkgDarkGlass:Clean">
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DarknessDebug:Make" DependsOnTargets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;pkgDarkGlass:Make">
+    <Target Name="DarknessDebug:Make" DependsOnTargets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkCore:Make;pkgDarkGlass:Make">
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkgDarkUnicode;pkgDarkIO;pkgDarkDynlib;pkgdarkCollections;pkgDarkLog;pkgDarkThreading;pkgDarkPlatform;pkgDarkCore;DarkCore;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkgDarkUnicode;pkgDarkIO;pkgDarkDynlib;pkgdarkCollections;pkgDarkLog;pkgDarkThreading;pkgDarkHandles;pkgDarkPlatform;pkgDarkCore;DarkCore;pkgDarkGlass;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkgDarkUnicode:Clean;pkgDarkIO:Clean;pkgDarkDynlib:Clean;pkgdarkCollections:Clean;pkgDarkLog:Clean;pkgDarkThreading:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;DarkCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkgDarkUnicode:Clean;pkgDarkIO:Clean;pkgDarkDynlib:Clean;pkgdarkCollections:Clean;pkgDarkLog:Clean;pkgDarkThreading:Clean;pkgDarkHandles:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;DarkCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkgDarkUnicode:Make;pkgDarkIO:Make;pkgDarkDynlib:Make;pkgdarkCollections:Make;pkgDarkLog:Make;pkgDarkThreading:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;DarkCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkgDarkUnicode:Make;pkgDarkIO:Make;pkgDarkDynlib:Make;pkgdarkCollections:Make;pkgDarkLog:Make;pkgDarkThreading:Make;pkgDarkHandles:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;DarkCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

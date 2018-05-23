@@ -75,9 +75,13 @@ initialization
                  dgVersionMajor := LoadProcAddress('dgVersionMajor');
                  dgVersionMinor := LoadProcAddress('dgVersionMinor');
                           dgRun := LoadProcAddress('dgRun');
-  dgGetMessageChannelConnection := LoadProcAddress('dgGetMessageChannelConnection');
-                  dgSendMessage := LoadProcAddress('dgSendMessage');
                    dgInitialize := LoadProcAddress('dgInitialize');
+                     dgFinalize := LoadProcAddress('dgFinalize');
+               dgGetMessagePipe := LoadProcAddress('dgGetMessagePipe');
+                  dgSendMessage := LoadProcAddress('dgSendMessage');
+              dgSendMessageWait := LoadProcAddress('dgSendMessageWait');
+                   dgFreeHandle := LoadProcAddress('dgFreeHandle');
+
 
 finalization
   libDarkGlass := nil;

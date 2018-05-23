@@ -27,32 +27,33 @@
 unit darkglass;
 
 interface
-uses
-  darkPlatform;
+
+const
+  cMaxStringLength = 255;
 
 type
   ///  <summary>
-  ///    Represents a connection to a message channel for sending
-  ///    messages.
+  ///    Used as a handle to objects passed through the messaging system
+  ///    to the darkglass engine.
   ///  </summary>
-  THChannelConnection = uint32;
+  THandle = pointer;
 
   ///  <summary>
-  ///    A message handling procedure for responding to messages on the game
-  ///    channel.
+  ///    Used to send messages into the darkglass message bus.
   ///  </summary>
-  TMessageHandler = function( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
-
-  ///  <summary>
-  ///     This record is returned from a call to SendMessage() to indicate
-  ///     if the message was successfully sent, and to return any response
-  ///     value.
-  ///  </summary>
-  TMessageResponse = record
-    Sent: boolean;
-    ParamA: NativeUInt;
-    ParamB: NativeUInt;
+  TMessage = record
+    Value: nativeuint;
+    ParamA: nativeuint;
+    ParamB: nativeuint;
+    ParamC: nativeuint;
+    ParamD: nativeuint;
   end;
+
+  ///  <summary>
+  ///    The callback prototype, used as a callback function for the main
+  ///    application while the dark glass engine is running.
+  ///  </summary>
+  TExternalMessageHandler = function (aMessage: TMessage): nativeuint;
 
 var
   /// <summary>
@@ -75,10 +76,16 @@ var
 
   ///  <summary>
   ///    Initializes the DarkGlass engine.
-  ///    You must call dgInitialize() before calling dgRun(),
-  ///    dgGetMessageChannel(), or dgSendMessage(). (Or other messaging functions)
+  ///    You must call dgInitialize() before calling dgRun().
   ///  </summary>
-  dgInitialize: procedure( GameMessageHandler: TMessageHandler ); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  dgInitialize: procedure( MessageHandler: TExternalMessageHandler ); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+
+  ///
+  ///  <summary>
+  ///    Finalizes the DarkGlass engine.
+  ///    You must call dgFinalize() after calling dgRun().
+  ///  </summary>
+  dgFinalize: procedure; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
   /// <summary>
   ///   This procedure passes execution to the run method of the global IPlatform
@@ -88,45 +95,34 @@ var
   /// </summary>
   dgRun: procedure; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
-  /// <summary>
-  ///   This function locates a message channel by name and returns a connection
-  ///   handle to it. <br />Message channels are used to communicate between the
-  ///   sub-systems of the application during execution.
-  /// </summary>
-  /// <param name="ChannelName">
-  ///   The case-insensitive name of the message channel to be located.
-  /// </param>
-  /// <returns>
-  ///   If this method is unsuccessful a value of zero is returned, otherwise a
-  ///   handle to the message channel connection is returned.
-  /// </returns>
-  dgGetMessageChannelConnection: function ( ChannelName: string ): THChannelConnection; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  ///  <summary>
+  ///    This function returns a handle to a commincation channel, allowing
+  ///    messages to be sent into the communication channel.
+  ///    The channel name is a UTF-8 (ANSI) string terminated with a zero character.
+  ///    The channel name must not exceed cMaxChannelName characters.
+  ///  </summary>
+  dgGetMessagePipe: function ( lpszChannelName: pointer ): THandle; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
-  /// <summary>
-  ///   This procedure sends a message into a message channel as specified by
-  ///   it's connection handle (optained using the
-  ///   dgGetMessageChannelConnection() function.
-  /// </summary>
-  /// <param name="ChannelConnection">
-  ///   The handle of a message channel connection to send a message to.
-  /// </param>
-  /// <param name="aMessage">
-  ///   The message to send into the message channel.
-  /// </param>
-  /// <returns>
-  ///   Returns true if the message was sent to the channel, else returns false. <br />
-  ///   Possible causes of failure include the message channel being full, or an
-  ///   invalid message channel handle being specified.
-  /// </returns>
-  dgSendMessage: function ( ChannelConnection: THChannelConnection; MessageValue: uint32; ParamA: NativeUInt; ParamB: NativeUInt; WaitFor: Boolean ): TMessageResponse; {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+  ///  <summary>
+  ///    Sends a message into the specified message pipe.
+  ///    This function immediately returns without waiting for a response from
+  ///    the message channel. If the message cannot be sent, this function returns
+  ///    false, else it returns true on successful transmission of the message.
+  ///  </summary>
+  dgSendMessage: function ( PipeHandle: THandle; MessageValue, ParamA, ParamB, ParamC, ParamD: nativeuint ): boolean;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
 
-//------------------------------------------------------------------------------
-// Platform messages.
-//------------------------------------------------------------------------------
-const
-          MSG_CREATE_WINDOW = darkPlatform.MSG_CREATE_WINDOW;
-   MSG_PLATFORM_INITIALIZED = darkPlatform.MSG_PLATFORM_INITIALIZED;
-      MSG_SET_GAME_CALLBACK = darkPlatform.MSG_SET_GAME_CALLBACK;
+  ///  <summary>
+  ///    Sends a message into the specified message pipe.
+  ///    This function will wait for a response from the message channel.
+  ///  </summary>
+  dgSendMessageWait: function( PipeHandle: THandle; MessageValue, ParamA, ParamB, ParamC, ParamD: nativeuint ): nativeuint;  {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+
+  ///  <summary>
+  ///    This procedure frees a handle to an object within the system.
+  ///  </summary>
+  dgFreeHandle: procedure( Handle: THandle ); {$ifdef MSWINDOWS} stdcall; {$else} cdecl; {$endif}
+
+
 
 implementation
 

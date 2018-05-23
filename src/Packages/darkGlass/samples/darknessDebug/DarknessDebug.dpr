@@ -28,35 +28,34 @@ program DarknessDebug;
 uses
   darkglass,
   darkglass.static,
+  darkplatform.messages,
   sysutils;
 
-var
-  PlatformChannel: THChannelConnection = 0;
-  GameChannel: THChannelConnection = 0;
-  Response: TMessageResponse;
 
-function HandleMessage( MessageValue: uint32; var ParamA: NativeUInt; var ParamB: NativeUInt ): boolean;
+function HandleMessage( aMessage: TMessage ): nativeuint;
+var
+  PlatformPipe: THandle;
+  Response: nativeuint;
 begin
-  Result := True;
-  case MessageValue of
+  Result := 0;
+  case aMessage.Value of
 
     MSG_PLATFORM_INITIALIZED: begin
-      Response := dgSendMessage(PlatformChannel, MSG_CREATE_WINDOW, 0, 0, True );
-      if not Response.Sent then begin
-        raise
-          Exception.Create('Message buffer full when attempting to create window');
-      end;
+      PlatformPipe := dgGetMessagePipe(Pointer(UTF8Encode('platform')));
+      Response := dgSendMessageWait(PlatformPipe, MSG_CREATE_WINDOW, 100, 100, 0, 0 );
     end
 
     else begin
-      Result := False;
+      Result := 0;
     end;
   end;
 end;
 
 begin
-   dgInitialize(HandleMessage);
-  PlatformChannel := dgGetMessageChannelConnection('platform');
-  GameChannel := dgGetMessageChannelConnection('game');
-  dgRun;
+  dgInitialize(HandleMessage);
+  try
+    dgRun;
+  finally
+   dgFinalize;
+  end;
 end.

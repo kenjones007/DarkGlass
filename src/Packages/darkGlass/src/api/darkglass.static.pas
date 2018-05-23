@@ -37,8 +37,11 @@ initialization
                  dgVersionMajor := @darkCore.api.dgVersionMajor;
                  dgVersionMinor := @darkCore.api.dgVersionMinor;
                    dgInitialize := @darkCore.api.dgInitialize;
+                     dgFinalize := @darkCore.api.dgFinalize;
                           dgRun := @darkCore.api.dgRun;
-  dgGetMessageChannelConnection := @darkCore.api.dgGetMessageChannelConnection;
+               dgGetMessagePipe := @darkCore.api.dgGetMessagePipe;
                   dgSendMessage := @darkCore.api.dgSendMessage;
+              dgSendMessageWait := @darkCore.api.dgSendMessageWait;
+                   dgFreeHandle := @darkCore.api.dgFreeHandle;
 
 end.
