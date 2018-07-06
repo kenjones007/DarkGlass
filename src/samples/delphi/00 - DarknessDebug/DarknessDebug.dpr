@@ -24,24 +24,38 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------
-unit darkglass.static;
-
-interface
-
-implementation
+program DarknessDebug;
 uses
-  darkGlass.core.api,
-  darkglass;
+  darkglass,
+  darkglass.static,
+  darkplatform.messages,
+  sysutils;
 
-initialization
-                 dgVersionMajor := @darkGlass.core.api.dgVersionMajor;
-                 dgVersionMinor := @darkGlass.core.api.dgVersionMinor;
-                   dgInitialize := @darkGlass.core.api.dgInitialize;
-                     dgFinalize := @darkGlass.core.api.dgFinalize;
-                          dgRun := @darkGlass.core.api.dgRun;
-               dgGetMessagePipe := @darkGlass.core.api.dgGetMessagePipe;
-                  dgSendMessage := @darkGlass.core.api.dgSendMessage;
-              dgSendMessageWait := @darkGlass.core.api.dgSendMessageWait;
-                   dgFreeHandle := @darkGlass.core.api.dgFreeHandle;
 
+function HandleMessage( aMessage: TMessage ): nativeuint;
+var
+  PlatformPipe: THandle;
+  Response: nativeuint;
+begin
+  Result := 0;
+  case aMessage.Value of
+
+    MSG_PLATFORM_INITIALIZED: begin
+      PlatformPipe := dgGetMessagePipe(Pointer(UTF8Encode('platform')));
+      Response := dgSendMessageWait(PlatformPipe, MSG_CREATE_WINDOW, 100, 100, 0, 0 );
+    end
+
+    else begin
+      Result := 0;
+    end;
+  end;
+end;
+
+begin
+  dgInitialize(HandleMessage);
+  try
+    dgRun;
+  finally
+   dgFinalize;
+  end;
 end.

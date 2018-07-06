@@ -12,8 +12,8 @@
         <Projects Include="darkGlassBindings\delphi\pkgDarkGlassBindings.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj">
-            <Dependencies>darkGlass\pkgDarkGlass.dproj;darkGlassBindings\delphi\pkgDarkGlassBindings.dproj</Dependencies>
+        <Projects Include="samples\delphi\00 - DarknessDebug\DarknessDebug.dproj">
+            <Dependencies/>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -50,14 +50,14 @@
     <Target Name="pkgDarkGlassBindings:Make">
         <MSBuild Projects="darkGlassBindings\delphi\pkgDarkGlassBindings.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DarknessDebug" DependsOnTargets="pkgDarkGlass;pkgDarkGlassBindings">
-        <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj"/>
+    <Target Name="DarknessDebug">
+        <MSBuild Projects="samples\delphi\00 - DarknessDebug\DarknessDebug.dproj"/>
     </Target>
-    <Target Name="DarknessDebug:Clean" DependsOnTargets="pkgDarkGlass:Clean;pkgDarkGlassBindings:Clean">
-        <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Clean"/>
+    <Target Name="DarknessDebug:Clean">
+        <MSBuild Projects="samples\delphi\00 - DarknessDebug\DarknessDebug.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DarknessDebug:Make" DependsOnTargets="pkgDarkGlass:Make;pkgDarkGlassBindings:Make">
-        <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Make"/>
+    <Target Name="DarknessDebug:Make">
+        <MSBuild Projects="samples\delphi\00 - DarknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
         <CallTarget Targets="pkgDarkGlass;darkGlass;pkgDarkGlassBindings;DarknessDebug"/>
