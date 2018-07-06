@@ -29,3 +29,7 @@ Additional targets may also be possible in the future depending upon research to
 <strong> Graphics API </strong>
 
 DarkGlass will be designed to support interchangable graphics API's for rendering, with initial development targeting OpenGL and OpenGL-ES. With option to pivot to Vulkan early in development, and DirectX support being considered experimental in the initial phase.
+
+# Building & Usage
+
+Please see the Building.md file for build instructions.
