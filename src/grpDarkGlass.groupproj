@@ -3,41 +3,17 @@
         <ProjectGuid>{8084854E-5FED-4EAA-AC3D-647F5C1F58A4}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Packages\darkUnicode\src\pkgDarkUnicode.dproj">
+        <Projects Include="darkGlass\pkgDarkGlass.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Packages\darkIO\src\pkgDarkIO.dproj">
+        <Projects Include="darkGlass\darkGlass.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Packages\darkDynlib\src\pkgDarkDynlib.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkCollections\src\pkgdarkCollections.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkLog\src\pkgDarkLog.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkThreading\src\pkgDarkThreading.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkHandles\src\pkgDarkHandles.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkPlatform\src\pkgDarkPlatform.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkCore\src\pkgDarkCore.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkCore\src\DarkCore.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="Packages\darkGlass\src\pkgDarkGlass.dproj">
+        <Projects Include="darkGlassBindings\delphi\pkgDarkGlassBindings.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj">
-            <Dependencies>Packages\darkDynlib\src\pkgDarkDynlib.dproj;Packages\darkThreading\src\pkgDarkThreading.dproj;Packages\darkCore\src\pkgDarkCore.dproj;Packages\darkGlass\src\pkgDarkGlass.dproj</Dependencies>
+            <Dependencies>darkGlass\pkgDarkGlass.dproj;darkGlassBindings\delphi\pkgDarkGlassBindings.dproj</Dependencies>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -47,122 +23,50 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="pkgDarkUnicode">
-        <MSBuild Projects="Packages\darkUnicode\src\pkgDarkUnicode.dproj"/>
-    </Target>
-    <Target Name="pkgDarkUnicode:Clean">
-        <MSBuild Projects="Packages\darkUnicode\src\pkgDarkUnicode.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkUnicode:Make">
-        <MSBuild Projects="Packages\darkUnicode\src\pkgDarkUnicode.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkIO">
-        <MSBuild Projects="Packages\darkIO\src\pkgDarkIO.dproj"/>
-    </Target>
-    <Target Name="pkgDarkIO:Clean">
-        <MSBuild Projects="Packages\darkIO\src\pkgDarkIO.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkIO:Make">
-        <MSBuild Projects="Packages\darkIO\src\pkgDarkIO.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkDynlib">
-        <MSBuild Projects="Packages\darkDynlib\src\pkgDarkDynlib.dproj"/>
-    </Target>
-    <Target Name="pkgDarkDynlib:Clean">
-        <MSBuild Projects="Packages\darkDynlib\src\pkgDarkDynlib.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkDynlib:Make">
-        <MSBuild Projects="Packages\darkDynlib\src\pkgDarkDynlib.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgdarkCollections">
-        <MSBuild Projects="Packages\darkCollections\src\pkgdarkCollections.dproj"/>
-    </Target>
-    <Target Name="pkgdarkCollections:Clean">
-        <MSBuild Projects="Packages\darkCollections\src\pkgdarkCollections.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgdarkCollections:Make">
-        <MSBuild Projects="Packages\darkCollections\src\pkgdarkCollections.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkLog">
-        <MSBuild Projects="Packages\darkLog\src\pkgDarkLog.dproj"/>
-    </Target>
-    <Target Name="pkgDarkLog:Clean">
-        <MSBuild Projects="Packages\darkLog\src\pkgDarkLog.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkLog:Make">
-        <MSBuild Projects="Packages\darkLog\src\pkgDarkLog.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkThreading">
-        <MSBuild Projects="Packages\darkThreading\src\pkgDarkThreading.dproj"/>
-    </Target>
-    <Target Name="pkgDarkThreading:Clean">
-        <MSBuild Projects="Packages\darkThreading\src\pkgDarkThreading.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkThreading:Make">
-        <MSBuild Projects="Packages\darkThreading\src\pkgDarkThreading.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkHandles">
-        <MSBuild Projects="Packages\darkHandles\src\pkgDarkHandles.dproj"/>
-    </Target>
-    <Target Name="pkgDarkHandles:Clean">
-        <MSBuild Projects="Packages\darkHandles\src\pkgDarkHandles.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkHandles:Make">
-        <MSBuild Projects="Packages\darkHandles\src\pkgDarkHandles.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkPlatform">
-        <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj"/>
-    </Target>
-    <Target Name="pkgDarkPlatform:Clean">
-        <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkPlatform:Make">
-        <MSBuild Projects="Packages\darkPlatform\src\pkgDarkPlatform.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="pkgDarkCore">
-        <MSBuild Projects="Packages\darkCore\src\pkgDarkCore.dproj"/>
-    </Target>
-    <Target Name="pkgDarkCore:Clean">
-        <MSBuild Projects="Packages\darkCore\src\pkgDarkCore.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="pkgDarkCore:Make">
-        <MSBuild Projects="Packages\darkCore\src\pkgDarkCore.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="DarkCore">
-        <MSBuild Projects="Packages\darkCore\src\DarkCore.dproj"/>
-    </Target>
-    <Target Name="DarkCore:Clean">
-        <MSBuild Projects="Packages\darkCore\src\DarkCore.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="DarkCore:Make">
-        <MSBuild Projects="Packages\darkCore\src\DarkCore.dproj" Targets="Make"/>
-    </Target>
     <Target Name="pkgDarkGlass">
-        <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj"/>
+        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj"/>
     </Target>
     <Target Name="pkgDarkGlass:Clean">
-        <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj" Targets="Clean"/>
+        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj" Targets="Clean"/>
     </Target>
     <Target Name="pkgDarkGlass:Make">
-        <MSBuild Projects="Packages\darkGlass\src\pkgDarkGlass.dproj" Targets="Make"/>
+        <MSBuild Projects="darkGlass\pkgDarkGlass.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DarknessDebug" DependsOnTargets="pkgDarkDynlib;pkgDarkThreading;pkgDarkCore;pkgDarkGlass">
+    <Target Name="darkGlass">
+        <MSBuild Projects="darkGlass\darkGlass.dproj"/>
+    </Target>
+    <Target Name="darkGlass:Clean">
+        <MSBuild Projects="darkGlass\darkGlass.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="darkGlass:Make">
+        <MSBuild Projects="darkGlass\darkGlass.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="pkgDarkGlassBindings">
+        <MSBuild Projects="darkGlassBindings\delphi\pkgDarkGlassBindings.dproj"/>
+    </Target>
+    <Target Name="pkgDarkGlassBindings:Clean">
+        <MSBuild Projects="darkGlassBindings\delphi\pkgDarkGlassBindings.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="pkgDarkGlassBindings:Make">
+        <MSBuild Projects="darkGlassBindings\delphi\pkgDarkGlassBindings.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DarknessDebug" DependsOnTargets="pkgDarkGlass;pkgDarkGlassBindings">
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj"/>
     </Target>
-    <Target Name="DarknessDebug:Clean" DependsOnTargets="pkgDarkDynlib:Clean;pkgDarkThreading:Clean;pkgDarkCore:Clean;pkgDarkGlass:Clean">
+    <Target Name="DarknessDebug:Clean" DependsOnTargets="pkgDarkGlass:Clean;pkgDarkGlassBindings:Clean">
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DarknessDebug:Make" DependsOnTargets="pkgDarkDynlib:Make;pkgDarkThreading:Make;pkgDarkCore:Make;pkgDarkGlass:Make">
+    <Target Name="DarknessDebug:Make" DependsOnTargets="pkgDarkGlass:Make;pkgDarkGlassBindings:Make">
         <MSBuild Projects="Packages\darkGlass\samples\darknessDebug\DarknessDebug.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="pkgDarkUnicode;pkgDarkIO;pkgDarkDynlib;pkgdarkCollections;pkgDarkLog;pkgDarkThreading;pkgDarkHandles;pkgDarkPlatform;pkgDarkCore;DarkCore;pkgDarkGlass;DarknessDebug"/>
+        <CallTarget Targets="pkgDarkGlass;darkGlass;pkgDarkGlassBindings;DarknessDebug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="pkgDarkUnicode:Clean;pkgDarkIO:Clean;pkgDarkDynlib:Clean;pkgdarkCollections:Clean;pkgDarkLog:Clean;pkgDarkThreading:Clean;pkgDarkHandles:Clean;pkgDarkPlatform:Clean;pkgDarkCore:Clean;DarkCore:Clean;pkgDarkGlass:Clean;DarknessDebug:Clean"/>
+        <CallTarget Targets="pkgDarkGlass:Clean;darkGlass:Clean;pkgDarkGlassBindings:Clean;DarknessDebug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="pkgDarkUnicode:Make;pkgDarkIO:Make;pkgDarkDynlib:Make;pkgdarkCollections:Make;pkgDarkLog:Make;pkgDarkThreading:Make;pkgDarkHandles:Make;pkgDarkPlatform:Make;pkgDarkCore:Make;DarkCore:Make;pkgDarkGlass:Make;DarknessDebug:Make"/>
+        <CallTarget Targets="pkgDarkGlass:Make;darkGlass:Make;pkgDarkGlassBindings:Make;DarknessDebug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

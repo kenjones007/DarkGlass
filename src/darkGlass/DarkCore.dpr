@@ -2,7 +2,7 @@ library DarkCore;
 uses
   System.SysUtils,
   System.Classes,
-  darkCore.api in 'api\darkCore.api.pas';
+  darkGlass.core.api in 'darkGlass.core.api.pas';
 
 {$R *.res}
 

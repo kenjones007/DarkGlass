@@ -1,4 +1,4 @@
-package pkgDarkHandles;
+package pkgDarkGlass;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -31,6 +31,7 @@ requires
   rtl;
 
 contains
-  darkHandles in 'api\darkHandles.pas';
+  darkGlass.core.api in 'darkGlass.core.api.pas',
+  darkGlass.core.handles in 'darkGlass.core.handles.pas';
 
 end.

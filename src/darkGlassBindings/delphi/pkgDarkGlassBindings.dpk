@@ -1,4 +1,4 @@
-package pkgDarkGlass;
+package pkgDarkGlassBindings;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -31,9 +31,9 @@ requires
   rtl;
 
 contains
-  darkglass.dynamic in 'api\darkglass.dynamic.pas',
-  darkglass in 'api\darkglass.pas',
-  darkglass.static in 'api\darkglass.static.pas';
+  darkglass.dynamic in 'darkglass.dynamic.pas',
+  darkglass in 'darkglass.pas',
+  darkglass.static in 'darkglass.static.pas';
 
 end.
 
