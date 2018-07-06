@@ -141,12 +141,9 @@ begin
 end;
 
 procedure dgInitialize( MessageHandler: TExternalMessageHandler );
-const
-  cExternalChannelName = '{9BA27E0F-89AC-4689-80E8-53A7E4ABF082}';
 begin
   ThreadSystem := TThreadSystem.Create;
-  ThreadSystem.InstallSubSystem(TMainLoop.Create( cExternalChannelName ));
-  ThreadSystem.InstallSubSystem(TExternalMessages.Create( cExternalChannelName, MessageHandler ));
+  TDarkPlatform.Initialize( ThreadSystem, MessageHandler );
 end;
 
 procedure dgFinalize;
