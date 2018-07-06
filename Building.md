@@ -15,13 +15,13 @@ The darkGlass library depends on many other dark libraries:
 Due to limitations in nested submodule support within git, these dependencies have not been added to the project, and must therefore be cloned separately.
 Each project has paths configured with the assumption that all dark libraries are cloned into the same parent directory, as follows...
 
-\darkLibs\darkDynlib
-\darkLibs\darkCollections
-\darkLibs\darkIO
-\darkLibs\darkLog
-\darkLibs\darkThreading
-\darkLibs\darkPlatform
-\darkLibs\darkGlass
+* \darkLibs\darkDynlib
+* \darkLibs\darkCollections
+* \darkLibs\darkIO
+* \darkLibs\darkLog
+* \darkLibs\darkThreading
+* \darkLibs\darkPlatform
+* \darkLibs\darkGlass
 
 You may rename the 'darkLibs' directory as you wish, so long as each of the sub-directories remain under the same parent directory.
 Once you have cloned each of the projects, open the grpDarkGlassDependencies.groupproj file within the RAD Studio IDE and build all projects.
